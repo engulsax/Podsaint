@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js -L"
+    "start": "nodemon src/pl/app.js -L"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
     "nodemon": "^2.0.2"
-  }  
+  }
 }
