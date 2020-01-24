@@ -1,0 +1,18 @@
+version: '3'
+services:
+  "web-application":
+    build: "./web-application"
+    ports:
+      - "3000:8080"
+      - "9229:9229"
+    volumes:
+      - "./web-application/src:/web-application/src"
+    depends_on:
+      - database
+  database:
+    build: ./database
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=theRootPassword
+      - MYSQL_DATABASE=webAppDatabase
