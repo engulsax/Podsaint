@@ -1,0 +1,109 @@
+body{
+    height: 100%;
+    background: rgb(255, 254, 216);
+    background: linear-gradient(0deg, rgba(255, 254, 198, 0.671) 0%, rgb(240, 180, 205) 80%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.search{
+    border-radius: 20px;
+    height:35px;
+}
+
+.center{
+    text-align: center;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+}
+
+#header{
+    background-color: white;
+    min-height: 4rem;
+}
+
+.categories{
+    background: rgb(239,210,106);
+    opacity: 0.7;
+}
+
+#menu{
+    list-style: none;
+    float: right;
+}
+
+#menu li{
+    display:inline-block;
+    margin-right: 2vh;
+    margin-top: 2vh;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.categories-button{
+    margin-right: 2vh;
+    margin-bottom: 2vh;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+    float: right;
+}
+
+#menu a{
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#logo{
+    margin: 2vh;
+    float: left;
+}
+
+#logo-icon{
+    float: left;
+    display: block;
+    width: 40px;
+}
+
+#logo-text{
+    float: left;
+    display: block;
+    color: rgb(107,107,107);
+    font-size: large;
+    margin-left: 1vh;
+    font-weight: 250;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#selling-text{
+    margin-top: 5%;
+}
+
+#selling-text>h1{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    display: block;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+a.sign-up-button{
+    text-transform: uppercase;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
+
+.sign-up-button{
+    width: 250px;
+    margin: 2%;
+    border-radius: 20px;
+    background-color: rgb(152,189,139);
+}
+
+.sign-up-button:hover{
+    margin: 2%;
+    background-color: rgb(123, 158, 108);
+}

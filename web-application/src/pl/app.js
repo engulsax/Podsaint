@@ -3,6 +3,8 @@ const expressHandlebars = require('express-handlebars')
 
 const app = express()
 
+app.use(express.static(__dirname + "/public"))
+
 app.set("views", "src/pl/views")
 
 app.engine('hbs', expressHandlebars({
