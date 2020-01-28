@@ -1,7 +1,7 @@
 body{
     height: 100%;
     background: rgb(255, 254, 216);
-    background: linear-gradient(0deg, rgba(255, 254, 198, 0.671) 0%, rgb(240, 180, 205) 80%);
+    background: linear-gradient(0deg, rgba(255, 254, 198, 0.671) 0%, rgb(199, 137, 163) 60%);
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
@@ -103,7 +103,7 @@ a.sign-up-button{
     background-color: rgb(152,189,139);
 }
 
-.sign-up-button:hover{
+.sign-up-button:hover, .sign-up-button:focus{
     margin: 2%;
     background-color: rgb(123, 158, 108);
 }
