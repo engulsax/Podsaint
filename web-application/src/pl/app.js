@@ -16,6 +16,13 @@ app.get('/', function(request, response){
   response.render("home.hbs")
 })
 
+app.get('/feed', function(request, response){
+
+  response.render("feed.hbs")
+})
+
+
+
 app.listen(8080, function(){
   console.log("Web application listening on port 8080.")
 })
