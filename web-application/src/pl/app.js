@@ -1,5 +1,6 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
+const API = require('./../dal/API-fetch-dal.js')
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.engine('hbs', expressHandlebars({
 }))
 
 app.get('/', function(request, response){
+  console.log(API.getPodcasts("dog"))
   response.render("home.hbs")
 })
 
