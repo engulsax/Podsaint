@@ -1,26 +1,34 @@
-<div id="sign-in-pop-up" class="grid-x">
+<div id="sign-up-pop-up" class="grid-x">
     <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
         <div class="pop-up-content">
-            <span id="close-btn-sign-in">&times;</span>
+            <span id="close-btn-sign-up">&times;</span>
             <form>
                 <label>
                     Username
                     <input type="text">
                 </label>
                 <label>
+                    Email
+                    <input type="text">
+                </label>
+                <label>
                     Password
                     <input type="password">
                 </label>
-                <input class="button pop-up-button" type="button" value="SIGN IN">
+                <input class="button pop-up-button" type="button" value="SIGN UP">
             </form>
-            <label class="center alternative-sign-up">
-                Or sign in using
+            <div class="center alternative-sign-up">
+                <div class="sign-text">Or sign up using</div>
                 <ul class="social-media-list">
                     <li><a href="#" class="fa fa-facebook"></a></li>
                     <li><a href="#" class="fa fa-twitter"></a></li>
                     <li><a href="#" class="fa fa-google"></a></li>
                 </ul>
-            </label>
+            </div>
+            <div class="sign-in-link sign-text">
+                Already have an account?
+                <a id="sign-in-alternative" href="#">Sign in</a>
+            </div>
         </div>
     </div>
 </div>

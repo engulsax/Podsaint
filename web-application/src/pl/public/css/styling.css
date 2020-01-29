@@ -41,14 +41,6 @@ body{
     font-family: 'Open Sans', sans-serif;
 }
 
-.categories-button{
-    margin-right: 2vh;
-    margin-bottom: 2vh;
-    color: rgb(107,107,107);
-    font-family: 'Open Sans', sans-serif;
-    float: right;
-}
-
 #menu a{
     color: rgb(107,107,107);
     font-family: 'Open Sans', sans-serif;

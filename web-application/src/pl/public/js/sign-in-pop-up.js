@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //Get modal button
     var modalBtnSignIn = document.getElementById("sign-in")
     //Get close button
-    var closeBtn = document.getElementById("close-btn")
+    var closeBtn = document.getElementById("close-btn-sign-in")
 
     modalBtnSignIn.addEventListener("click", function (event) {
         modalSignIn.style.display = "block"

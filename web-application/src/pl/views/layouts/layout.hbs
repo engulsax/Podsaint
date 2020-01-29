@@ -21,9 +21,16 @@
 
     <!--Styling CSS -->
     <link rel="stylesheet" href="/css/styling.css" type="text/css">
+    <link rel="stylesheet" href="/css/sign-pop-up.css" type="text/css">
+    <link rel="stylesheet" href="/css/categories-pop-up.css" type="text/css">
 
-   <!-- Icon library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">   
+    <!-- Podsaint JavaScript -->
+    <script src="/js/sign-up-pop-up.js"></script>
+    <script src="/js/sign-in-pop-up.js"></script>
+    <script src="/js/categories-pop-up.js"></script>
+
+    <!-- Icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!--meta http-equiv="X-UA-Compatible" content="ie=edge"-->
 
@@ -39,7 +46,7 @@
                     <div id="logo-text">Podsaint</div>
                 </div>
                 <nav id="menu">
-                    <ul> 
+                    <ul>
                         <li>
                             <input class="search" type="text" placeholder="Search..">
                         </li>
@@ -47,8 +54,15 @@
                             <a id="sign-in" href="#">Sign In</a>
                         </li>
                     </ul>
-                    <a href="#" class="categories-button">Categories</i></a>
+                    <a href="#" id="categories-button">Categories &#x25BC;</a>
                 </nav>
+            </div>
+        </div>
+        <div class="grid-x">
+            <div id="categories-content" class="cell">
+                <ul>
+
+                </ul>
             </div>
         </div>
     </header>

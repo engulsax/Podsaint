@@ -1,0 +1,25 @@
+#categories-content{
+    display: none;
+    background: linear-gradient(0deg, rgba(238, 111, 210, 0.2) 0%, rgba(199, 137, 163, 0.2) 60%);
+    background-color: rgb(235, 190, 124);
+    z-index: 1
+}
+
+
+#categories-content ul>li{
+    display:inline-block;
+    margin-right: 1vh;
+    margin-top: 1vh;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    list-style: none;
+}
+
+
+#categories-button{
+    margin-right: 2vh;
+    margin-bottom: 2vh;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+    float: right;
+}
