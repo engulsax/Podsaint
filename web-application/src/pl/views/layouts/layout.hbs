@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -23,6 +22,7 @@
     <link rel="stylesheet" href="/css/styling.css" type="text/css">
     <link rel="stylesheet" href="/css/sign-pop-up.css" type="text/css">
     <link rel="stylesheet" href="/css/categories-pop-up.css" type="text/css">
+    <link rel="stylesheet" href="/css/podholder.css" type="text/css">
 
     <!-- Podsaint JavaScript -->
     <script src="/js/sign-up-pop-up.js"></script>
@@ -42,13 +42,13 @@
         <div class="grid-x">
             <div class="cell">
                 <div id="logo">
-                    <img id="logo-icon" src="/images/Podsaint_logo.png">
+                    <a href="/"><img id="logo-icon" src="/images/Podsaint_logo.png"></a>
                     <div id="logo-text">Podsaint</div>
                 </div>
                 <nav id="menu">
                     <ul>
                         <li>
-                            <input class="search" type="text" placeholder="Search..">
+                            <input class="search" type="text" placeholder="Search...">
                         </li>
                         <li>
                             <a id="sign-in" href="#">Sign In</a>
@@ -61,15 +61,20 @@
         <div class="grid-x">
             <div id="categories-content" class="cell">
                 <ul>
-
+                    {{#each model.categories}}
+                    <li><a href="/category/{{id}}">{{category}}</a></li>
+                    {{/each}}
                 </ul>
             </div>
         </div>
     </header>
     <main>
         {{{body}}}
+        {{>sign-in-pop-up}}
     </main>
+    <footer id="footer">
 
+    </footer>
 </body>
 
 </html>

@@ -1,6 +1,8 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
-const API = require('./../dal/API-fetch-dal.js')
+const categoryBL = require('../bl/category-bl')
+const categoryPL = require('./category-pl')
+
 
 const app = express()
 
@@ -13,11 +15,24 @@ app.engine('hbs', expressHandlebars({
   defaultLayout: "layout",
 }))
 
-app.get('/', function(request, response){
-  console.log(API.getPodcasts("dog"))
-  response.render("home.hbs")
+const model = {}
+
+const getCategories = async function (request, response, next) {
+  model.categories = await categoryBL.getCategoriesDetails()
+  //.log(await categoryBL.getCategoryDetails('1301'))
+  next()
+}
+
+app.use(getCategories)
+
+app.get('/', function (request, response) {
+  response.render("home.hbs", { model })
 })
 
-app.listen(8080, function(){
+/*---------------------------------ROUTERS-------------------------------------*/
+app.use("/category", categoryPL)
+
+
+app.listen(8080, function () {
   console.log("Web application listening on port 8080.")
 })

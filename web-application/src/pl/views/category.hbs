@@ -1,0 +1,22 @@
+<div class="grid-x">
+    <div class="cell medium-8 medium-offset-2 l">
+        <h1 class="head-category">{{model.category}}</h1>
+        <form id="search-form">
+            <input type="text" placeholder="Search for podcast in {{model.category}}..">
+            <div id="options"></div>
+        </form>
+    </div>
+</div>
+<div class="grid-x">
+    <div id="pod-sections" class="cell small-10 medium-6 small-offset-1 medium-offset-3">
+        <ul>
+            {{#each model.subCategories}}
+            <li>
+                <h2 class="sub-category">{{category}}</h2>
+                <section class="cell small-8 center">
+                </section>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
