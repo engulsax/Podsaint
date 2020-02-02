@@ -21,6 +21,9 @@ app.get('/feed', function(request, response){
   response.render("feed.hbs")
 })
 
+app.get('/pod-info', function(request,response){
+  response.render("pod-info.hbs")
+})
 
 
 app.listen(8080, function(){

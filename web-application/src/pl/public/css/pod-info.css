@@ -1,0 +1,44 @@
+
+
+
+#content{
+    margin-top: 50px;
+}
+h2 {
+    margin-left: 20px;
+    font-size: x-large;
+    font-weight: bolder;
+}
+h3 {
+    margin-left: 20px;
+    font-weight: lighter;
+}
+p {
+    margin-left: 20px;
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+}
+
+.headers {
+    display: block;
+    font-family: 'Open Sans', sans-serif;
+    color:whitesmoke;
+}
+
+#image-div{
+    background-color: rgb(249, 244, 246);;
+    padding: 20px;
+    border-radius: 10px;
+}
+.text-right {
+    text-align: right;
+}
+.buttons {
+    float:right;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+}
+
+.reviews{
+    background-color: rgb(242, 206, 220);
+}
