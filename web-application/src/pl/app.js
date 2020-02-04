@@ -1,7 +1,8 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
-const categoryBL = require('../bl/category-bl')
+const categoryBL = require('../bl/category-bl') //CHANGE THIS!
 const categoryPL = require('./category-pl')
+const searchPL = require('./search-pl')
 
 
 const app = express()
@@ -18,8 +19,7 @@ app.engine('hbs', expressHandlebars({
 const model = {}
 
 const getCategories = async function (request, response, next) {
-  model.categories = await categoryBL.getCategoriesDetails()
-  //.log(await categoryBL.getCategoryDetails('1301'))
+  model.categories = await categoryBL.getCategoriesDetails() //COME UP WITH ALTERNATIVE!!
   next()
 }
 
@@ -31,6 +31,7 @@ app.get('/', function (request, response) {
 
 /*---------------------------------ROUTERS-------------------------------------*/
 app.use("/category", categoryPL)
+app.use("/search", searchPL)
 
 
 app.listen(8080, function () {

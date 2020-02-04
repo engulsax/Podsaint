@@ -7,7 +7,6 @@ const model = {}
 
 const getCategories = async function (request, response, next) {
     model.categories = await categoryBL.getCategoriesDetails()
-    //console.log(await categoryBL.getCategoryDetails('1301'))
     next()
 }
 
@@ -18,8 +17,8 @@ router.get('/:id', function (request, response) {
         const id = request.params.id
         const currentCategoryDetails = await categoryBL.getCategoryDetails(id)
         model.category = currentCategoryDetails.category
+        model.id = currentCategoryDetails.id
         model.subCategories = currentCategoryDetails.subCategories
-        console.log(model.subCategories)
         response.render('category.hbs', {model})
     })()
 })

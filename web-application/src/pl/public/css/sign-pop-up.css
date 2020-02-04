@@ -45,11 +45,16 @@ form{
     display: block;
 }
 
-label{
+label, legend{
     color: white;
     font-weight: 600;
     font-size: large;
     font-family: 'Open Sans', sans-serif;
+}
+
+legend{
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.6);
+    font-size: x-large;
 }
 
 .sign-text{

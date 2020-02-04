@@ -1,0 +1,25 @@
+<div class="grid-x">
+    <div class="cell medium-8 medium-offset-2">
+        <h1 class="head-category">{{model.headText}}</h1>
+        {{>search-field}}
+    </div>
+</div>
+<div class="grid-x">
+    <section class="cell medium-8 medium-offset-2">
+        <ul id="podcast-search-results">
+            {{#if model.result}}
+            <h1 class="head-category">Results</h1>
+            {{#each model.result}}
+            <li>
+                <figure id="podcast-holder">
+                    <a href="#"><img id="podcast-image" src="{{artworkUrl600}}"></a>
+                    <figcaption id="podcast-title">{{collectionName}}</figcaption>
+                </figure>
+            </li>
+            {{/each}}
+        </ul>
+        {{else}}
+        <p class="no-result">...No result found...</p>
+        {{/if}}
+    </section>
+</div>

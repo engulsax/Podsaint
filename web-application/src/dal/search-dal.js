@@ -1,19 +1,23 @@
 
 //change node-fetch to axios
 const fetch = require('node-fetch')
-const defaultHTTPS = "https://itunes.apple.com/search?media=podcast&limit=200"
+const defaultHTTPS = "https://itunes.apple.com/search?media=podcast&limit=50"
 
 exports.getPodcasts = async function getPodcasts(term){
-    //options = { "term": term, "country": country, "lang": lang }
     let https = defaultHTTPS + "&term=" + term
-    try{
-        const response = await fetch(https)
-        console.log(await response.json())
-    }
-    catch(error){
-       console.log("poop")
-    }
+    console.log(https)
+    const response = await fetch(https)
+    return await response.json()
 }
+
+
+exports.getPodcastsWithId = async function getPodcastsWithId(term, categoryId){
+    let https = defaultHTTPS + "&term=" + term + "&genreId=" + categoryId
+    console.log(https)
+    const response = await fetch(https)
+    return await response.json()
+}
+
 
 //entity
 /*podcastAuthor, podcast*/

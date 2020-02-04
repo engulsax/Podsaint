@@ -9,6 +9,7 @@
     margin: 5px;
     padding: 0;
     display: table;
+    width: 99%;
     font-family: 'Open Sans', sans-serif;
     color: white;
     list-style: none;
@@ -29,7 +30,7 @@
 }
 
 #categories-content a:hover, #categories-content a:focus{
-    color: rgba(255,255,255,0.6)
+    color: rgba(255,255,255,0.6);
 }
 
 #categories-button{
@@ -42,20 +43,16 @@
 
 
 @media screen and (max-width: 850px) {
-
     #categories-content ul>li{
       width: 33.33%;
-    }
-  
+    }  
 }
 
 
 @media screen and (max-width: 600px) {
-
     #categories-content ul>li{
       width: 100%;
       margin: 2px;
       font-size: 110%;
     }
-  
 }

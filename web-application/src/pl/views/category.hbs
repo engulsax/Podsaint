@@ -1,10 +1,7 @@
 <div class="grid-x">
-    <div class="cell medium-8 medium-offset-2 l">
+    <div class="cell medium-8 medium-offset-2">
         <h1 class="head-category">{{model.category}}</h1>
-        <form id="search-form">
-            <input type="text" placeholder="Search for podcast in {{model.category}}..">
-            <div id="options"></div>
-        </form>
+        {{>search-field}}
     </div>
 </div>
 <div class="grid-x">
@@ -14,6 +11,9 @@
             <li>
                 <h2 class="sub-category">{{category}}</h2>
                 <section class="cell small-8 center">
+                    <ul>
+                        <li></li>
+                    </ul>
                 </section>
             </li>
             {{/each}}
