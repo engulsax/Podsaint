@@ -185,42 +185,67 @@ fieldset#main-field{
 #podcast-search-results{
     margin: auto auto;
     background-color: rgba(255,255,255,0.2);
-    padding: 0px 20px 20px;
+    padding: 2px 0px 0px 0px;
     border-radius: 20px;
     text-align: center;
 }
 
 #podcast-search-results ul{
-    margin: 10px auto;
+    margin: 10px auto 0;
     list-style: none;
 }
 
 #podcast-search-results li{
-    margin: 10px 5px;
+    margin: 10px 2px 0px 2px;
     list-style: none;
     display: inline-block;
 }
 
 #podcast-title{
+    font-size: 80%;
     text-align: center;
     color: white;
     text-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+    background-color: rgba(0,0,0,0.4);
 }
 
 #podcast-image{
    margin: auto auto;
    float:center;
    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
-   width: 180px;
-   height: 180px;
+   width: 210px;
+   height: 210px;
 }
 
 #podcast-holder{
-    margin: 8px 20px;
+    margin: 0 10px;
     vertical-align: top;
     text-align: center;
-    width: 180px;
+    width: 210px;
     height: auto;
     display: inline-block;
 }
 
+
+.nextArrowBtn{
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    right: 0;
+    color: rgba(0, 0, 0, 0.637);
+    font-size: 150%;
+    
+}
+.prevArrowBtn{
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    left: 0;
+    color: rgba(0, 0, 0, 0.637);
+    font-size: 50px;
+}
+
+.slick{
+    padding: 0;
+    margin: 0;
+}

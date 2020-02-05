@@ -1,11 +1,15 @@
 
 const searchDAL = require('../dal/search-dal')
 
-exports.searchPodcastsWithId = async function searchPodcasts(term, subCategoryId, mainCategoryId) {
+exports.searchPodcastsWithIdAndTerm = async function searchPodcastsWithIdAndTerm(term, subCategoryId, mainCategoryId) {
     if (subCategoryId === "all") {
-        return await searchDAL.getPodcastsWithId(term, mainCategoryId)
+        return await searchDAL.searchPodcastsWithIdAndTerm(term, mainCategoryId)
     }
-    return await searchDAL.getPodcastsWithId(term, subCategoryId)
+    return await searchDAL.searchPodcastsWithIdAndTerm(term, subCategoryId)
+}
+
+exports.searchPodcastsWithId = async function getPodcastsWithId(id) {
+    return await searchDAL.getPodcastsWithId(id)
 }
 
 exports.searchPodcasts = async function searchPodcasts(term) {

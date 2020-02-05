@@ -7,12 +7,19 @@
 <div class="grid-x">
     <div id="pod-sections" class="cell small-10 medium-6 small-offset-1 medium-offset-3">
         <ul>
-            {{#each model.subCategories}}
+            {{#each model.categoryLists}}
             <li>
                 <h2 class="sub-category">{{category}}</h2>
-                <section class="cell small-8 center">
-                    <ul>
-                        <li></li>
+                <section id="slideshow" class="cell small-8 center">
+                    <ul id="podcast-search-results" class="slick">
+                        {{#each subCategories}}
+                        <li>
+                            <figure id="podcast-holder" class="podcast-holder">
+                                <a href="#"><img id="podcast-image" src="{{artworkUrl600}}"></a>
+                                <figcaption id="podcast-title">{{collectionName}}</figcaption>
+                            </figure>
+                        </li>
+                        {{/each}}
                     </ul>
                 </section>
             </li>

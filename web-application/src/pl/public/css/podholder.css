@@ -1,16 +1,16 @@
-#pod-sections section {
-    background-color: rgba(75, 75, 75, 0.2);
-    border-radius: 25px;
-    height: 20px;
-}
-
 
 #pod-sections ul{
-    margin: 0 0 0 0;
+    margin: 10px auto;
+    list-style: none;
 }
 
 #pod-sections ul>li{
     font-family: 'Open Sans', sans-serif;
     color: white;
     list-style: none;
+}
+
+#podcast-list{
+    height: auto;
+    display: inline-block;
 }

@@ -1,24 +1,33 @@
 const express = require('express')
 const categoryBL = require('../bl/category-bl')
+const searchBL = require('../bl/search-bl')
 const router = express.Router()
-
-/*THIS IS REPETION OF CODE (SEE SAME CODE IN app.js), TODO: REMOVE AND MAKE BETTER*/
-const model = {}
-
-const getCategories = async function (request, response, next) {
-    model.categories = await categoryBL.getCategoriesDetails()
-    next()
-}
-
-router.use(getCategories)
 
 router.get('/:id', function (request, response) {
     (async function(){
-        const id = request.params.id
-        const currentCategoryDetails = await categoryBL.getCategoryDetails(id)
-        model.category = currentCategoryDetails.category
-        model.id = currentCategoryDetails.id
-        model.subCategories = currentCategoryDetails.subCategories
+        const mainCategoryId = request.params.id
+        const currentCategoryDetails = await categoryBL.getCategoryDetails(mainCategoryId)
+
+        const categoryLists = []
+        for(category of currentCategoryDetails.subCategories){
+            searchResponse = await searchBL.searchPodcastsWithId(category.id)
+            //currentSubCategoryDetails.push(searchResponse.results)
+            categoryList = {}
+            categoryList.category = category.category
+            categoryList.subCategories = searchResponse.results
+            categoryLists.push(categoryList)
+        }
+        
+        const model = {
+            categories: await categoryBL.getCategoriesDetails(),
+            category: currentCategoryDetails.category,
+            id: currentCategoryDetails.id,
+            categoryLists: categoryLists,
+            subCategories: currentCategoryDetails.subCategories,
+            //subCategoryDetails: currentSubCategoryDetails
+        }
+
+        console.log(categoryLists)
         response.render('category.hbs', {model})
     })()
 })

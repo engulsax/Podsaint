@@ -39,7 +39,7 @@ router.get('/:id', function (request, response) {
 
         const searchText = request.query.searchText
         const categoryOption = request.query.category
-        const searchResponse = await searchBL.searchPodcastsWithId(searchText, categoryOption, id)
+        const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, id)
 
         model.result = searchResponse.results
 
