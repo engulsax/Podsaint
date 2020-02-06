@@ -33,8 +33,6 @@ app.get('/', function (request, response) {
 app.use("/category", categoryPL)
 app.use("/search", searchPL)
 
-
-app.listen(8080, function () {
 app.get('/feed', function(request, response){
 
   response.render("feed.hbs")
