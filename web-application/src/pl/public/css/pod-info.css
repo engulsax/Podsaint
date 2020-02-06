@@ -36,9 +36,10 @@ textarea{
 }
 
 #image-div{
-    background-color: rgb(249, 244, 246);;
+    background-color: rgba(249, 244, 246,0.2);
     padding: 20px;
     border-radius: 10px;
+    text-align: center;
 }
 .text-right {
     text-align: right;

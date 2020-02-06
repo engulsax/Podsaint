@@ -15,3 +15,7 @@ exports.searchPodcastsWithId = async function getPodcastsWithId(id) {
 exports.searchPodcasts = async function searchPodcasts(term) {
     return await searchDAL.getPodcasts(term)
 }
+
+exports.searchPodcast = async function searchPodcast(term) {
+    return await searchDAL.getPodcast(term)
+}

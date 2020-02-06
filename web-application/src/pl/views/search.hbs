@@ -11,10 +11,7 @@
         <ul id="podcast-search-results">
             {{#each model.result}}
             <li>
-                <figure id="podcast-holder">
-                    <a href="#"><img id="podcast-image" src="{{artworkUrl600}}"></a>
-                    <figcaption id="podcast-title">{{collectionName}}</figcaption>
-                </figure>
+                {{>podcast-figure}}
             </li>
             {{/each}}
         </ul>

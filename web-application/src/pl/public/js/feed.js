@@ -20,8 +20,4 @@ document.addEventListener("DOMContentLoaded", function(){
         playlist.style.display="none"
     }
 
-
-
-
-
 })

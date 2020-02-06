@@ -11,6 +11,13 @@ exports.getPodcasts = async function getPodcasts(term){
     return await response.json()
 }
 
+exports.getPodcast = async function getPodcast(term){
+    let https = defaultHTTPS + "&term=" + term
+    console.log(https)
+    const response = await fetch(https)
+    return await response.json()
+}
+
 exports.searchPodcastsWithIdAndTerm = async function searchPodcastsWithIdAndTerm(term, categoryId){
     const limit = "&limit=80"
     let https = defaultHTTPS + limit + "&term=" + term + "&genreId=" + categoryId

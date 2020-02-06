@@ -1,32 +1,41 @@
-
+<div class="grid-x">
+    <!-- each need to get into scope-->
+   {{#each model.information}}
+    <div class="cell large-3 medium-12 small-12">
         <div class="grid-x">
-            <div class="cell large-3 medium-12 small-12">
-                <div class="grid-x">
-                    <div class="cell large-12 medium-6">
-                        <div id="image-div">
-                            <img src="/images/temp/1.jpeg"/>
-                        </div>
-                    </div>
-                    <div class="cell large-12 medium-6">
-                        <p>Rating Rating</p>
-                        <p>Rating Rating</p>
-                        <p>Rating Rating</p>    
-                    </div>                        
+            <div class="cell large-12 medium-6">
+                <div id="image-div">
+                    <img id="podcast-image" src="{{artworkUrl600}}">
                 </div>
             </div>
-            <div class="cell large-9 medium-12 small-12">
-                <div class="grid-x">
-                    <div class="cell large-6 medium-6 small-6">
-                        <h2 class="headers">You're Dead To Me</h2>
-                        <h3 class="headers">BBC Radio 4</h3>
-                    </div>
-                    <div class="cell large-6 medium-6 small-6">
-                        <h3 class="headers text-right">306 Episodes</h3>
-                        <button class="buttons">Se all episodes</button>
-                    </div>
-                    <div id="review" class="cell large-12">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam maximus quam nec risus vehicula, vel mattis turpis pellentesque. Mauris diam purus, pretium id justo ac, scelerisque cursus ex. Curabitur vulputate vel nulla non finibus. Phasellus quis sagittis nunc. Integer nunc urna, convallis id urna a, imperdiet euismod metus. Etiam vel cursus tellus, in viverra sem. Duis pellentesque rutrum mi, non luctus mauris scelerisque eget. Donec eu augue consequat, tristique enim nec, pulvinar urna. </p>
-                    </div>
-                </div>
+            <div class="cell large-12 medium-6">
+                <p>Rating Rating</p>
+                <p>Rating Rating</p>
+                <p>Rating Rating</p>
             </div>
         </div>
+    </div>
+    <div class="cell large-9 medium-12 small-12">
+        <div class="grid-x">
+            <div class="cell large-6 medium-6 small-6">
+                <h2 class="headers">{{collectionName}}</h2>
+                <h3 class="headers">{{artistName}}</h3>
+            </div>
+            <div class="cell large-6 medium-6 small-6">
+                <h3 class="headers text-right">{{trackCount}} Episodes</h3>
+                <a href="{{collectionViewUrl}}" class="buttons">More information on iTunes</a>
+            </div>
+            <div id="review" class="cell large-12">
+                <p>
+                    I WILL WRITE MORE WEBSCRAPE
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam maximus quam nec risus vehicula, vel
+                    mattis turpis pellentesque. Mauris diam purus, pretium id justo ac, scelerisque cursus ex. Curabitur
+                    vulputate vel nulla non finibus. Phasellus quis sagittis nunc. Integer nunc urna, convallis id urna
+                    a, imperdiet euismod metus. Etiam vel cursus tellus, in viverra sem. Duis pellentesque rutrum mi,
+                    non luctus mauris scelerisque eget. Donec eu augue consequat, tristique enim nec, pulvinar urna.
+                </p>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
