@@ -35,5 +35,16 @@ app.use("/search", searchPL)
 
 
 app.listen(8080, function () {
+app.get('/feed', function(request, response){
+
+  response.render("feed.hbs")
+})
+
+app.get('/pod-info', function(request,response){
+  response.render("pod-info.hbs")
+})
+
+
+app.listen(8080, function(){
   console.log("Web application listening on port 8080.")
 })
