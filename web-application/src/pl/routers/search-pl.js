@@ -10,6 +10,7 @@ router.get('/', function (request, response) {
         const searchResponse = await searchBL.searchPodcasts(searchText)
 
         const model = {
+            categories: await categoryBL.getCategoriesDetails(),
             result: searchResponse.results,
             headText: "Search for all podcasts",
             id: ""
@@ -28,11 +29,12 @@ router.get('/:id', function (request, response) {
         const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
 
         model = {
+            categories: await categoryBL.getCategoriesDetails(),
             id: categoryId,
             currentCategoryDetails: currentCategoryDetails,
             headText: currentCategoryDetails.category,
             subCategories: currentCategoryDetails.subCategories,
-            result: searchResponse.results
+            result: searchResponse.results,
         }
 
         response.render('search.hbs', { model })

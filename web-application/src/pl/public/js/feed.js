@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
 
-    const podSections = document.getElementById("pod-sections")
+    const podSections = document.getElementById("podcast-section")
     const playlists = podSections.children
 
     for(let playlist of playlists){

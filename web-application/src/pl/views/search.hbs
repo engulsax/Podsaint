@@ -1,14 +1,14 @@
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
-        <h1 class="head-category">{{model.headText}}</h1>
+        <h1 class="head-text">{{model.headText}}</h1>
         {{>search-field}}
     </div>
 </div>
 <div class="grid-x">
     <section class="cell medium-8 medium-offset-2">
         {{#if model.result}}
-        <h1 class="head-category">Results</h1>
-        <ul id="podcast-search-results">
+        <h1 class="head-text">Results</h1>
+        <ul id="podcast-section">
             {{#each model.result}}
             <li>
                 {{>podcast-figure}}

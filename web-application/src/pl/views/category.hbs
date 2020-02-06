@@ -1,17 +1,17 @@
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
-        <h1 class="head-category">{{model.category}}</h1>
+        <h1 class="head-text">{{model.category}}</h1>
         {{>search-field}}
     </div>
 </div>
 <div class="grid-x">
-    <div id="pod-sections" class="cell small-10 medium-6 small-offset-1 medium-offset-3">
+    <div class="cell small-10 medium-6 small-offset-1 medium-offset-3">
         <ul>
             {{#each model.categoryLists}}
             <li>
-                <h2 class="sub-category">{{category}}</h2>
+                <h2 class="sub-text">{{category}}</h2>
                 <section id="slideshow" class="cell small-8 center">
-                    <ul id="podcast-search-results" class="slick">
+                    <ul id="podcast-section" class="slick">
                         {{#each subCategories}}
                         <li>
                             {{>podcast-figure}}
