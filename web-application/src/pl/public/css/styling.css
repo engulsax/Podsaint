@@ -226,6 +226,11 @@ fieldset#main-field{
     display: inline-block;
 }
 
+.podcast-size-210{
+    width: 210px;
+    height: 210px;
+}
+
 
 .nextArrowBtn{
     position: absolute;
