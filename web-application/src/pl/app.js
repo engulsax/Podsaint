@@ -38,10 +38,12 @@ app.get('/feed', function(request, response){
   response.render("feed.hbs")
 })
 
-app.get('/pod-info', function(request,response){
-  response.render("pod-info.hbs")
+app.get('/podcast', function(request,response){
+  response.render("podcast.hbs")
 })
-
+app.get('/write-review', function(request,response){
+  response.render('write-review.hbs')
+})
 
 app.listen(8080, function(){
   console.log("Web application listening on port 8080.")
