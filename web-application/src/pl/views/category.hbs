@@ -5,8 +5,20 @@
     </div>
 </div>
 <div class="grid-x">
-    <div class="cell small-10 medium-6 small-offset-1 medium-offset-3">
+    <div class="cell medium-8 medium-offset-2">
         <ul>
+            <li>
+                <h2 class="sub-text">Popular in {{model.category}}</h2>
+                <section id="slideshow" class="cell small-8 center">
+                    <ul id="podcast-section" class="slick">
+                        {{#each model.mainPodcasts}}
+                        <li>
+                            {{>podcast-figure}}
+                        </li>
+                        {{/each}}
+                    </ul>
+                </section>
+            </li>
             {{#each model.categoryLists}}
             <li>
                 <h2 class="sub-text">{{category}}</h2>

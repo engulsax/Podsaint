@@ -54,6 +54,11 @@ footer{
 
 /*-------------------- STYLING --------------------*/
 
+.white{
+    background-color: white;
+    color: white;
+}
+
 .inline{
     display: inline;
 }
@@ -126,6 +131,7 @@ footer{
 #search-form input[type=text]{
     border-radius: 20px;
     height: 50px;
+    margin-top: 40px;
 }
 
 .head-text{
@@ -303,17 +309,20 @@ fieldset#main-field{
 }
 
 #podcast-section li{
-    margin: 10px 2px 0px 2px;
+    margin: 2px 2px 0px 2px;
     list-style: none;
     display: inline-block;
 }
 
-#podcast-title{
-    font-size: 80%;
+#podcast-holder{
+    position: relative;
+    display: inline-block;
+    margin: 30px 10px;
+    vertical-align: top;
     text-align: center;
-    color: white;
-    text-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
-    background-color: rgba(0,0,0,0.4);
+    width: 210px;
+    height: auto;
+    display: inline-block;
 }
 
 #podcast-image{
@@ -324,6 +333,10 @@ fieldset#main-field{
    height: 210px;
 }
 
+#podcast-image:hover{
+    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.8);
+ }
+
 #podcast-image-2{
     margin: auto auto;
     float:center;
@@ -332,14 +345,20 @@ fieldset#main-field{
     height: auto;
  }
 
-#podcast-holder{
-    margin: 0 10px;
-    vertical-align: top;
+/*
+#podcast-title{
+    display: none;
     text-align: center;
-    width: 210px;
-    height: auto;
-    display: inline-block;
-}
+    color: white;
+    text-shadow: 2px 0px 10px rgba(22, 22, 22, 0.7);
+    background-color: rgba(0,0,0,0.4);
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 0%;
+}*/
+
 
 .podcast-size-210{
     width: 210px;
@@ -512,7 +531,6 @@ textarea{
 }
 
 form{
-    width: 80%;
     margin: 0 auto;
 }
 

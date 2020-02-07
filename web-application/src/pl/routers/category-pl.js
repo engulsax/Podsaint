@@ -8,6 +8,7 @@ router.get('/:id', function (request, response) {
         
         const mainCategoryId = request.params.id
         const currentCategoryDetails = await categoryBL.getCategoryDetails(mainCategoryId)
+        const mainPodcasts = await searchBL.searchPodcastsWithId(mainCategoryId)
 
         const categoryLists = []
         for(category of currentCategoryDetails.subCategories){
@@ -21,6 +22,7 @@ router.get('/:id', function (request, response) {
         const model = {
             categories: await categoryBL.getCategoriesDetails(),
             category: currentCategoryDetails.category,
+            mainPodcasts: mainPodcasts.results,
             id: currentCategoryDetails.id,
             categoryLists: categoryLists,
             subCategories: currentCategoryDetails.subCategories,

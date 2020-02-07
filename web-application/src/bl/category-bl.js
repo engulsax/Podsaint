@@ -5,22 +5,26 @@ const errors = {
 }
 
 exports.getCategoriesDetails = async function getCategoriesDetails() {
-    if(categoryDAL.dataNotFetched()){
+    if (categoryDAL.dataNotFetched()) {
         await categoryDAL.fetchData()
     }
     return categoryDAL.categoriesDetails
 }
 
 exports.getCategories = async function getCategoriesDetails() {
-    if(categoryDAL.dataNotFetched()){
+    if (categoryDAL.dataNotFetched()) {
         await categoryDAL.fetchData()
     }
     return categoryDAL.categoriesDetails.map(obj => obj.category)
 }
 
 exports.getCategoryDetails = async function getCategoryDetails(id) {
-    if(categoryDAL.dataNotFetched()){
+    if (categoryDAL.dataNotFetched()) {
         await categoryDAL.fetchData()
     }
-    return categoryDAL.categoriesDetails.find(obj => {return obj.id === id})
+    return categoryDAL.categoriesDetails.find(obj => { return obj.id === id })
+}
+
+exports.fetchPodInfo = async function fetchPodInfo(url) {
+    return categoryDAL.fetchPodInfo(url)
 }

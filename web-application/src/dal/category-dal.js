@@ -29,6 +29,13 @@ exports.fetchData = async function fetchData() {
     })
 }
 
+exports.fetchPodInfo = async function fetchInfo(url) {
+    const html = await axios.get(url)
+    const $ = cheerio.load(html.data)
+    return $('.product-hero-desc').find('p').first().text()
+}
+
+
 exports.dataNotFetched = function dataNotFetched(){
     return(categoriesDetails.length === 0)
 }

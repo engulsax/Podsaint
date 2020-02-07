@@ -10,7 +10,7 @@
                 <h1>Reviews</h1>
             </div>
             <div class="cell large-6">
-                <a href="#" class="buttons">Write a review</a>
+                <a href="/podcast/{{model.collectionId}}/write-review" class="buttons">Write a review</a>
             </div>
         </div>
 
@@ -36,13 +36,15 @@
             <div class="cell large-12">
                 <h1>Similar Podcasts</h1>
             </div>
-
-            <div="cell large-12">
-
-                <h2>Similar Podcasts</h2>
-
+            <section id="slideshow" class="cell small-12 center">
+                <ul id="podcast-section" class="slick">
+                    {{#each model.podcastsInSameCategory}}
+                    <li>
+                        {{>podcast-figure}}
+                    </li>
+                    {{/each}}
+                </ul>
+            </section>
         </div>
     </div>
-
-</div>
 </div>
