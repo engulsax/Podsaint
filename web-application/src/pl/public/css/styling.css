@@ -131,14 +131,14 @@ footer{
 #search-form input[type=text]{
     border-radius: 20px;
     height: 50px;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .head-text{
     text-align: center;
     color: white;
     font-weight: 600;
-    font-size: 2.5vw;
+    font-size: xx-large;
     font-family: 'Open Sans', sans-serif;
     display: block;
     margin: 2%;
@@ -147,18 +147,23 @@ footer{
     text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
 }
 
+@media screen and (min-width: 64em) {
+    .head-text{
+        font-size: 280%;
+    }
+}
+
 .sub-text{
     text-align: center;
     color: white;
     font-weight: 600;
-    font-size: 1.2rem;
-    font-size: 1.5vw;
+    font-size: x-large;
     font-family: 'Open Sans', sans-serif;
     display: block;
     margin-top: 2rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    text-shadow: 2px 0px 10px rgba(0,0,0,0.6);
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
 }
 
 .podsaint-button{
@@ -544,6 +549,7 @@ label, legend{
     font-weight: 600;
     font-size: large;
     font-family: 'Open Sans', sans-serif;
+    margin: 25px 0;
 }
 
 legend{

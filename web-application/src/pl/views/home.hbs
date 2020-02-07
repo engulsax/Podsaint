@@ -7,5 +7,17 @@
     <div class="cell center">
         <a id="sign-up" class="button sign-up-button">Sign Up - It's free</a>
     </div>
+    {{>sign-up-pop-up}}
+    <div class="cell medium-8 medium-offset-2">
+        <h2 class="sub-text">Popular podcasts</h2>
+        <section id="slideshow" class="cell small-8 center">
+            <ul id="podcast-section" class="slick">
+                {{#each model.mainPodcasts}}
+                <li>
+                    {{>podcast-figure}}
+                </li>
+                {{/each}}
+            </ul>
+        </section>
+    </div>
 </div>
-{{>sign-up-pop-up}}

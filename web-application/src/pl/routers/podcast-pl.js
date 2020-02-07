@@ -37,7 +37,6 @@ router.get('/:id/write-review', function (request, response) {
         const mainCategoryId = information[0].genreIds[0]
         const podcastsInSameCategory = await searchBL.searchPodcastsWithId(mainCategoryId)
         const description = await categoryBL.fetchPodInfo(information[0].collectionViewUrl)
-        console.log(description)
 
         model = {
             categories: await categoryBL.getCategoriesDetails(),
