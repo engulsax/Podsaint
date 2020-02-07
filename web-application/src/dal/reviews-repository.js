@@ -33,7 +33,7 @@ exports.newPodcastReview = async function newPodcastReview(collectionId, humorRa
 
 	} catch {
 		console.log("Database error")
-		//throw error
+		//throw er ror
 	}
 
 	try {
