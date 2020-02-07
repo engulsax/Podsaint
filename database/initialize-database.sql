@@ -14,7 +14,7 @@ CREATE TABLE reviews (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED,
     pod_id VARCHAR(50),
-    pq_rating INT,
+    production_quality_rating INT,
     seriousness_rating INT,
     humor_rating INT,
     fact_rating INT,
@@ -33,3 +33,8 @@ CREATE TABLE podcastlists (
     CONSTRAINT fk_userid FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_podcastid FOREIGN KEY (pod_id) REFERENCES podcasts(pod_id) ON DELETE CASCADE
 );
+
+
+
+INSERT INTO users(username,password) VALUES ("johan","abc123");
+INSERT INTO podcasts(pod_id) VALUES ("596047499");
