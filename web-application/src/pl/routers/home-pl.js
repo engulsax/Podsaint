@@ -1,6 +1,7 @@
 const express = require('express')
 const categoryBL = require('../../bl/category-bl')
 const searchBL = require('../../bl/search-bl')
+const accountBL = require('../../bl/account-bl')
 const router = express.Router()
 
 /*NOT LOGGED IN*/
@@ -31,5 +32,35 @@ router.get('/home', function (request, response) {
     })()
 })
 
+router.post('/signup', function(request, response){
+
+    (async function () {
+        
+        const username = request.body.username
+        const password= request.body.password
+        
+        await accountBL.userRegistration(username, password)
+        response.render("home.hbs")
+
+    })()
+})
+
+router.post('/signin', function (request, response) {
+    (async function () {
+       
+        const username = request.body.username
+        const password = request.body.password
+        const validUser = await accountBL.userLogin(username, password)
+        
+        if (validUser){
+            model = {categories: await categoryBL.getCategoriesDetails()}
+            response.render("feed.hbs", {model})
+        }else{
+            //not logged in
+            response.render("home.hbs")
+        }
+        
+    })()
+})
 
 module.exports = router

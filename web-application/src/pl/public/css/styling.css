@@ -451,6 +451,46 @@ textarea{
       padding: 20px;
   }
 
+
+/*-------------------- REVIEWS STYLING -----------------------*/
+
+.reviews {
+    background-color: rgba(249, 244, 246, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 200px;
+    /*text-align: center;*/
+}
+.reviews .cell {
+    margin: 0px;
+    
+    
+}
+.reviews .cell p {
+    font-size: small;
+    margin: 0px;
+}
+
+.review .fa {   
+    width: 10px;
+    height: 1px;
+}
+
+.fa-star {
+    
+    color: rgb(135, 116, 116);
+    transition: all .2s;
+}
+.fa-star::before {
+    
+    font-size: 12px;
+}
+
+.checked {
+    color: #FD4;
+  }
+
+
 /*-------------------- STAR REVIEW ICONS --------------------*/
 
 .star-div{
@@ -496,6 +536,39 @@ textarea{
     font-family: FontAwesome;
   }
 
+  input.star-5-pq:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-pq:checked ~ label.star:before {
+    color: #F62;
+  }
+  input.star-5-cr:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-cr:checked ~ label.star:before {
+    color: #F62;
+  }
+  input.star-5-hr:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-hr:checked ~ label.star:before {
+    color: #F62;
+  }
+
+  input.star-5-or:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-or:checked ~ label.star:before {
+    color: #F62;
+  }
 /*-------------------- SIGN UP/SIGN IN POP UP --------------------*/
 
   #sign-in-pop-up, #sign-up-pop-up{

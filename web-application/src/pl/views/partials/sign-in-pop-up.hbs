@@ -2,16 +2,16 @@
     <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
         <div class="pop-up-content">
             <span id="close-btn-sign-in">&times;</span>
-            <form>
+            <form action="/signin" method = "POST">
                 <label>
                     Username
-                    <input type="text">
+                    <input type="text" name="username">
                 </label>
                 <label>
                     Password
-                    <input type="password">
+                    <input type="password" name="password">
                 </label>
-                <input class="button pop-up-button" type="button" value="SIGN IN">
+                <input class="button pop-up-button" type="submit" value="SIGN IN">
             </form>
             <label class="center alternative-sign-up">
                 Or sign in using

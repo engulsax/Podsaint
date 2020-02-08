@@ -2,10 +2,10 @@
     <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
         <div class="pop-up-content">
             <span id="close-btn-sign-up">&times;</span>
-            <form>
+            <form action="/signup" method = "POST">
                 <label>
                     Username
-                    <input type="text">
+                    <input type="text" name="username">
                 </label>
                 <label>
                     Email
@@ -13,9 +13,9 @@
                 </label>
                 <label>
                     Password
-                    <input type="password">
+                    <input type="password" name="password">
                 </label>
-                <input class="button pop-up-button" type="button" value="SIGN UP">
+                <input class="button pop-up-button" type="submit" value="SIGN UP">
             </form>
             <div class="center alternative-sign-up">
                 <div class="sign-text">Or sign up using</div>
