@@ -5,13 +5,15 @@
             <form action="/signin" method = "POST">
                 <label>
                     Username
-                    <input type="text" name="username">
+                    <input id="signin-user" type="text" name="username">
                 </label>
+                <p id="input-user-error"></p>
                 <label>
                     Password
-                    <input type="password" name="password">
+                    <input id="signin-password" type="password" name="password">
                 </label>
-                <input class="button pop-up-button" type="submit" value="SIGN IN">
+                <p id="input-password-error"></p>
+                <input id="sign-in-btn"class="button pop-up-button" type="submit" value="SIGN IN">
             </form>
             <label class="center alternative-sign-up">
                 Or sign in using

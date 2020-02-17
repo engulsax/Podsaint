@@ -3,16 +3,16 @@ const util = require('util')
 
 const db = util.promisify(conn.query).bind(conn)
 
-exports.userRegistration = async function userRegistration(username, password){
+exports.userRegistration = async function userRegistration(username, password, email){
 
-    const query = "INSERT INTO users (username, password) VALUES (?, ?)"
-    const values = [username, password]
+    const query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
+    const values = [username, email, password]
     
     try{
         return await db(query, values)
 
     }catch(error){
-        console.log(error)
+        throw error
     }
 }
 
@@ -25,6 +25,8 @@ exports.getUser = async function getUser(username){
 
     }catch(error){
         console.log(error)
+        throw error
+        
     }
 }
 

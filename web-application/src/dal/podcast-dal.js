@@ -42,6 +42,7 @@ exports.getPodcastById = async function getPodcastById(collectionId){
 
 	try{
 		const response = await db(query,values)
+		console.log(response)
 		return response[0].pod_id
 
 	}catch(error){

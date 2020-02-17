@@ -8,7 +8,9 @@ services:
     volumes:
       - "./web-application/src:/web-application/src"
     depends_on:
+      - redis
       - database
+        
   database:
     build: ./database
     ports:
@@ -16,3 +18,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=theRootPassword
       - MYSQL_DATABASE=webAppDatabase
+  
+  redis:
+    build: ./redis  
+    ports: 
+      - "6379:6379"
+   
+ 
+    

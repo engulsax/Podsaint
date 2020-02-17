@@ -5,8 +5,7 @@ const reviewDAL = require('../dal/podcast-dal')
 exports.newPodcastReview = async function newPodcastReview(collectionId, comedyRating, factRating, productionQualty, overallRating, reviewText, seriousnessRating) {
    
     try {
-        console.log("kommit hit hit")
-
+       
         return await reviewDAL.newPodcastReview(collectionId, comedyRating, factRating, productionQualty, overallRating, reviewText, seriousnessRating)
 
     }catch{
