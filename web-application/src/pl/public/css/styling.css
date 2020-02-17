@@ -3,7 +3,7 @@
 body{
     height: 100%;
     background: rgb(255, 254, 216);
-    background: linear-gradient(0deg, rgba(214, 194, 104, 0.897) 0%, rgb(199, 137, 163) 60%);
+    background: linear-gradient(0deg, rgba(209, 178, 109, 0.897) 0%, rgb(199, 137, 163) 60%);
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
@@ -13,7 +13,7 @@ h1 {
   color: whitesmoke;
   font-size: 2rem;
   font-weight: bolder;
-  margin: 0px 10px 10px 10px;
+  margin: 10px 10px 10px 10px;
 }
 
 h2 {
@@ -21,7 +21,7 @@ h2 {
     color: whitesmoke;
     font-size: 1.5rem;
     font-weight: bolder;
-    margin: 0px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
 }
 
 h3 {
@@ -29,14 +29,24 @@ h3 {
     color: whitesmoke;
     font-weight: lighter;
     font-size: 1.2rem;
-    margin: 0px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
+}
+
+a {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1rem;
+}
+
+a:hover, a:focus{
+    color: rgba(245, 245, 245, 0.712);
 }
 
 p {
     font-family: 'Open Sans', sans-serif;
     color: whitesmoke;
     font-size: 1rem;;
-    margin: 0px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
 }
 
 ul,li {
@@ -54,6 +64,10 @@ footer{
 
 /*-------------------- STYLING --------------------*/
 
+.right{
+    float: right;
+}
+
 .white{
     background-color: white;
     color: white;
@@ -70,6 +84,10 @@ footer{
 .search{
     border-radius: 20px;
     height:35px;
+}
+
+.inline{
+    display: inline;
 }
 
 .center{
@@ -92,6 +110,30 @@ footer{
 #menu{
     list-style: none;
     float: right;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.padding-bottom{
+    padding-bottom: 10px;
+}
+
+.margin-bottom{
+    margin-bottom: 10px;
+}
+
+.no-margin{
+    margin: 0;
+}
+
+.block{
+    display: block;
 }
 
 #menu li{
@@ -212,8 +254,12 @@ fieldset#main-field{
     margin: 0 auto;
 }
 
-#main-field select{
+#main-field select, #main-field input{
     border-radius: 20px;
+}
+
+#main-field input{
+    height: 45px;
 }
 
 #itunes-search{
@@ -346,24 +392,16 @@ fieldset#main-field{
     margin: auto auto;
     float:center;
     box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
-    max-width: 75%;
+    max-width: 60%;
     height: auto;
  }
 
-/*
-#podcast-title{
-    display: none;
-    text-align: center;
-    color: white;
-    text-shadow: 2px 0px 10px rgba(22, 22, 22, 0.7);
-    background-color: rgba(0,0,0,0.4);
-    position: absolute;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    top: 0%;
-}*/
-
+ @media screen and (min-width: 64em) {
+    #podcast-image-2{
+        max-width: 75%;
+        float: left;
+    }
+}
 
 .podcast-size-210{
     width: 210px;
@@ -414,7 +452,7 @@ textarea{
   
   #information-holder{
       background-color: rgba(249, 244, 246, 0.2);
-      padding: 20px;
+      padding: 20px 20px;
       border-radius: 10px;
       min-height: 260px;
       text-align: center;
@@ -432,13 +470,6 @@ textarea{
     }
 }
   
-  .text-right {
-      text-align: right;
-  }
-
-  .text-left {
-    text-align: left;
-}
   .buttons {
       float:right;
       font-family: 'Open Sans', sans-serif;
@@ -451,25 +482,45 @@ textarea{
       padding: 20px;
   }
 
+  .action-menu{
+      display: block;
+      text-align: right;
+      margin: -20px 5px;
+  }
+
+  .action-menu li{
+    display: inline;
+    text-align: right;
+    font-size: 24px;
+    color: white;
+    margin: 0px 10px
+}
+
+  .rating-list, .rating-list li{
+      display: block;
+      text-align: left;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      color: white;
+      margin: 0;
+      padding: 0;
+  }
+
 
 /*-------------------- REVIEWS STYLING -----------------------*/
 
 .reviews {
-    background-color: rgba(249, 244, 246, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     padding: 20px;
     border-radius: 10px;
     min-height: 200px;
-    /*text-align: center;*/
+    margin-bottom: 10px;
 }
+
 .reviews .cell {
-    margin: 0px;
-    
-    
+    margin: 0px;    
 }
-.reviews .cell p {
-    font-size: small;
-    margin: 0px;
-}
+
 
 .review .fa {   
     width: 10px;
@@ -477,12 +528,10 @@ textarea{
 }
 
 .fa-star {
-    
     color: rgb(135, 116, 116);
     transition: all .2s;
 }
 .fa-star::before {
-    
     font-size: 12px;
 }
 
@@ -490,12 +539,42 @@ textarea{
     color: #FD4;
   }
 
+.ratings{     
+     text-align: center;
+}
+
+.rating-text{
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: small;
+}
+
+.review-box{
+    background-color:rgba(255, 255, 255, 0.1);
+    margin: 10px;
+    border-radius: 20px;
+}
+
+#name-text{
+    font-style: italic;
+    display: inline;
+    margin: 10px 0px;
+    text-align: left;
+}
+
+.overall-rating,.overall-rating div{
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
 
 /*-------------------- STAR REVIEW ICONS --------------------*/
 
 .star-div{
-    display: inline-block;
-    float: left;
+    display: inline;
   }
   
   input.star{
@@ -503,12 +582,13 @@ textarea{
   }
   
   label.star {
-    margin: 1px;
-    float: right;
+    margin: 2px;
     padding: 1px;
     font-size: medium;
     color: #444;
     transition: all .2s;
+    text-align: center;
+    float: right;
   }
   
   input.star:checked ~ label.star:before {
@@ -585,7 +665,7 @@ textarea{
 
 .pop-up-content{
     background: rgb(255, 254, 216);
-    background: linear-gradient(0deg, rgb(255, 254, 198) 0%, rgb(199, 137, 163) 60%);
+    background: linear-gradient(0deg, rgba(214, 194, 104, 0.897) 0%, rgb(199, 137, 163) 60%);
     background-repeat: no-repeat;
     margin: 15% auto;
     padding: 25px;
@@ -622,7 +702,8 @@ label, legend{
     font-weight: 600;
     font-size: large;
     font-family: 'Open Sans', sans-serif;
-    margin: 25px 0;
+    margin: 5px 0;
+    margin-top: 10px;
 }
 
 legend{
@@ -748,3 +829,56 @@ ul.social-media-list li{
     font-size: 50px;
 }
 
+/*Comdey/Seriouss*/
+
+.checkgroup input[type="radio"].tone{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: none;
+}
+
+.checkgroup input[type="radio"].tone:focus{
+    display: none;
+}
+
+.checkgroup{
+    display: inline;
+    margin: 0 0.2em;
+}
+
+
+label.tone svg{
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: 0.5em auto;
+}
+
+label.tone{
+    font-size: medium;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    margin: 15px;
+}
+
+label.tone svg:hover{
+    transform: rotate(-15deg) scale(1.1);
+    filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
+
+
+input.tone:checked ~ label.tone svg {
+    transform: scale(1.2);
+    filter: brightness(2.5) sepia(1) hue-rotate(7deg) saturate(5);
+    text-shadow: 0 0 7px #FFFFFF;
+  }
+
+  input.tone:checked ~ .tone {
+    color: #FFFFFF;
+    text-shadow: 2px 0 7px #FFFFFF;
+  }
+
+.review-text-boc{
+    white-space: pre-wrap;
+  }
+  

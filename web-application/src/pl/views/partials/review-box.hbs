@@ -1,0 +1,32 @@
+<section class="ratings">
+
+    <div class="overall-rating">
+        <div class="rating-text">Overall {{#rating overall_rating}}{{/rating}}</div>
+    </div>
+
+    <div class="review-box grid-x">
+
+        <div class="cell large-3 small-6">
+            <div class="cell small-6 rating-text">Seriousness</div>
+            <div class="cell small-6">{{#rating seriousness_rating}}{{/rating}}</div>
+        </div>
+
+
+        <div class="cell large-3 small-6">
+            <div class="cell small-6 rating-text">Funniness</div>
+            <div class="cell small-6">{{#rating comedy_rating}}{{/rating}}</div>
+        </div>
+
+        <div class="cell large-3 small-6">
+            <div class="cell small-6 rating-text">Topic Relevance</div>
+            <div class="cell small-6">{{#rating fact_rating}}{{/rating}}</div>
+        </div>
+
+
+        <div class="cell large-3 small-6">
+            <div class="cell small-6 rating-text">Production Quality</div>
+            <div class="cell small-6">{{#rating production_quality_rating}}{{/rating}}</div>
+        </div>
+    </div>
+
+</section>

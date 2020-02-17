@@ -7,19 +7,25 @@ CREATE TABLE users(
 );
 
 CREATE TABLE podcasts(
-    pod_id VARCHAR(50) PRIMARY KEY
+    pod_id VARCHAR(50) PRIMARY KEY,
+    pod_name VARCHAR(300),
+    comedy_rating INT,
+    drama_rating INT,
+    topic_relevence_rating INT,
+    production_quality_rating INT,
+    overall_rating INT
 );
 
 CREATE TABLE reviews (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED,
     pod_id VARCHAR(50),
-    production_quality_rating INT,
-    seriousness_rating INT,
     comedy_rating INT,
-    fact_rating INT,
+    drama_rating INT,
+    topic_relevence_rating INT,
+    production_quality_rating INT,
     overall_rating INT,
-    review_text VARCHAR(1000),
+    review_text VARCHAR(2000),
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_podcast FOREIGN KEY (pod_id) REFERENCES podcasts(pod_id) ON DELETE CASCADE ON UPDATE CASCADE
 

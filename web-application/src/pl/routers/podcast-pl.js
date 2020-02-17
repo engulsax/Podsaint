@@ -4,7 +4,6 @@ const searchBL = require('../../bl/search-bl')
 const podcastBL = require('../../bl/podcast-bl')
 const router = express.Router()
 
-
 router.get('/:id', function (request, response) {
     (async function () {
 
@@ -16,10 +15,12 @@ router.get('/:id', function (request, response) {
         const description = await categoryBL.fetchPodInfo(information[0].collectionViewUrl)
         const reviews = await podcastBL.getAllReviewsByPodcastId(collectionId)
 
+        console.log(reviews)
 
-        model = {
-            reviews: reviews,
+
+        const model = {
             categories: await categoryBL.getCategoriesDetails(),
+            reviews: reviews,
             collectionId: collectionId,
             information: information,
             podcastsInSameCategory: podcastsInSameCategory.results,
@@ -40,7 +41,7 @@ router.get('/:id/write-review', function (request, response) {
         const podcastsInSameCategory = await searchBL.searchPodcastsWithId(mainCategoryId)
         const description = await categoryBL.fetchPodInfo(information[0].collectionViewUrl)
 
-        model = {
+        const model = {
             categories: await categoryBL.getCategoriesDetails(),
             collectionId: collectionId,
             information: information,
@@ -53,32 +54,25 @@ router.get('/:id/write-review', function (request, response) {
 })
 
 
-
 router.post('/:id/write-review', function (request, response) {
-    
-    (async function(){
+
+    (async function () {
 
         const collectionId = request.params.id
-        const comedyRating = parseInt(request.body.comedyRating)
-        const factRating = parseInt(request.body.factRating)
+        const toneRating = parseInt(request.body.podcastTone)
+        const topicRelevenceRating = parseInt(request.body.topicRelevenceRating)
         const productionQualty = parseInt(request.body.productionQuality)
         const overallRating = parseInt(request.body.overallRating)
         const reviewText = request.body.reviewText
-        const seriousnessRating = parseInt(request.body.seriousnessRating)
-        
-        await podcastBL.newPodcastReview(collectionId,comedyRating,factRating,productionQualty,overallRating,reviewText,seriousnessRating)
-        const information = await searchBL.searchPodcast(collectionId)
-        const categories = await categoryBL.getCategoriesDetails()
 
-        model = {
-            collectionId: collectionId,
-            information: information.results,
-            categories: categories
-        }
-        response.render("podcast.hbs", { model })
+        await podcastBL.newPodcastReview(
+            collectionId, toneRating, topicRelevenceRating, productionQualty,
+            overallRating, reviewText
+        )
+        response.redirect("/podcast/" + collectionId)
 
     })()
-        
+
 })
 
 

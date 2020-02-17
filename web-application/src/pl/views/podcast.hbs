@@ -1,37 +1,39 @@
 <div class="grid-x content">
 
     <div class="cell small-10 large-8 medium-10 large-offset-2 medium-offset-1 small-offset-1">
-
+        
         <!--Pod-info section-->
         {{>podcast-information}}
+
+        <div class="grid-x">
+            <div class="cell">
+                <a href="/podcast/{{model.collectionId}}/write-review" class="buttons">Write a review</a>
+            </div>
+        </div>
+
+        {{#if model.reviews}}
 
         <div class="grid-x">
             <div class="cell large-6 headers">
                 <h1>Reviews</h1>
             </div>
-            <div class="cell large-6">
-                <a href="/podcast/{{model.collectionId}}/write-review" class="buttons">Write a review</a>
+        </div>
+
+        <div class="grid-x">
+            {{#each model.reviews}}
+            <div class="cell review">
+                {{>review}}
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="grid-x">
+            <div class="cell large-12">
+                <a class="buttons">View more reviews</a>
             </div>
         </div>
 
-        <div class="grid-x reviews">
-            <div class="cell large-4 review">
-                {{>review}}
-                
-            </div>
-            <div class="cell large-4 review">
-                {{>review}}
-            </div>
-            <div class="cell large-4 review">
-                {{>review}}
-            </div>
-        </div>
-        
-        <div class="grid-x">
-            <div class="cell large-12">
-                <button class="buttons">View more reviews</button>
-            </div>
-        </div>
+        {{/if}}
 
 
         <div class="grid-x">
