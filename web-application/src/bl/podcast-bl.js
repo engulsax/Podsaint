@@ -1,27 +1,29 @@
 
-const reviewDAL = require('../dal/podcast-dal')
 
+module.exports = function ({ podcastDAL }) {
 
-exports.newPodcastReview = async function newPodcastReview(collectionId, comedyRating, factRating, productionQualty, overallRating, reviewText, seriousnessRating) {
-   
-    try {
-       
-        return await reviewDAL.newPodcastReview(collectionId, comedyRating, factRating, productionQualty, overallRating, reviewText, seriousnessRating)
+    return {
+        newPodcastReview: async function (collectionId, comedyRating, factRating, productionQualty, overallRating, reviewText, seriousnessRating) {
 
-    }catch{
-        //error
-        console.log("podcast-bl-error")
-          
-    }
-}
+            try {
 
-exports.getAllReviewsByPodcastId = async function getAllReviewsByPodcastId(collectionId){
+                return await podcastDAL.newPodcastReview(collectionId, comedyRating, factRating, productionQualty, overallRating, reviewText, seriousnessRating)
 
-    try{
-        return await reviewDAL.getAllReviewsByPodcastId(collectionId)
-    }catch{
-        //error
-        console.log("get all reviewsbypodcastid error")
-        
+            } catch{
+                //error
+                console.log("podcast-bl-error")
+            }
+        },
+
+        getAllReviewsByPodcastId: async function (collectionId) {
+
+            try {
+                return await podcastDAL.getAllReviewsByPodcastId(collectionId)
+            } catch{
+                //error
+                console.log("get all reviewsbypodcastid error")
+
+            }
+        }
     }
 }
