@@ -13,6 +13,11 @@
         <form action="" method="POST">
             <div id="information-holder">
 
+                {{#each model.information}}
+                <label for="podcastNameReview"><h2>{{collectionName}}</h2></label>
+                <input type="text" id="podcastNameReview" name="collectionName" value="{{collectionName}}" readonly>
+                {{/each}}
+
 
                 <div class="gird-x cell checkgroup">
 
@@ -77,15 +82,20 @@
 
                         <div class="cell">
                             <fieldset class="star-div">
-                                <input class="star star-5-hr" id="star-5-hr" type="radio" name="topicRelevenceRating" value="5" />
+                                <input class="star star-5-hr" id="star-5-hr" type="radio" name="topicRelevenceRating"
+                                    value="5" />
                                 <label class="star star-5-hr" for="star-5-hr"></label>
-                                <input class="star star-4-hr" id="star-4-hr" type="radio" name="topicRelevenceRating" value="4" />
+                                <input class="star star-4-hr" id="star-4-hr" type="radio" name="topicRelevenceRating"
+                                    value="4" />
                                 <label class="star star-4-hr" for="star-4-hr"></label>
-                                <input class="star star-3-hr" id="star-3-hr" type="radio" name="topicRelevenceRating" value="3" />
+                                <input class="star star-3-hr" id="star-3-hr" type="radio" name="topicRelevenceRating"
+                                    value="3" />
                                 <label class="star star-3-hr" for="star-3-hr"></label>
-                                <input class="star star-2-hr" id="star-2-hr" type="radio" name="topicRelevenceRating" value="2" />
+                                <input class="star star-2-hr" id="star-2-hr" type="radio" name="topicRelevenceRating"
+                                    value="2" />
                                 <label class="star star-2-hr" for="star-2-hr"></label>
-                                <input class="star star-1-hr" id="star-1-hr" type="radio" name="topicRelevenceRating" value="1" />
+                                <input class="star star-1-hr" id="star-1-hr" type="radio" name="topicRelevenceRating"
+                                    value="1" />
                                 <label class="star star-1-hr" for="star-1-hr"></label>
                             </fieldset>
                         </div>
@@ -127,7 +137,8 @@
                     <div class="cell small">
                         <label>
                             Write a review
-                            <textarea rows="5" cols="2" placeholder="Write your review here..." name="reviewText"></textarea>
+                            <textarea rows="5" cols="2" placeholder="Write your review here..."
+                                name="reviewText"></textarea>
                         </label>
                         <div>
                             <input type="submit" class="podsaint-button button" value="Submit">

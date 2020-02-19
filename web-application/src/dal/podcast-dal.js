@@ -7,26 +7,19 @@ const ratingDatabaseNames = ["overall_rating", "production_quality_rating", "top
 const ratingsVaribleNames = ["overall", "quality", "topic", "comedy", "drama"]
 const arrSum = arr => arr.reduce((a, b) => a + b, 0)
 
-exports.newPodcastReview = async function newPodcastReview(collectionId, comedyRating, dramaRating, topicRelevence, productionQuality, overallRating, reviewText) {
+exports.newPodcastReview = async function newPodcastReview(collectionId, collectionName, comedyRating, dramaRating, topicRelevence, productionQuality, overallRating, reviewText) {
 
 	const userId = 1
 	const query = "INSERT INTO reviews (user_id, pod_id, production_quality_rating, topic_relevence_rating, comedy_rating, drama_rating, overall_rating, review_text) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
 	const values = [userId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating, reviewText]
 
-	/*comdey_rating INT,
-    drama_rating INT,
-    topic_relevence_rating INT,
-    production_quality_rating INT,
-    overall_rating INT*/
-
 	try {
 
 		const podcast = await this.getPodcastById(collectionId)
-		console.log("CHECK THIS MF OUT HAHA ---- " + podcast)
 
 		if (podcast == undefined) {
 
-			await this.addPodcast(collectionId)
+			await this.addPodcast(collectionId, collectionName)
 		}
 
 		await addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
@@ -49,13 +42,13 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 		ratings.quality += await productionQuality
 		ratings.topic += await topicRelevence
 		ratings.drama += await dramaRating
-		ratings.comdey += await comedyRating
+		ratings.comedy += await comedyRating
 
 		/*Finding all value in objects with the help of ratingsVaribleNames'
 		which has the name of all the keys aka the varible names (in this case)*/
 		ratingDatabaseNames.forEach(async function (rating, i) {
-			//await addNewRatingsToPodcast(collectionId, rating, ratings[ratingsVaribleNames[i]])
-			console.log(rating+ "------" + "-------"  + ratings[ratingsVaribleNames[i]])
+			await addNewRatingsToPodcast(collectionId, rating, ratings[ratingsVaribleNames[i]])
+			//console.log(rating + "------" + "-------" + ratings[ratingsVaribleNames[i]])
 		})
 
 	} catch (error) {
@@ -67,33 +60,29 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 
 }
 
+/* WHAT AM I DOING?*/
 async function addNewRatingsToPodcast(collectionId, ratingName, ratingScore) {
-	query = "INSERT INTO (" + ratingName + ") Values (?) FROM podcast WHERE pod_id = ?"
+	query = "UPDATE podcasts SET " + ratingName + " = ? WHERE pod_id = ?"
+	//console.log("NEW QUERY--------" + query)
 	values = [ratingScore, collectionId]
 	db(query, values)
 }
 
 async function getRatingsFromPodcast(collectionId) {
 
-	values = [collectionId]
+	query = "SELECT * FROM podcasts WHERE pod_id = ?"
+	value = [collectionId]
 
-	overallQuery = "SELECT overall_rating FROM podcasts WHERE pod_id = ?"
-	qualityQuery = "SELECT production_quality_rating FROM podcasts WHERE pod_id = ?"
-	topicQuery = "SELECT topic_relevence_rating FROM podcasts WHERE pod_id = ?"
-	comedyQuery = "SELECT comedy_rating FROM podcasts WHERE pod_id = ?"
-	dramaQuery = "SELECT drama_rating FROM podcasts WHERE pod_id = ?"
-
-	const ratings = {}
-
-	/*PROBLEM IS HERE*/
 	try {
-		ratings.overall = await db(overallQuery, values)
-		console.log("afsafea   " + Object.values(ratings.overall))
-		ratings.quality = await db(qualityQuery, values)
-		ratings.topic = await db(topicQuery, values)
-		ratings.comdey = await db(comedyQuery, values)
-		ratings.drama = await db(dramaQuery, values)
-		console.log("GET RATINGS-------"+ratings)
+
+		const result = await db(query, value)
+		const ratings = {}
+
+		/*async - await unecessary?*/
+		ratingDatabaseNames.forEach(async function (rating, i) {
+			ratings[ratingsVaribleNames[i]] = await result[0][rating]
+		})
+
 		return ratings
 	} catch (error) {
 		console.log(error)
@@ -106,10 +95,10 @@ exports.getPodcastById = async function getPodcastById(collectionId) {
 
 
 	const query = "SELECT * FROM podcasts WHERE pod_id = ?"
-	const values = [collectionId]
+	const value = [collectionId]
 
 	try {
-		const response = await db(query, values)
+		const response = await db(query, value)
 		//console.log(response)
 		return response[0].pod_id
 
@@ -119,9 +108,9 @@ exports.getPodcastById = async function getPodcastById(collectionId) {
 	}
 }
 
-exports.addPodcast = async function addPodcast(collectionId) {
+exports.addPodcast = async function addPodcast(collectionId, collectionName) {
 	const query = "INSERT INTO podcasts(pod_id, pod_name, comedy_rating, drama_rating, topic_relevence_rating, production_quality_rating, overall_rating) VALUES(?, ?, ? ,? ,? ,? ,?)"
-	const values = [collectionId, "poop", 0, 0, 0, 0, 0]
+	const values = [collectionId, collectionName, 0, 0, 0, 0, 0]
 
 	try {
 		const response = await db(query, values)
@@ -135,10 +124,10 @@ exports.addPodcast = async function addPodcast(collectionId) {
 exports.getAllReviewsByPodcastId = async function getAllReviewsByPodcastId(collectionId) {
 
 	const query = "SELECT * FROM reviews WHERE pod_id = ?"
-	const values = [collectionId]
+	const value = [collectionId]
 
 	try {
-		const response = await db(query, values)
+		const response = await db(query, value)
 		return response
 	} catch (error) {
 		console.log("error in getallreviewsbypodcast")
@@ -149,14 +138,80 @@ exports.getAllReviewsByPodcastId = async function getAllReviewsByPodcastId(colle
 exports.getAllReviewsByUser = async function getAllReviewsByUser(userId) {
 
 	const query = "SELECT * FROM reviews WHERE user_id = ?"
-	const values = [userId]
+	const value = [userId]
 
 	try {
-		const response = await db(query, values)
+		const response = await db(query, value)
 		return response
 
 	} catch (error) {
 		console.log("error in getallreviewsbyid")
 		console.log(error)
 	}
+}
+
+
+exports.getAverageRatingsByPodcastId = async function getAverageRatingsByPodcastId(collectionId) {
+
+	/*Unnecessary awaits ?*/
+
+	try {
+		const ratings = await getRatingsFromPodcast(collectionId)
+		const numberOfReviewsRaw = await getNumberOfReviews(collectionId)
+		const numberOfReviews = await numberOfReviewsRaw[0]["COUNT(*)"]
+		
+		const averageRatings = {}
+		for (key in ratings) {
+			averageRatings[key] = Math.round(ratings[key] / (await numberOfReviews))
+			console.log("average ratings---------- " + await averageRatings[key])
+		}
+
+		return averageRatings
+
+	} catch (error) {
+		console.log("error in getAverageRatingsByPodcastId")
+		console.log(error)
+	}
+}
+
+exports.getToneInformationByPodcastId = async function getToneInformationByPodcastId(collectionId) {
+
+	toneInformation = {}
+
+	const numberOfReviewsRaw = await getNumberOfReviews(collectionId)
+	const numberOfReviews = numberOfReviewsRaw[0]["COUNT(*)"]
+
+	dramaQuery = "SELECT drama_rating FROM podcasts WHERE pod_id = ?"
+	comedyQuery = "SELECT comedy_rating FROM podcasts WHERE pod_id = ?"
+
+	value = [collectionId]
+
+	const dramaScoreRaw = await db(dramaQuery, value)
+	const comedyScoreRaw = await db(comedyQuery, value)
+	const dramaScore = dramaScoreRaw[0]['drama_rating']
+	const comedyScore = comedyScoreRaw[0]['comedy_rating']
+
+	if (dramaScore < comedyScore) {
+		toneInformation.mostPicked = "Comedy/Relaxed"
+		/*mulitplication by 100 to make decimal into precentage*/
+		toneInformation.precentage = Math.round(((comedyScore) / numberOfReviews) * 100)
+	} else {
+		toneInformation.mostPicked = "Drama/Serious"
+		toneInformation.precentage = Math.round(((dramaScore) / numberOfReviews) * 100)
+	}
+
+	return toneInformation
+}
+
+async function getNumberOfReviews(collectionId) {
+	query = "SELECT COUNT(*) FROM reviews WHERE pod_id = ?"
+	value = [collectionId]
+
+	return await db(query, value)
+}
+
+exports.podcastHasReviews = async function podcastHasReviews(collectionId){
+	const numberOfReviws = await getNumberOfReviews(collectionId)
+	console.log("NUMBER OF MF REVIES------"+numberOfReviws[0]['COUNT(*)'])
+	return numberOfReviws[0]['COUNT(*)']
 }

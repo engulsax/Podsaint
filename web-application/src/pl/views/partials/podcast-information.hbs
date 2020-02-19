@@ -3,14 +3,14 @@
         <ul>
             <li><a href="#">Add to your podcasts</a></li>
             <li><a href="#">Add to want to listen </a></li>
-            <li><a href="#">Recommend to friend</a></li>
         </ul>
     </div>
 </div>
 <div class="grid-x">
     <div id="information-holder" class="cell">
         <!-- each need to get into scope-->
-        {{#each model.information}}
+        {{#with model}}
+        {{#with information.[0]}}
         <div class="cell">
 
             <div class="grid-x">
@@ -27,17 +27,26 @@
                     <a href="{{collectionViewUrl}}" class="buttons">More information on iTunes</a>
                 </div>
             </div>
+            {{/with}}
+
             <div class="cell">
-                {{>review-box}}
+                {{#if reviews}}
+                {{>review-box-info}}
+                {{else}}
+                <p> No one has yet rated "{{information.[0].collectionName}}" </p>
+                <a href="/podcast/{{../collectionId}}/write-review">Rate it?</a>
+                {{/if}}
             </div>
+
             <div class="cell text-left">
                 <h2>Description</h2>
                 <p>
-                    {{../model.description}}
+                    {{description}}
                 </p>
             </div>
         </div>
-
+        {{/with}}
     </div>
-    {{/each}}
+
+
 </div>

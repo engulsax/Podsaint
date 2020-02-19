@@ -1,36 +1,36 @@
 <section class="ratings">
     <div class="grid-x cell">
 
+        {{#with tone}}
 
         <div id="showcase-tone" class="cell">
-            <div class="rating-text small">Tone of the podcast:</div>
-            {{#if comedy_rating}}
-            <div class="rating-text"> Comedy/Relaxed </div>
-            {{else}}
-            <div class="rating-text"> Drama/Serious </div>
-            {{/if}}
+            <div class="rating-text small">{{precentage}}% of people rated this as</div>
+            <div class="rating-text">{{mostPicked}}</div>
         </div>
 
+        {{/with}}
 
     </div>
 
     <div class="review-box grid-x">
 
+        {{#with average}}
         <div class="cell small medium-4">
             <div class="cell small-6 rating-text">Overall</div>
-            <div class="rating-text"> {{#rating overall_rating}}{{/rating}}</div>
+            <div class="rating-text"> {{#rating overall}}{{/rating}}</div>
         </div>
 
         <div class="cell small medium-4">
             <div class="cell small-6 rating-text">Topic Relevance</div>
-            <div class="cell small-6">{{#rating topic_relevence_rating}}{{/rating}}</div>
+            <div class="cell small-6">{{#rating topic}}{{/rating}}</div>
         </div>
 
 
         <div class="cell small medium-4">
             <div class="cell small-6 rating-text">Production Quality</div>
-            <div class="cell small-6">{{#rating production_quality_rating}}{{/rating}}</div>
+            <div class="cell small-6">{{#rating quality}}{{/rating}}</div>
         </div>
+        {{/with}}
 
     </div>
 

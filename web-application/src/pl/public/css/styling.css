@@ -64,6 +64,7 @@ footer{
 
 /*-------------------- STYLING --------------------*/
 
+
 .right{
     float: right;
 }
@@ -544,9 +545,14 @@ textarea{
 }
 
 .rating-text{
-    display: inline-block;
+    display: block;
     font-family: 'Open Sans', sans-serif;
     color: white;
+    font-size: medium;
+}
+
+
+.rating-text.small{
     font-size: small;
 }
 
@@ -881,4 +887,21 @@ input.tone:checked ~ label.tone svg {
 .review-text-boc{
     white-space: pre-wrap;
   }
-  
+
+  #podcastNameReview{
+      display:none;
+  }
+
+  #showcase-tone{
+    text-align: left;
+  }
+
+  #showcase-tone label.tone svg{
+    float:left;
+    filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
+
+  #showcase-tone label.tone svg:hover{
+    transform: rotate(0) scale(1);
+    filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
