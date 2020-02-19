@@ -1,66 +1,111 @@
 const express = require('express')
-const categoryBL = require('../../bl/category-bl')
-const searchBL = require('../../bl/search-bl')
-const accountBL = require('../../bl/account-bl')
-const router = express.Router()
 
-/*NOT LOGGED IN*/
-router.get('/', function (request, response) {
-    (async function () {
-        
-        const mainPodcasts = await searchBL.searchPodcasts('podcast')
+module.exports = function ({ categoryBL, accountBL, searchBL }) {
+ 
+    const router = express.Router()
 
-        model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            mainPodcasts: mainPodcasts.results
-           
-        }
+    /*NOT LOGGED IN*/
+    router.get('/', function (request, response) {
+        (async function () {
 
-        console.log(model.mainPodcasts)
+            if (request.session.key) {
 
-        response.render("home.hbs", { model })
-    })()
-})
+                model = { categories: await categoryBL.getCategoriesDetails() }
+                response.render("feed.hbs", { model })
+            }
+            else {
+                const mainPodcasts = await searchBL.searchPodcasts('podcast')
 
-/*LOGGED IN*/
-router.get('/home', function (request, response) {
-    (async function () {
-        model = {
-            categories: await categoryBL.getCategoriesDetails()
-        }
-        response.render("feed.hbs", { model })
-    })()
-})
+                model = {
+                    categories: await categoryBL.getCategoriesDetails(),
+                    mainPodcasts: mainPodcasts.results
+                }
+                response.render("home.hbs", { model })
+            }
+        })()
+    })
 
-router.post('/signup', function(request, response){
+    /*LOGGED IN*/
+    router.get('/home', function (request, response) {
+        (async function () {
+            if (request.session.key) {
+                model = { categories: await categoryBL.getCategoriesDetails() }
+                response.render("feed.hbs", { model })
+            }
+            else {
+                const mainPodcasts = await searchBL.searchPodcasts('podcast')
 
-    (async function () {
-        
-        const username = request.body.username
-        const password= request.body.password
-        
-        await accountBL.userRegistration(username, password)
-        response.render("home.hbs")
+                model = {
+                    categories: await categoryBL.getCategoriesDetails(),
+                    mainPodcasts: mainPodcasts.results
+                }
+                response.render("signup.hbs", { model })
+            }
+        })()
+    })
 
-    })()
-})
+    router.get('/signup', function (request, response) {
+        response.render("signup.hbs")
 
-router.post('/signin', function (request, response) {
-    (async function () {
-       
-        const username = request.body.username
-        const password = request.body.password
-        const validUser = await accountBL.userLogin(username, password)
-        
-        if (validUser){
-            model = {categories: await categoryBL.getCategoriesDetails()}
-            response.render("feed.hbs", {model})
-        }else{
-            //not logged in
+    })
+    router.get('/signin', function (request, response) {
+        response.render("signin.hbs")
+    })
+
+    router.post('/signout', function (request, response) {
+
+        if (request.session.key) {
+            request.session.destroy(function () {
+                response.redirect('/')
+            })
+        } else {
             response.render("home.hbs")
         }
-        
-    })()
-})
+    })
 
-module.exports = router
+    router.post('/signup', function (request, response) {
+        (async function () {
+            console.log("signup post")
+            const username = request.body.username
+            const password = request.body.password
+            const email = request.body.email
+
+            try {
+                console.log("test")
+                await accountBL.userRegistration(username, password, email)
+                model = { userRegSucess: true }
+                console.log(model)
+                response.render("home.hbs", model)
+
+            } catch (error) {
+                model = { inputError: error }
+                response.render("signup.hbs", model)
+            }
+        })()
+    })
+
+    router.post('/signin', function (request, response) {
+        (async function () {
+
+            const username = request.body.username
+            const password = request.body.password
+
+            try {
+                if (await accountBL.userLogin(username, password)) {
+                    request.session.key = { user: username }
+                    model = { categories: await categoryBL.getCategoriesDetails() }
+                    response.render("feed.hbs", { model })
+
+                } else {
+                    response.render("signin.hbs")
+                }
+
+            } catch (error) {
+                model = { inputError: error }
+                response.render("signin.hbs", model)
+            }
+        })()
+    })
+
+    return router
+}

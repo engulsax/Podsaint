@@ -1,15 +1,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const expressHandlebars = require('express-handlebars')
-var svgstore = require('svgstore');
-var fs = require('fs');
-
-
-const categoryPL = require('./routers/category-pl')
-const searchPL = require('./routers/search-pl')
-const homePL = require('./routers/home-pl')
-const podcastPL = require('./routers/podcast-pl')
-
+const svgstore = require('svgstore');
+const fs = require('fs');
+const redis = require('redis')
+const session = require('express-session')
+const container = require('../main.js')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -45,12 +41,31 @@ app.engine('hbs', expressHandlebars({
   }
 }))
 
+let redisClient = redis.createClient(6379, 'podsaint_redis_1')
+var RedisStore = require('connect-redis')(session)
+
+
+app.use(session({
+	secret: "ldasdgewbodkodkfkrsldfsbgtdhhtyu",
+	store: new RedisStore({client: redisClient }),
+	saveUninitialized: false,
+	resave: false
+}))
+
+/*
+app.use(function(request, response, next){
+	console.log("---------test session middleware test-------------")
+	console.log(request.session)
+	console.log(request.session.key)
+	next()
+})*/
 
 /*---------------------------------ROUTERS-------------------------------------*/
-app.use("/", homePL)
-app.use("/category", categoryPL)
-app.use("/search", searchPL)
-app.use("/podcast", podcastPL)
+app.use("/", container.resolve('homePL'))
+app.use("/category", container.resolve('categoryPL'))
+app.use("/search", container.resolve('searchPL'))
+app.use("/podcast", container.resolve('podcastPL'))
+
 
 
 app.listen(8080, function () {

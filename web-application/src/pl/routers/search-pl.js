@@ -1,85 +1,86 @@
 const express = require('express')
-const categoryBL = require('../../bl/category-bl')
-const searchBL = require('../../bl/search-bl')
-const router = express.Router()
 
-/*Searching on itunes*/
-router.get('/itunes', function (request, response) {
-    (async function () {
-        const searchText = request.query.searchText
-        const categoryOption = request.query.category
-        const searchResponse = await searchBL.searchPodcasts(searchText)
+module.exports = function ({ categoryBL, searchBL, podcastBL }) {
 
-        const model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            result: searchResponse.results,
-            headText: "Search for all podcasts",
-            id: ""
-        }
+    const router = express.Router()
+    /*Searching on itunes*/
+    router.get('/itunes', function (request, response) {
+        (async function () {
+            const searchText = request.query.searchText
+            const categoryOption = request.query.category
+            const searchResponse = await searchBL.searchPodcasts(searchText)
 
-        response.render('search.hbs', { model })
-    })()
-})
+            const model = {
+                categories: await categoryBL.getCategoriesDetails(),
+                result: searchResponse.results,
+                headText: "Search for all podcasts",
+                id: ""
+            }
 
-router.get('/itunes/:id', function (request, response) {
-    (async function () {
-        const categoryId = request.params.id
-        const searchText = request.query.searchText
-        const categoryOption = request.query.category
-        const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
-        const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
+            response.render('search.hbs', { model })
+        })()
+    })
 
-        model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            id: categoryId,
-            currentCategoryDetails: currentCategoryDetails,
-            headText: currentCategoryDetails.category,
-            subCategories: currentCategoryDetails.subCategories,
-            result: searchResponse.results,
-        }
+    router.get('/itunes/:id', function (request, response) {
+        (async function () {
+            const categoryId = request.params.id
+            const searchText = request.query.searchText
+            const categoryOption = request.query.category
+            const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
+            const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
 
-        response.render('search.hbs', { model })
-    })()
-})
+                model = {
+                    categories: await categoryBL.getCategoriesDetails(),
+                    id: categoryId,
+                    currentCategoryDetails: currentCategoryDetails,
+                    headText: currentCategoryDetails.category,
+                    subCategories: currentCategoryDetails.subCategories,
+                    result: searchResponse.results,
+                }
+
+            response.render('search.hbs', { model })
+        })()
+    })
 
 
-/*Searching on podsaint*/
-router.get('/podsaint', function (request, response) {
-    (async function () {
-        const searchText = request.query.searchText
-        const categoryOption = request.query.category
-        const searchResponse = await searchBL.searchPodcasts(searchText)
+    /*Searching on podsaint*/
+    router.get('/podsaint', function (request, response) {
+        (async function () {
+            const searchText = request.query.searchText
+            const categoryOption = request.query.category
+            const searchResponse = await searchBL.searchPodcasts(searchText)
 
-        const model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            result: searchResponse.results,
-            headText: "Search for all podcasts",
-            id: ""
-        }
+            const model = {
+                categories: await categoryBL.getCategoriesDetails(),
+                result: searchResponse.results,
+                headText: "Search for all podcasts",
+                id: ""
+            }
 
-        response.render('search.hbs', { model })
-    })()
-})
+            response.render('search.hbs', { model })
+        })()
+    })
 
-router.get('/podsaint/:id', function (request, response) {
-    (async function () {
-        const categoryId = request.params.id
-        const searchText = request.query.searchText
-        const categoryOption = request.query.category
-        const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
-        const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
+    router.get('/podsaint/:id', function (request, response) {
+        (async function () {
+            const categoryId = request.params.id
+            const searchText = request.query.searchText
+            const categoryOption = request.query.category
+            const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
+            const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
 
-        model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            id: categoryId,
-            currentCategoryDetails: currentCategoryDetails,
-            headText: currentCategoryDetails.category,
-            subCategories: currentCategoryDetails.subCategories,
-            result: searchResponse.results,
-        }
+                model = {
+                    categories: await categoryBL.getCategoriesDetails(),
+                    id: categoryId,
+                    currentCategoryDetails: currentCategoryDetails,
+                    headText: currentCategoryDetails.category,
+                    subCategories: currentCategoryDetails.subCategories,
+                    result: searchResponse.results,
+                }
 
-        response.render('search.hbs', { model })
-    })()
-})
-
-module.exports = router
+            response.render('search.hbs', { model })
+        })()
+    })
+    
+    return router
+}

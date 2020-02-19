@@ -3,6 +3,7 @@
 CREATE TABLE users(
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL
 );
 
@@ -41,5 +42,5 @@ CREATE TABLE podcastlists (
 );
 
 
-INSERT INTO users(username,password) VALUES ("johan","abc123");
+INSERT INTO users(username,email,password) VALUES ("johan","test@mail.se","abc123");
 INSERT INTO podcasts(pod_id) VALUES ("596047499");

@@ -1,30 +1,35 @@
-const categoryDAL = require('../dal/category-dal.js')
 
-const errors = {
-    'noCategories': 'Could not get categories. Try again later.',
-}
+module.exports = function({categoryDAL}){
 
-exports.getCategoriesDetails = async function getCategoriesDetails() {
-    if (categoryDAL.dataNotFetched()) {
-        await categoryDAL.fetchData()
+    const errors = {
+        'noCategories': 'Could not get categories. Try again later.',
     }
-    return categoryDAL.categoriesDetails
-}
 
-exports.getCategories = async function getCategoriesDetails() {
-    if (categoryDAL.dataNotFetched()) {
-        await categoryDAL.fetchData()
+    return{
+
+        getCategoriesDetails: async function() {
+            if (categoryDAL.dataNotFetched()) {
+                await categoryDAL.fetchData()
+            }
+            return categoryDAL.categoriesDetails
+        },
+        
+        getCategories: async function() {
+            if (categoryDAL.dataNotFetched()) {
+                await categoryDAL.fetchData()
+            }
+            return categoryDAL.categoriesDetails.map(obj => obj.category)
+        },
+        
+        getCategoryDetails: async function(id) {
+            if (categoryDAL.dataNotFetched()) {
+                await categoryDAL.fetchData()
+            }
+            return categoryDAL.categoriesDetails.find(obj => { return obj.id === id })
+        },
+        
+        fetchPodInfo: async function(url) {
+            return categoryDAL.fetchPodInfo(url)
+        }
     }
-    return categoryDAL.categoriesDetails.map(obj => obj.category)
-}
-
-exports.getCategoryDetails = async function getCategoryDetails(id) {
-    if (categoryDAL.dataNotFetched()) {
-        await categoryDAL.fetchData()
-    }
-    return categoryDAL.categoriesDetails.find(obj => { return obj.id === id })
-}
-
-exports.fetchPodInfo = async function fetchPodInfo(url) {
-    return categoryDAL.fetchPodInfo(url)
 }
