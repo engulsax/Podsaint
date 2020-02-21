@@ -2,27 +2,11 @@
     <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
         <div class="pop-up-content">
             <span id="close-btn-sign-in">&times;</span>
-            <form action="/signin" method = "POST">
-                <label>
-                    Username
-                    <input id="signin-user" type="text" name="username">
-                </label>
-                <p id="input-user-error"></p>
-                <label>
-                    Password
-                    <input id="signin-password" type="password" name="password">
-                </label>
-                <p id="input-password-error"></p>
-                <input id="sign-in-btn"class="button pop-up-button" type="submit" value="SIGN IN">
-            </form>
-            <label class="center alternative-sign-up">
-                Or sign in using
-                <ul class="social-media-list">
-                    <li><a href="#" class="fa fa-facebook"></a></li>
-                    <li><a href="#" class="fa fa-twitter"></a></li>
-                    <li><a href="#" class="fa fa-google"></a></li>
-                </ul>
-            </label>
+            {{>sign-in-form}}
+            <div class="sign-in-link sign-text">
+                Don't have an account?
+                <a id="sign-up-alternative">Sign up</a>
+            </div>
         </div>
     </div>
 </div>

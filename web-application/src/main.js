@@ -6,17 +6,15 @@ const searchPLRo = require('./pl/routers/search-pl')
 const homePLRo = require('./pl/routers/home-pl')
 const podcastPLRo = require('./pl/routers/podcast-pl')
 
-
-const accountDALFun = require('../src/dal/account-dal.js')
-const categoryDALFun = require('../src/dal/category-dal.js')
-const searchDALFun = require('../src/dal/search-dal')
-const podcastDALFun = require('../src/dal/podcast-dal')
-
-
 const categoryBLFun = require('../src/bl/category-bl')
-const searchBLFun = require('../src/bl/search-bl')
+const searchItunesBLFun = require('./bl/search-itunes-bl')
+const searchPodsaintBLFun = require('./bl/search-podsaint-bl')
 const accountBLFun = require('../src/bl/account-bl')
 const podcastBLFun = require('../src/bl/podcast-bl')
+
+const accountDALFun = require('../src/dal/account-dal.js')
+const searchPodsaintDALFun = require('../src/dal/search-podsaint-dal')
+const podcastDALFun = require('../src/dal/podcast-dal')
 
 const container = awilix.createContainer()
 
@@ -27,12 +25,12 @@ container.register('podcastPL', awilix.asFunction(podcastPLRo))
 
 container.register('accountBL', awilix.asFunction(accountBLFun))
 container.register('categoryBL', awilix.asFunction(categoryBLFun))
-container.register('searchBL', awilix.asFunction(searchBLFun))
+container.register('searchPodsaintBL', awilix.asFunction(searchPodsaintBLFun))
+container.register('searchItunesBL', awilix.asFunction(searchItunesBLFun))
 container.register('podcastBL', awilix.asFunction(podcastBLFun))
 
 container.register('accountDAL', awilix.asFunction(accountDALFun))
-container.register('categoryDAL', awilix.asFunction(categoryDALFun))
-container.register('searchDAL', awilix.asFunction(searchDALFun))
+container.register('searchPodsaintDAL', awilix.asFunction(searchPodsaintDALFun))
 container.register('podcastDAL', awilix.asFunction(podcastDALFun))
 
 

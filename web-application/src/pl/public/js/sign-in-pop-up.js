@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", function (event) {
 
-    //Get modal element
     var modalSignIn = document.getElementById("sign-in-pop-up")
-    //Get modal button
+
     var modalBtnSignIn = document.getElementById("sign-in")
-    //Get close button
+
     var closeBtn = document.getElementById("close-btn-sign-in")
+
+    var altSignUpBtn = document.getElementById("sign-up-alternative")
+
+    var modalSignUp = document.getElementById("sign-up-pop-up")
     
     const inputUsername = document.getElementById("signin-user")
     const inputPassword = document.getElementById("signin-password")
@@ -15,6 +18,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         event.preventDefault()
         modalSignIn.style.display = "block"
     })
+
+    altSignUpBtn.addEventListener("click",function(event){
+        modalSignIn.style.display = "none"
+        modalSignUp.style.display = "block"
+    })
+
+
 
     window.addEventListener("click", function (event) {
         
@@ -26,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     closeBtn.addEventListener("click", function (event) {
         modalSignIn.style.display = "none"
     })
+
     document.getElementById("sign-in-btn").addEventListener("click", function(event){
     
         console.log("submit user sign in")

@@ -1,19 +1,31 @@
 const express = require('express')
+const router = express.Router()
 
-module.exports = function ({ categoryBL, searchBL, podcastBL }) {
+module.exports = function ({ categoryBL, searchItunesBL, searchPodsaintBL, podcastBL }) {
 
-    const router = express.Router()
-    /*Searching on itunes*/
+    router.use(async function (request, response, next) {
+        response.model = {
+            categories: await categoryBL.getCategoriesDetails(),
+            loggedIn: (request.session.key)
+        }
+        next()
+    })
+
+    router.get('/', function (request, response) {
+        response.redirect('/search/itunes')
+    })
+
     router.get('/itunes', function (request, response) {
         (async function () {
             const searchText = request.query.searchText
-            const categoryOption = request.query.category
-            const searchResponse = await searchBL.searchPodcasts(searchText)
+            const searchResponse = await searchItunesBL.searchPodcasts(searchText)
 
+            searchResponse.results
             const model = {
                 categories: await categoryBL.getCategoriesDetails(),
+                prevSearchText: searchText,
                 result: searchResponse.results,
-                headText: "Search for all podcasts",
+                category: "Search for all podcasts",
                 id: ""
             }
 
@@ -26,16 +38,17 @@ module.exports = function ({ categoryBL, searchBL, podcastBL }) {
             const categoryId = request.params.id
             const searchText = request.query.searchText
             const categoryOption = request.query.category
-            const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
-            const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
+            const searchResponse = await searchItunesBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
+            const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId)
 
                 model = {
                     categories: await categoryBL.getCategoriesDetails(),
                     id: categoryId,
                     currentCategoryDetails: currentCategoryDetails,
-                    headText: currentCategoryDetails.category,
+                    prevSearchText: searchText,
+                    category: currentCategoryDetails.category,
                     subCategories: currentCategoryDetails.subCategories,
-                    result: searchResponse.results,
+                    result: searchResponse.results
                 }
 
             response.render('search.hbs', { model })
@@ -48,12 +61,26 @@ module.exports = function ({ categoryBL, searchBL, podcastBL }) {
         (async function () {
             const searchText = request.query.searchText
             const categoryOption = request.query.category
-            const searchResponse = await searchBL.searchPodcasts(searchText)
+
+            const toneRating = request.query.podcastTone
+            const topicRelevenceRating = parseInt(request.query.topicRelevenceRating)
+            const productionQualty = parseInt(request.query.productionQuality)
+            const overallRating = parseInt(request.query.overallRating)
+
+            const searchResponse = await searchPodsaintBL.getSearchMatch(
+                categoryOption,
+                searchText,
+                toneRating,
+                topicRelevenceRating,
+                productionQualty,
+                overallRating
+            )
 
             const model = {
                 categories: await categoryBL.getCategoriesDetails(),
-                result: searchResponse.results,
-                headText: "Search for all podcasts",
+                result: searchResponse,
+                prevSearchText: searchText,
+                category: "Search for all podcasts",
                 id: ""
             }
 
@@ -61,26 +88,46 @@ module.exports = function ({ categoryBL, searchBL, podcastBL }) {
         })()
     })
 
+    router.use('/podsaint/:id', function (request, responsen, next) {
+
+        //INPUT HANDLE HERE
+    })
+
     router.get('/podsaint/:id', function (request, response) {
         (async function () {
             const categoryId = request.params.id
             const searchText = request.query.searchText
             const categoryOption = request.query.category
-            const searchResponse = await searchBL.searchPodcastsWithIdAndTerm(searchText, categoryOption, categoryId)
+
+            const toneRating = request.query.podcastTone
+            const topicRelevenceRating = parseInt(request.query.topicRelevenceRating)
+            const productionQualty = parseInt(request.query.productionQuality)
+            const overallRating = parseInt(request.query.overallRating)
+
+            const searchResponse = await searchPodsaintBL.getSearchMatch(
+                categoryOption,
+                searchText,
+                toneRating,
+                topicRelevenceRating,
+                productionQualty,
+                overallRating
+            )
+
             const currentCategoryDetails = await categoryBL.getCategoryDetails(categoryId),
 
                 model = {
                     categories: await categoryBL.getCategoriesDetails(),
+                    prevSearchText: searchText,
                     id: categoryId,
                     currentCategoryDetails: currentCategoryDetails,
-                    headText: currentCategoryDetails.category,
+                    category: currentCategoryDetails.category,
                     subCategories: currentCategoryDetails.subCategories,
-                    result: searchResponse.results,
+                    result: searchResponse
                 }
 
             response.render('search.hbs', { model })
         })()
     })
-    
+
     return router
 }

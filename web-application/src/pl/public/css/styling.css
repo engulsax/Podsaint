@@ -16,6 +16,25 @@ h1 {
   margin: 10px 10px 10px 10px;
 }
 
+.nothing {
+    border: 0;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 10px white;
+}
+
+li:focus{
+    outline: none;
+    opacity: 0.8;
+}
+
 h2 {
     font-family: 'Open Sans', sans-serif;
     color: whitesmoke;
@@ -91,6 +110,10 @@ footer{
     display: inline;
 }
 
+.text-center{
+    text-align: center;
+}
+
 .center{
     text-align: center;
     align-self: center;
@@ -148,6 +171,16 @@ footer{
 #menu a{
     color: rgb(107,107,107);
     font-family: 'Open Sans', sans-serif;
+}
+
+#menu input{
+    background-color: white;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#menu input:hover{
+    cursor: pointer;
 }
 
 #logo{
@@ -671,7 +704,7 @@ textarea{
 
 .pop-up-content{
     background: rgb(255, 254, 216);
-    background: linear-gradient(0deg, rgba(214, 194, 104, 0.897) 0%, rgb(199, 137, 163) 60%);
+    background: linear-gradient(0deg, rgba(209, 178, 109, 1) 0%, rgb(199, 137, 163) 60%);
     background-repeat: no-repeat;
     margin: 15% auto;
     padding: 25px;
@@ -837,13 +870,13 @@ ul.social-media-list li{
 
 /*Comdey/Seriouss*/
 
-.checkgroup input[type="radio"].tone{
+.checkgroup input[type="radio"].tone, .checkgroup input[type="checkbox"].tone {
     -webkit-appearance: none;
     -moz-appearance: none;
     display: none;
 }
 
-.checkgroup input[type="radio"].tone:focus{
+.checkgroup input[type="radio"].tone:focus, .checkgroup input[type="checkbox"].tone:focus{
     display: none;
 }
 
@@ -888,7 +921,7 @@ input.tone:checked ~ label.tone svg {
     white-space: pre-wrap;
   }
 
-  #podcastNameReview{
+  #hide{
       display:none;
   }
 

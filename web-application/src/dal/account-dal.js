@@ -1,34 +1,34 @@
+const conn = require("./db")
+const util = require('util')
+const db = util.promisify(conn.query).bind(conn)
 
-module.exports = function({}){
+module.exports = function ({ }) {
 
-    const conn = require("./db")
-    const util = require('util')
-    const db = util.promisify(conn.query).bind(conn)
+    return {
 
-    return{
-
-        userRegistration: async function(username, password, email){
+        userRegistration: async function (username, password, email) {
 
             const query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
             const values = [username, email, password]
-            
-            try{
+
+            try {
                 return await db(query, values)
-        
-            }catch(error){
+
+            } catch (error) {
+                console.log("----ERRRRROOORRRR---- " + JSON.stringify(error))
                 throw error
             }
         },
 
-        getUser: async function(username){
+        getUser: async function (username) {
             const query = "SELECT * FROM users WHERE username = ?"
             const values = [username]
-        
-            try{
+
+            try {
                 return await db(query, values)
-        
-            }catch(error){
-                console.log(error)
+
+            } catch (error) {
+                console.log("----ERRRRROOORRRR NUMBAH TWO---- " + JSON.stringify(error))
                 throw error
             }
         }

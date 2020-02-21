@@ -10,11 +10,10 @@ module.exports = function({}){
 	
 	return{
 
-		newPodcastReview: async function newPodcastReview(collectionId, collectionName, comedyRating, dramaRating, topicRelevence, productionQuality, overallRating, reviewText) {
+		newPodcastReview: async function newPodcastReview(collectionId, reviewPoster, collectionName, podCreators, comedyRating, dramaRating, topicRelevence, productionQuality, overallRating, reviewText) {
 
-			const userId = 1
-			const query = "INSERT INTO reviews (user_id, pod_id, production_quality_rating, topic_relevence_rating, comedy_rating, drama_rating, overall_rating, review_text) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
-			const values = [userId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating, reviewText]
+			const query = "INSERT INTO reviews (review_poster, pod_id, production_quality_rating, topic_relevence_rating, comedy_rating, drama_rating, overall_rating, review_text) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
+			const values = [reviewPoster, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating, reviewText]
 		
 			try {
 		
@@ -22,7 +21,7 @@ module.exports = function({}){
 		
 				if (podcast == undefined) {
 		
-					await this.addPodcast(collectionId, collectionName)
+					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
 		
 				await addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
@@ -54,9 +53,9 @@ module.exports = function({}){
 			}
 		},
 		
-		addPodcast: async function addPodcast(collectionId, collectionName) {
-			const query = "INSERT INTO podcasts(pod_id, pod_name, comedy_rating, drama_rating, topic_relevence_rating, production_quality_rating, overall_rating) VALUES(?, ?, ? ,? ,? ,? ,?)"
-			const values = [collectionId, collectionName, 0, 0, 0, 0, 0]
+		addPodcast: async function addPodcast(collectionId, collectionName, podCreators) {
+			const query = "INSERT INTO podcasts(pod_id, pod_name, pod_creators, comedy_rating, drama_rating, topic_relevence_rating, production_quality_rating, overall_rating) VALUES(?, ?, ? ,? ,? ,? ,?, ?)"
+			const values = [collectionId, collectionName, podCreators, 0, 0, 0, 0, 0]
 		
 			try {
 				const response = await db(query, values)

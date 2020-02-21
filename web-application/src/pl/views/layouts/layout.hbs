@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--jQuery and slick-->
-    <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script type="text/javascript" src="/js/slick.js"></script>
 
@@ -43,12 +41,12 @@
 
     <!-- Icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <!--Clientside JavaScript-->
-     <script src="/js/feed.js"></script>
-     <script src="/js/pod-info.js"></script>
-     
-    <!--meta http-equiv="X-UA-Compatible" content="ie=edge"--> 
+    <script src="/js/feed.js"></script>
+    <script src="/js/pod-info.js"></script>
+
+    <!--meta http-equiv="X-UA-Compatible" content="ie=edge"-->
 
     <title>Podsaint</title>
 </head>
@@ -64,19 +62,22 @@
                 <nav id="menu">
                     <ul>
                         <li>
-                            <form method="GET" action="/search">
+                            <form method="GET" action="/search/itunes">
                                 <input name="searchText" class="search" type="text" placeholder="Search...">
                             </form>
                         </li>
+                        {{#if model.loggedIn}}
+                        <li>
+                            <form action="/signout" method="POST">
+                                <input class="logout-button nothing" type="submit" value="Sign Out" />
+                            </form>
+                            
+                        </li>
+                        {{else}}
                         <li>
                             <a id="sign-in" href="/signin">Sign In</a>
                         </li>
-                      
-
-                        <form action="/signout" method="POST">
-                            <input class="logout-button" type="submit" value="Log out"/> 
-                        </form>
-
+                        {{/if}}
                     </ul>
                     <a href="#" id="categories-button">Categories &#x25BC;</a>
                 </nav>

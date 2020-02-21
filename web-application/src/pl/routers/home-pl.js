@@ -1,84 +1,75 @@
 const express = require('express')
+const router = express.Router()
 
-module.exports = function ({ categoryBL, accountBL, searchBL }) {
- 
-    const router = express.Router()
+module.exports = function ({ categoryBL, accountBL, searchItunesBL }) {
+
+    router.use(async function(request, response, next){
+        response.model = {
+            categories: await categoryBL.getCategoriesDetails(),
+            loggedIn: (request.session.key)
+        }
+        next()
+    })
 
     /*NOT LOGGED IN*/
     router.get('/', function (request, response) {
-        (async function () {
-
-            if (request.session.key) {
-
-                model = { categories: await categoryBL.getCategoriesDetails() }
-                response.render("feed.hbs", { model })
-            }
-            else {
-                const mainPodcasts = await searchBL.searchPodcasts('podcast')
-
-                model = {
-                    categories: await categoryBL.getCategoriesDetails(),
-                    mainPodcasts: mainPodcasts.results
-                }
-                response.render("home.hbs", { model })
-            }
-        })()
+        response.redirect('/home')
     })
 
     /*LOGGED IN*/
     router.get('/home', function (request, response) {
         (async function () {
-            if (request.session.key) {
-                model = { categories: await categoryBL.getCategoriesDetails() }
+            if (response.model.loggedIn) {
+                const model = response.model
                 response.render("feed.hbs", { model })
             }
             else {
-                const mainPodcasts = await searchBL.searchPodcasts('podcast')
-
-                model = {
-                    categories: await categoryBL.getCategoriesDetails(),
-                    mainPodcasts: mainPodcasts.results
-                }
-                response.render("signup.hbs", { model })
+                const mainPodcasts = await searchItunesBL.searchPodcasts('podcast')
+                const model = response.model
+                model.mainPodcasts = mainPodcasts.results
+                response.render("home.hbs", { model })
             }
+            console.log(request.session.key.user)
         })()
     })
 
     router.get('/signup', function (request, response) {
-        response.render("signup.hbs")
-
+            const model = response.model
+            response.render("signup.hbs", { model })
     })
+
     router.get('/signin', function (request, response) {
-        response.render("signin.hbs")
+            const model = response.model
+            response.render("signin.hbs", { model })
     })
 
     router.post('/signout', function (request, response) {
 
-        if (request.session.key) {
+        if (response.model.loggedIn) {
             request.session.destroy(function () {
                 response.redirect('/')
             })
         } else {
-            response.render("home.hbs")
+            response.redirect('/')
         }
     })
 
     router.post('/signup', function (request, response) {
         (async function () {
-            console.log("signup post")
             const username = request.body.username
             const password = request.body.password
             const email = request.body.email
 
             try {
-                console.log("test")
                 await accountBL.userRegistration(username, password, email)
-                model = { userRegSucess: true }
-                console.log(model)
-                response.render("home.hbs", model)
+                if (await accountBL.userLogin(username, password)) {
+                    request.session.key = { user: username }
+                }
+                response.redirect('/')
 
             } catch (error) {
-                model = { inputError: error }
+                const model = response.model
+                model.inputError = error
                 response.render("signup.hbs", model)
             }
         })()
@@ -93,15 +84,11 @@ module.exports = function ({ categoryBL, accountBL, searchBL }) {
             try {
                 if (await accountBL.userLogin(username, password)) {
                     request.session.key = { user: username }
-                    model = { categories: await categoryBL.getCategoriesDetails() }
-                    response.render("feed.hbs", { model })
-
-                } else {
-                    response.render("signin.hbs")
                 }
-
+                response.redirect('/')
             } catch (error) {
-                model = { inputError: error }
+                const model = response.model
+                model.inputError = error
                 response.render("signin.hbs", model)
             }
         })()

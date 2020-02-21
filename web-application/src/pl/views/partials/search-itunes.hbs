@@ -1,18 +1,23 @@
 <form id="itunes-search" method="GET" id="search-form" action="/search/itunes/{{model.id}}">
     <fieldset id="main-field" class="fieldset">
-        <input type="text" name="searchText" placeholder="Search for podcast in {{model.category}}...">
+        {{#if model.category}}
+              <input type="text" name="searchText" placeholder="Search for podcast in {{model.category}}..." value="{{model.prevSearchText}}">
+        {{else}}
+            <input type="text" name="searchText" placeholder="Search for podcast on itunes..." value="{{model.prevSearchText}}">
+        {{/if}}
         <div id="options">
             <div class="grid-x">
                 <div class="cell small-6">
                     <label>
                         Choose category:
                         <select name="category">
-                            <option value="all">All</option>
                             {{#if model.id}}
+                            <option value="all">{{model.category}}</option>
                             {{#each model.subCategories}}
                             <option value="{{id}}">{{category}}</option>
                             {{/each}}
                             {{else}}
+                            <option value="all">All</option>
                             {{#each model.categories}}
                             <option value="{{id}}">{{category}}</option>
                             {{/each}}

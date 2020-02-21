@@ -1,15 +1,25 @@
 
-const DRAMA = 0
-const COMEDY = 1
+const axios = require("axios")
+const cheerio = require('cheerio')
 
 module.exports = function ({ podcastDAL }) {
 
     return {
-        newPodcastReview: async function newPodcastReview(collectionId, collectionName, toneRating, topicRelevence, productionQualty, overallRating, reviewText) {
+        newPodcastReview: async function newPodcastReview(
+            collectionId,
+            reviewPoster,
+            collectionName,
+            podCreators,
+            toneRating,
+            topicRelevence,
+            productionQualty,
+            overallRating,
+            reviewText
+        ) {
 
             let dramaRating = 0
             let comedyRating = 0
-            if (toneRating === COMEDY) {
+            if (toneRating === "comedy") {
                 comedyRating = 1
             } else {
                 dramaRating = 1
@@ -18,10 +28,21 @@ module.exports = function ({ podcastDAL }) {
             try {
                 console.log("kommit hit hit")
 
-                return await podcastDAL.newPodcastReview(collectionId, collectionName, comedyRating, dramaRating, topicRelevence, productionQualty, overallRating, reviewText)
+                return await podcastDAL.newPodcastReview(
+                    collectionId,
+                    reviewPoster,
+                    podCreators,
+                    collectionName,
+                    comedyRating,
+                    dramaRating,
+                    topicRelevence,
+                    productionQualty,
+                    overallRating,
+                    reviewText
+                )
 
-            } catch{
-                //error
+            } catch(error){
+                console.log(error)
                 console.log("podcast-bl-error")
             }
         },
@@ -33,8 +54,8 @@ module.exports = function ({ podcastDAL }) {
                     return await podcastDAL.getAllReviewsByPodcastId(collectionId)
                 }
                 return []
-            } catch{
-                //error
+            } catch(error){
+                console.log(error)
                 console.log("get all reviewsbypodcastid error")
 
             }
@@ -65,11 +86,19 @@ module.exports = function ({ podcastDAL }) {
                 return ratingInformation
 
             } catch (error) {
-                //error
-
                 console.log("getRatingInformationByPodcastId error")
                 console.log(error)
             }
+        },
+
+        fetchPodInfo: async function (url) {
+            return fetchPodInfo(url)
         }
     }
+}
+
+async function fetchPodInfo(url) {
+    const html = await axios.get(url)
+    const $ = cheerio.load(html.data)
+    return $('.product-hero-desc').find('p').first().text()
 }

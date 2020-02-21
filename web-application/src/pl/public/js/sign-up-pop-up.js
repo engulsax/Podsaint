@@ -1,14 +1,13 @@
 document.addEventListener("DOMContentLoaded", function (event) {
 
-    //Get modal sign up
     var modalSignUp = document.getElementById("sign-up-pop-up")
-    //Get modal button
+
     var modalBtnSignUp = document.getElementById("sign-up")
-    //Get close button
+
     var closeBtn = document.getElementById("close-btn-sign-up")
-    //Alt sign in
+
     var altSignInBtn = document.getElementById("sign-in-alternative")
-    //Get modal sign in
+
     var modalSignIn = document.getElementById("sign-in-pop-up")
 
     const inputUsername = document.getElementById("input-username")

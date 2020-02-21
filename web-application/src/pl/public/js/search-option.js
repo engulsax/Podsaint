@@ -13,11 +13,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     buttonholder.style.display = "block"
 
-    itunesSection.style.display = "none"
 
-    //podsaint section selected first
-    podsaintButton.style.backgroundColor = "rgb(123, 158, 108)"
-    podsaintSection.style.display = "block"
+    if(window.location.href.includes("/search/podsaint")){
+        itunesSection.style.display = "none"
+        podsaintSection.style.display = "block"
+        podsaintButton.style.backgroundColor = "rgb(123, 158, 108)"
+        
+    } else {
+        podsaintSection.style.display = "none"
+        itunesSection.style.display = "block"
+        itunesButton.style.backgroundColor = "rgb(123, 158, 108)"
+    }
+    
+
+
 
     itunesButton.addEventListener("click", function (event) {
         itunesSection.style.display = "block"
