@@ -1,0 +1,21 @@
+<form action="/list" method="POST">
+    <label>
+        Username
+        <input id="signin-user" type="text" name="username">
+    </label>
+    <p>{{inputError.usernameLengthError}}</p>
+    <label>
+        Password
+        <input id="signin-password" type="password" name="password">
+    </label>
+    <p>{{inputError.passwordLengthError}}</p>
+    <input id="sign-in-btn" class="button pop-up-button" type="submit" value="SIGN IN">
+</form>
+<label class="center alternative-sign-up">
+    Or sign in using
+    <ul class="social-media-list">
+        <li><a href="#" class="fa fa-facebook"></a></li>
+        <li><a href="#" class="fa fa-twitter"></a></li>
+        <li><a href="#" class="fa fa-google"></a></li>
+    </ul>
+</label>

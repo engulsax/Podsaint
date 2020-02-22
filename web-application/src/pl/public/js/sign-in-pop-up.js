@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const inputPassword = document.getElementById("signin-password")
 
     modalBtnSignIn.addEventListener("click", function (event) {
-        
         event.preventDefault()
         modalSignIn.style.display = "block"
     })

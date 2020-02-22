@@ -690,7 +690,7 @@ textarea{
   }
 /*-------------------- SIGN UP/SIGN IN POP UP --------------------*/
 
-  #sign-in-pop-up, #sign-up-pop-up{
+  #sign-in-pop-up, #sign-up-pop-up, #add-to-list-pop-up{
     display: none;
     position: fixed;
     z-index: 1;
