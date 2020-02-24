@@ -688,9 +688,9 @@ textarea{
   input.star-1-or:checked ~ label.star:before {
     color: #F62;
   }
-/*-------------------- SIGN UP/SIGN IN POP UP --------------------*/
+/*-------------------- SIGN UP/SIGN IN/ LIST POP UP --------------------*/
 
-  #sign-in-pop-up, #sign-up-pop-up, #add-to-list-pop-up{
+  #sign-in-pop-up, #sign-up-pop-up, #list-pop-up{
     display: none;
     position: fixed;
     z-index: 1;
@@ -712,7 +712,7 @@ textarea{
     border-radius: 20px;
 }
 
-#close-btn-sign-in, #close-btn-sign-up{
+#close-btn-sign-in, #close-btn-sign-up, #close-btn-add-to-list{
     float: right;
     color:white;
     font-size: 40px;
@@ -721,7 +721,8 @@ textarea{
     right: -10px;
 }
 
-#close-btn-sign-in:hover, #close-btn-sign-up:hover,#close-btn-sign-in:focus, #close-btn-sign-up:focus{
+#close-btn-sign-in:hover, #close-btn-sign-up:hover,#close-btn-sign-in:focus, #close-btn-sign-up:focus,
+#close-btn-add-to-list:hover,#close-btn-add-to-list:focus{
     color: rgb(220,220,220);
     cursor: pointer;
     text-decoration: none;
@@ -758,7 +759,25 @@ legend{
     display: inline;
     text-align: right;
 }
+#podcast-lists{
+    display: inline;
+    width: 50%;
+}
+#create-new-list{
+    display: none;
+}
 
+.list-pop-up-button{
+    display: inline;
+    width: 25%;
+    background-color: rgb(152,189,139);
+    color: white;
+    text-transform: uppercase;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
 .pop-up-button{
     display: block;
     margin: 40px auto 0;
@@ -772,7 +791,7 @@ legend{
     font-weight: 600;
 }
 
-.pop-up-button:hover, .pop-up-button:focus{
+.pop-up-button:hover, .pop-up-button:focus, .list-pop-up-button:hover, .list-pop-up-button:focus{
     background-color: rgb(123, 158, 108);
     outline:none;
 }
@@ -937,4 +956,47 @@ input.tone:checked ~ label.tone svg {
   #showcase-tone label.tone svg:hover{
     transform: rotate(0) scale(1);
     filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
+
+
+  /*Drop down menu*/
+  .dropbtn {
+    margin-right: 30px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {background-color: #f1f1f1}
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
   }

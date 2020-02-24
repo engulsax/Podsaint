@@ -1,0 +1,37 @@
+<div class="grid-x">
+    <div class="cell medium-8 medium-offset-2">
+        <ul>
+            {{#each model.playlist}}
+            <form action="/{{playlistName}}/remove-podcasts" method="POST">
+                <li>
+                    <h2 class="sub-text">{{playlistName}}</h2>
+                    <section id="" class="cell small-8 center">´
+                        <ul id="podcast-section" class="slick">
+                            {{#each podcastInfo}}
+                            <li>
+                                <figure id="podcast-holder">
+                                    <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image"
+                                            class="podcast-size-210" src="{{this.artworkUrl600}}"></a>
+                                </figure>
+                                <input class="" type="checkbox" name="pod_id" value="{{this.collectionId}}">
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </section>
+                </li>
+                <input class="" type="submit" value="Remove selected podcasts">
+            </form>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+<div class="grid-x">
+    <div class="cell medium-8 medium-offset-2">
+        <form action="/{{playlistName}}/update-playlist" method="POST">
+            <label for="playlist" class="labels" id="name-label">new playlist name</label>
+            <input class="playlist" type="text" name="playlist"/>
+            <input class="" type="submit" value="Change playlist name">
+            <input class="" type="submit" value="Remove playlist">
+        </form>
+    </div>
+</div>

@@ -14,17 +14,15 @@ module.exports = function ({ accountDAL }) {
     return {
 
         userRegistration: async function (username, password, email) {
-
-
-            console.log("kommit hit till userreg")
+            
             try {
+                
                 inputValidation(username, email, password)
                 const hashed = await hashPassword(password)
-                console.log("kommit hit till userreg2")
-
                 const user = await accountDAL.userRegistration(username, hashed, email)
                 console.log("USER: "+JSON.stringify(user))
                 return user
+
             } catch (error) {
 
                 let validationErrors = {}
@@ -72,7 +70,6 @@ module.exports = function ({ accountDAL }) {
     }
 }
 
-
 function inputValidation(username, email, password) {
 
     if (email != null) {
@@ -97,7 +94,7 @@ async function hashPassword(password) {
         return await bcrypt.hash(password, saltRounds)
 
     } catch (error) {
-        console.log("errorr when hashing")
+        console.log("error when hashing")
         console.log(error)
     }
 }

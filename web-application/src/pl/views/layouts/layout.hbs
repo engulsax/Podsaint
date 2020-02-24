@@ -33,13 +33,12 @@
     <link rel="stylesheet" href="/css/styling.css" type="text/css">
 
     <!-- Podsaint JavaScript -->
-    <script src="/js/add-to-list-pop-up.js"></script>
     <script src="/js/sign-up-pop-up.js"></script>
     <script src="/js/sign-in-pop-up.js"></script>
     <script src="/js/categories-pop-up.js"></script>
     <script src="/js/search-option.js"></script>
-
-
+    <script src="/js/add-to-list-pop-up.js"></script>
+    
     <!-- Icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -68,11 +67,21 @@
                             </form>
                         </li>
                         {{#if model.loggedIn}}
+
+                            
+                        <div class="dropdown">
+                            <button class="dropbtn">Menu</button>
+                            <div class="dropdown-content">
+                                <a href="#">Settings</a>
+                                <a href="#">Log out</a>
+                            </div>
+                        </div>            <!--
                         <li>
                             <form action="/signout" method="POST">
                                 <input class="logout-button nothing" type="submit" value="Sign Out" />
                             </form>
-                            
+                        </li><a>Settings</a>
+                        -->    
                         </li>
                         {{else}}
                         <li>

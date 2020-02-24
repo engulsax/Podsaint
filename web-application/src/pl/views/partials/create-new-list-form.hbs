@@ -1,0 +1,13 @@
+
+<div id="create-new-list">
+    <form action="/podcast/{{model.collectionId}}/create-list" method="POST">
+        <h2>Create a new list</h2>
+        <label>
+            Playlist name
+            <input id="input-listname" type="text" name="playlistName">
+        </label>
+        <p id="list-input-error"></p>
+        <input id="create-new-list-btn" class="button list-pop-up-button" type="submit" value="Create and add">
+    </form>
+</div>
+

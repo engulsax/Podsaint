@@ -13,7 +13,29 @@
     <div id="podcast-section" class="cell small-10 medium-8 large-8 small-offset-1 medium-offset-2 large-offset-2">
 
         <section id="your-podcasts" class="cell center">
-            <h1>Your Podcasts</h1>
+            <div class="grid-x">
+                <div class="cell medium-8 medium-offset-2">
+                    <ul>
+                        {{#each model.playlists}}
+                        <li>
+                            <h2 class="sub-text">{{playlistName}}</h2>
+                            <a href="/{{playlistName}}/edit">edit list</a>
+                            <section id="" class="cell small-8 center">´
+                                <ul id="podcast-section" class="slick">
+                                    {{#each podcastInfo}}
+                                    <li>
+                                        <figure id="podcast-holder">
+                                        <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image" class="podcast-size-210" src="{{this.artworkUrl600}}"></a>
+                                        </figure>
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                            </section>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
         </section>
 
         <section id="want-to-listen" class="cell center">

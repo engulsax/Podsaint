@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
+module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }) {
 
     router.use(async function (request, response, next) {
 
@@ -13,7 +13,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
     })
 
     router.use('/:id', async function (request,response, next) {
-
+        
         const collectionId = request.params.id
         const informationRespons = await searchItunesBL.searchPodcast(collectionId)
         const information = informationRespons.results
@@ -30,12 +30,19 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
 
         (async function () {
 
+            const model = response.model
+            
+            if(response.model.loggedIn){
+                const userPlaylists = await playlistBL.getAllPodcastPlaylistsByUser(response.model.loggedIn.user)
+                model.userPlaylists = userPlaylists
+            }
+            
             const mainCategoryId = response.model.information[0].genreIds[0]
             const podcastsInSameCategory = await searchItunesBL.searchPodcastsWithId(mainCategoryId)
             const reviews = await podcastBL.getAllReviewsByPodcastId(response.model.collectionId)
             const ratingInformation = await podcastBL.getRatingInformationByPodcastId(response.model.collectionId)
-
-            const model = response.model
+            
+            
             model.tone = ratingInformation.tone
             model.average = ratingInformation.average
             model.reviews = reviews
@@ -86,6 +93,39 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
 
             })()
         } else {
+            response.render("signin.hbs")
+        }
+    })
+
+    router.post('/:id/create-list', function (request, response){
+        
+        if(request.session.key){
+            (async function (){
+                const playlistName = request.body.playlistName
+                const model = response.model.information[0]
+                const collectionId = request.params.id
+                const loggedIn = request.session.key    
+                        
+                await playlistBL.addPodcastToPlaylist(collectionId, playlistName, loggedIn.user, model.collectionName, model.artistName)
+                response.redirect("/podcast/" + collectionId)
+            })()
+        } else {
+            response.render("signin.hbs")
+        }
+    })
+
+    router.post('/:id/add-to-playlist', function (request, response){
+        
+        if(response.model.loggedIn){
+            (async function(){
+                const model = response.model.information[0]
+                const collectionId = request.params.id
+                const playlist = request.body.playlist
+                await playlistBL.addPodcastToPlaylist(collectionId, playlist, response.model.loggedIn.user, model.collectionName, model.artistName)
+                response.redirect("/podcast/" + collectionId)
+            })()
+
+        }else{
             response.render("signin.hbs")
         }
     })
