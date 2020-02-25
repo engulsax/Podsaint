@@ -21,6 +21,7 @@ CREATE TABLE podcasts(
 CREATE TABLE reviews (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     review_poster VARCHAR(50),
+    post_date DATETIME,
     pod_id VARCHAR(50),
     comedy_rating INT,
     drama_rating INT,

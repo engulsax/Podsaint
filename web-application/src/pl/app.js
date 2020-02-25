@@ -37,6 +37,16 @@ app.engine('hbs', expressHandlebars({
         starRatings += '<span class="fa fa-star"></span>'
       }
       return starRatings
+    },
+    equal: function (value1, value2, options) {
+
+      console.log("FASFQWRFSF" + value1 +"   " +value2)
+
+      if(value1 === value2) {
+        return options.fn(this)
+      } else {
+        return options.inverse(this)
+      }
     }
   }
 }))
@@ -46,10 +56,10 @@ var RedisStore = require('connect-redis')(session)
 
 
 app.use(session({
-	secret: "ldasdgewbodkodkfkrsldfsbgtdhhtyu",
-	store: new RedisStore({client: redisClient }),
-	saveUninitialized: false,
-	resave: false
+  secret: "ldasdgewbodkodkfkrsldfsbgtdhhtyu",
+  store: new RedisStore({ client: redisClient }),
+  saveUninitialized: false,
+  resave: false
 }))
 
 /*

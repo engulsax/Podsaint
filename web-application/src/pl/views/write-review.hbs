@@ -18,12 +18,18 @@
                 <label for="podcastNameReview">
                     <h2>{{collectionName}}</h2>
                 </label>
+
                 <!--Potential issue, if possible for use to change-->
+
                 <input type="text" id="hide" name="collectionName" value="{{collectionName}}" readonly>
                 <input type="text" id="hide" name="artistName" value="{{artistName}}" readonly>
                 {{/with}}
-                {{/with}}
 
+                <ul>
+                    {{#each errors}}
+                    <li class="errorInput">{{this}}</li>
+                    {{/each}}
+                </ul>
 
                 <div class="gird-x cell checkgroup">
 
@@ -60,7 +66,7 @@
                         <label>
                             Write a review
                             <textarea rows="5" cols="2" placeholder="Write your review here..."
-                                name="reviewText"></textarea>
+                                name="reviewText">{{text}}</textarea>
                         </label>
                         <div>
                             <input type="submit" class="podsaint-button button" value="Submit">
@@ -68,6 +74,8 @@
                     </div>
 
                 </div>
+
+                {{/with}}
 
             </div>
 

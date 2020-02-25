@@ -12,10 +12,16 @@ module.exports = function ({ podcastDAL }) {
             podCreators,
             toneRating,
             topicRelevence,
-            productionQualty,
+            productionQuality,
             overallRating,
             reviewText
         ) {
+
+            const errorMessages = reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality)
+            console.log(errorMessages)
+            if(errorMessages.length != 0){
+                return errorMessages
+            }
 
             let dramaRating = 0
             let comedyRating = 0
@@ -36,12 +42,12 @@ module.exports = function ({ podcastDAL }) {
                     comedyRating,
                     dramaRating,
                     topicRelevence,
-                    productionQualty,
+                    productionQuality,
                     overallRating,
                     reviewText
                 )
 
-            } catch(error){
+            } catch (error) {
                 console.log(error)
                 console.log("podcast-bl-error")
             }
@@ -54,7 +60,50 @@ module.exports = function ({ podcastDAL }) {
                     return await podcastDAL.getAllReviewsByPodcastId(collectionId)
                 }
                 return []
-            } catch(error){
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+
+            }
+        },
+
+        getThreeReviewsByPodcastId: async function getThreeReviewsByPodcastId(collectionId) {
+
+            const numberOfReviews = 3
+            try {
+                if (await podcastDAL.podcastHasReviews(collectionId)) {
+                    return await podcastDAL.getNReviewsByPodcastId(collectionId, numberOfReviews)
+                }
+                return []
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+
+            }
+        },
+
+        getNReviewsByPodcastId: async function getNReviewsByPodcastId(collectionId, value) {
+
+            const postPerPage = 3
+            try {
+                if (value == "all") {
+                    if (await podcastDAL.podcastHasReviews(collectionId)) {
+                        return {result: await podcastDAL.getAllReviewsByPodcastId(collectionId), amount: postPerPage}
+                    }
+                    return []
+                } else {
+                    if(value === undefined){
+                        value = postPerPage
+                    } else {
+                        value = parseInt(value)
+                        value += postPerPage
+                    }
+                    if (await podcastDAL.podcastHasReviews(collectionId)) {
+                        return {result: await podcastDAL.getNReviewsByPodcastId(collectionId, value), amount: value}
+                    }
+                    return []
+                }
+            } catch (error) {
                 console.log(error)
                 console.log("get all reviewsbypodcastid error")
 
@@ -95,6 +144,30 @@ module.exports = function ({ podcastDAL }) {
             return fetchPodInfo(url)
         }
     }
+}
+
+function  reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality){
+    errorMessages = []
+
+    console.log("overallRating: " +overallRating+ "topicRelevence: " +topicRelevence+ "toneRating: " +toneRating+ "productionQuality: " +productionQuality)
+
+    if(overallRating <= 0 || overallRating > 5){
+        errorMessages.push("invalid overall rating")
+    }
+
+    if(toneRating !== "comedy" && toneRating !=="drama"){
+        errorMessages.push("invalid tone rating")
+    }
+
+    if(topicRelevence <= 0 || topicRelevence > 5){
+        errorMessages.push("invalid topic relevance rating")
+    }
+
+    if(productionQuality <= 0 || productionQuality > 5){
+        errorMessages.push("invalid production quality rating")
+    }
+
+    return errorMessages
 }
 
 async function fetchPodInfo(url) {

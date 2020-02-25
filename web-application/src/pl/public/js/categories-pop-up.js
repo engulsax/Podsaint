@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const upArrow = '▲'
     const downArrow = '▼'
     //Get modal element
-    var modalCategories = document.getElementById("categories-content")
+    let modalCategories = document.getElementById("categories-content")
     //Get modal button
-    var categoriesBtn = document.getElementById("categories-button")
+    let categoriesBtn = document.getElementById("categories-button")
 
     categoriesBtn.textContent = "Categories " + downArrow
 

@@ -12,7 +12,17 @@ module.exports = function({}){
 
 		newPodcastReview: async function newPodcastReview(collectionId, reviewPoster, collectionName, podCreators, comedyRating, dramaRating, topicRelevence, productionQuality, overallRating, reviewText) {
 
-			const query = "INSERT INTO reviews (review_poster, pod_id, production_quality_rating, topic_relevence_rating, comedy_rating, drama_rating, overall_rating, review_text) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
+			const query = `INSERT INTO reviews(
+				review_poster, 
+				post_date, 
+				pod_id, 
+				production_quality_rating, 
+				topic_relevence_rating, 
+				comedy_rating, drama_rating, 
+				overall_rating, 
+				review_text
+			) 
+			VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`
 			const values = [reviewPoster, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating, reviewText]
 		
 			try {
@@ -54,7 +64,17 @@ module.exports = function({}){
 		},
 		
 		addPodcast: async function addPodcast(collectionId, collectionName, podCreators) {
-			const query = "INSERT INTO podcasts(pod_id, pod_name, pod_creators, comedy_rating, drama_rating, topic_relevence_rating, production_quality_rating, overall_rating) VALUES(?, ?, ? ,? ,? ,? ,?, ?)"
+			const query = `INSERT INTO podcasts(
+				pod_id, 
+				pod_name, 
+				pod_creators, 
+				comedy_rating, 
+				drama_rating, 
+				topic_relevence_rating, 
+				production_quality_rating, 
+				overall_rating 
+			) 
+			VALUES(?, ?, ? ,? ,? ,? ,?, ?)`
 			const values = [collectionId, collectionName, podCreators, 0, 0, 0, 0, 0]
 		
 			try {
@@ -68,8 +88,22 @@ module.exports = function({}){
 		
 		getAllReviewsByPodcastId: async function getAllReviewsByPodcastId(collectionId) {
 		
-			const query = "SELECT * FROM reviews WHERE pod_id = ?"
+			const query = "SELECT * FROM reviews WHERE pod_id = ? ORDER BY post_date DESC"
 			const value = [collectionId]
+		
+			try {
+				const response = await db(query, value)
+				return response
+			} catch (error) {
+				console.log("error in getallreviewsbypodcast")
+				console.log(error)
+			}
+		},
+
+		getNReviewsByPodcastId: async function getNReviewsByPodcastId(collectionId, amount) {
+		
+			const query = "SELECT * FROM reviews WHERE pod_id = ? ORDER BY post_date DESC LIMIT ?"
+			const value = [collectionId, amount]
 		
 			try {
 				const response = await db(query, value)
@@ -82,7 +116,7 @@ module.exports = function({}){
 		
 		getAllReviewsByUser: async function getAllReviewsByUser(userId) {
 		
-			const query = "SELECT * FROM reviews WHERE user_id = ?"
+			const query = "SELECT * FROM reviews WHERE user_id = ? ORDER BY post_date DESC"
 			const value = [userId]
 		
 			try {
@@ -91,6 +125,20 @@ module.exports = function({}){
 		
 			} catch (error) {
 				console.log("error in getallreviewsbyid")
+				console.log(error)
+			}
+		},
+
+		etNReviewsByUser: async function getNReviewsByPodcastId(userId, amount) {
+		
+			const query = "SELECT * FROM reviews WHERE user_id = ? ORDER BY post_date DESC LIMIT ?"
+			const value = [userId, amount]
+		
+			try {
+				const response = await db(query, value)
+				return response
+			} catch (error) {
+				console.log("error in getallreviewsbypodcast")
 				console.log(error)
 			}
 		},

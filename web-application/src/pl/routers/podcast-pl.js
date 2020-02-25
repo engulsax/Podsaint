@@ -7,7 +7,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
 
         response.model = {
             categories: await categoryBL.getCategoriesDetails(),
-            loggedIn: (request.session.key)
+            loggedIn: (request.session.key),
         }
         next()
     })
@@ -18,6 +18,12 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
         const informationRespons = await searchItunesBL.searchPodcast(collectionId)
         const information = informationRespons.results
 
+        if(response.model.loggedIn){
+            response.model.user = request.session.key.user
+        } else  {
+            response.model.user = undefined
+        }
+        
         response.model.collectionId = collectionId,
         response.model.information = information,
         response.model.description =  await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
@@ -32,7 +38,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
 
             const mainCategoryId = response.model.information[0].genreIds[0]
             const podcastsInSameCategory = await searchItunesBL.searchPodcastsWithId(mainCategoryId)
-            const reviews = await podcastBL.getAllReviewsByPodcastId(response.model.collectionId)
+            const reviews = await podcastBL.getThreeReviewsByPodcastId(response.model.collectionId)
             const ratingInformation = await podcastBL.getRatingInformationByPodcastId(response.model.collectionId)
 
             const model = response.model
@@ -40,6 +46,12 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
             model.average = ratingInformation.average
             model.reviews = reviews
             model.podcastsInSameCategory = podcastsInSameCategory.results
+
+            for(review of reviews){
+                if(review.review_poster === response.model.user){
+                    review.myReview = true
+                } 
+            }
 
             response.render("podcast.hbs", { model })
         })()
@@ -58,12 +70,21 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
         }
     })
 
-    router.post('/:id/write-review', function (request, response, next){
-        //TAKE CARE OF ERROR HANDLING
-        next()
+    router.get('/:id/all-reviews', async function (request, response){
+
+        const value = request.query.amount
+
+        const model = response.model
+        const reviews = await podcastBL.getNReviewsByPodcastId(response.model.collectionId, value)
+        model.reviews = reviews.result
+        model.amount = reviews.amount
+                
+        response.render("all-reviews.hbs", { model })
+        
     })
 
-    router.post('/:id/write-review', function (request, response) {
+
+    router.post('/:id/write-review', function (request, response, next) {
 
         if (request.session.key) {
             (async function () {
@@ -72,18 +93,27 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
                 const collectionName = request.body.collectionName
                 const podCreator = request.body.artistName
                 const toneRating = request.body.podcastTone
-                const topicRelevenceRating = parseInt(request.body.topicRelevenceRating)
-                const productionQualty = parseInt(request.body.productionQuality)
-                const overallRating = parseInt(request.body.overallRating)
+                const topicRelevenceRating = parseInt(request.body.topicRelevenceRating) || 0
+                const productionQualty = parseInt(request.body.productionQuality) || 0
+                const overallRating = parseInt(request.body.overallRating) || 0
                 const reviewText = request.body.reviewText
                 const reviewPoster = request.session.key.user
 
-                await podcastBL.newPodcastReview(
-                    collectionId, reviewPoster, podCreator, collectionName, toneRating, topicRelevenceRating, productionQualty,
+                const errors = await podcastBL.newPodcastReview(
+                    collectionId, reviewPoster, podCreator, collectionName, 
+                    toneRating, topicRelevenceRating, productionQualty,
                     overallRating, reviewText
                 )
-                response.redirect("/podcast/" + collectionId)
 
+                if(errors){
+                    const model = response.model
+                    model.text = reviewText
+                    model.errors = errors
+                    console.log(model)
+                    response.render("write-review.hbs", { model })
+                } else {
+                    response.redirect("/podcast/" + collectionId)
+                }
             })()
         } else {
             response.render("signin.hbs")

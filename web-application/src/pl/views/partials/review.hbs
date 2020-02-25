@@ -1,12 +1,24 @@
 <div class="reviews">
-    <p id="name-text">{{review_poster}}</p>
+    {{#if myReview}}
+    <div class="grid-x cell">
+        <div class="review-forms">
+            <form method="POST" class="edit" action="/delete-review/{{id}}">
+                <button type="submit"><i class="fa fa-edit"></i></button>
+            </form>
+            <form method="POST" class="delete" action="/delete-review/{{id}}">
+                <button type="submit"><i class="fa fa-remove"></i></button>
+            </form>
+        </div>
+    </div>
+    {{/if}}
+    <div class="block">
+        <p id="name-text" class="inline">{{review_poster}}</p>
+        <p class="datetime right no-margin inline">{{post_date}}</p>
+    </div>
 
     {{>review-box}}
 
     <section class="review-box">
-        <p>{{review_text}} <a href="#">...read more</a></p>
+        <p>{{review_text}}</p>
     </section>
-
-    
-
 </div>

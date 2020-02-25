@@ -16,6 +16,21 @@ h1 {
   margin: 10px 10px 10px 10px;
 }
 
+.input-submit{
+    border: 0;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0);
+    color: whitesmoke;
+}
+
+.input-submit:hover, .input-submit:focus{
+    cursor: pointer;
+    outline: none;
+    border-color: none;
+    box-shadow: none;
+}
+
+
 .nothing {
     border: 0;
     outline: none;
@@ -27,7 +42,7 @@ textarea:focus,
 button:focus {
     outline: none;
     border-color: white;
-    box-shadow: 0 0 10px white;
+    box-shadow: 0 0 2px white;
 }
 
 li:focus{
@@ -81,11 +96,24 @@ footer{
     margin-top: 5rem;
 }
 
+li.errorInput, .errorInput{
+ color: rgb(211, 85, 85);
+ margin: 10px; 
+ font-weight: 600;
+}
+
 /*-------------------- STYLING --------------------*/
 
+.help-text{
+    color: white;
+}
 
 .right{
     float: right;
+}
+
+.left{
+    float: left;
 }
 
 .white{
@@ -95,6 +123,10 @@ footer{
 
 .inline{
     display: inline;
+}
+
+.block{
+    display: block;
 }
 
 .content{
@@ -595,8 +627,13 @@ textarea{
     border-radius: 20px;
 }
 
+.review-box p{
+    white-space: pre;
+}
+
 #name-text{
     font-style: italic;
+    font-weight: 700;
     display: inline;
     margin: 10px 0px;
     text-align: left;
@@ -608,6 +645,8 @@ textarea{
     font-weight: 600;
     font-size: 1rem;
 }
+
+
 
 
 /*-------------------- STAR REVIEW ICONS --------------------*/
@@ -843,7 +882,38 @@ ul.social-media-list li{
 
 .fa:hover {
     opacity: 0.7;
+    /*float: right;*/
 }
+
+.review-forms{
+    width: 100%;
+    display: block;
+    text-align: right;
+}
+
+form.delete, form.edit{
+    display: inline;
+    margin: 10px;
+}
+
+form.delete button, form.edit button{
+    margin-top: -20px;
+}
+
+i.fa.fa-remove{
+    font-size:24px;
+    color: rgb(211, 85, 85);
+}
+
+i.fa.fa-edit{
+    font-size:22px;
+    color: rgb(0, 0, 0);
+}
+
+.fa-remove:hover, .fa-edit:hover{
+    cursor: pointer;
+}
+
 
 .alternative-sign-up{
     margin-top: 20px;
