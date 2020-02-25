@@ -16,6 +16,7 @@
             <div class="grid-x">
                 <div class="cell medium-8 medium-offset-2">
                     <ul>
+                        {{#if model.playlists}}
                         {{#each model.playlists}}
                         <li>
                             <h2 class="sub-text">{{playlistName}}</h2>
@@ -25,7 +26,8 @@
                                     {{#each podcastInfo}}
                                     <li>
                                         <figure id="podcast-holder">
-                                        <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image" class="podcast-size-210" src="{{this.artworkUrl600}}"></a>
+                                            <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image" class="podcast-size-210"
+                                                    src="{{this.artworkUrl600}}"></a>
                                         </figure>
                                     </li>
                                     {{/each}}
@@ -33,6 +35,9 @@
                             </section>
                         </li>
                         {{/each}}
+                        {{else}}
+                        <p>You dont have any playlists</p>
+                        {{/if}}
                     </ul>
                 </div>
             </div>

@@ -8,9 +8,9 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
 
         addPodcastToPlaylist: async function(collectionId, playlistName, user, collectionName, artistName){
             try{
-                const podCast = await podcastDAL.getPodcastById(collectionId)
+                const podcast = await podcastDAL.getPodcastById(collectionId)
                 
-                if(podCast){
+                if(podcast){
                    await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
 
                 }else{
@@ -25,24 +25,33 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
         },
 
         removePodcastsFromPlaylist: async function(podcastsToRemove, playlistName, user){
-                console.log(podcastsToRemove)
-                console.log(playlistName)
-                console.log(user)
-            try{
-                for(let i = 0; i < podcastsToRemove.length; i++){
-                    await playlistDAL.removePodcastFromPlaylist(podcastsToRemove[i],playlistName,user)
+            
+            try { 
+                if (typeof podcastsToRemove === 'string') {
+                    podcastsToRemove = [podcastsToRemove]
                 }
-            }catch(error){
+
+                for (let i = 0; i < podcastsToRemove.length; i++) {
+                    console.log("testtesttest")
+                    console.log(i)
+                    await playlistDAL.removePodcastFromPlaylist(podcastsToRemove[i], playlistName, user)
+                }
+                return
+            } catch (error) {
+                console.log("ERRRROR in removepodfromlist")
+                console.log(error)
 
             }
-
         },
-
-        uppdatePodCastPlaylist: async function (collectionId, playlistName, user){
-
-        },
-
         
+        removePlaylist: async function (playlistName, user){
+            try{
+                return await playlistDAL.removePlaylist(playlistName, user)
+
+            }catch(error){
+                console.log(error)
+            }
+        },
         getAllPlaylistsByUser: async function (user){
             
             try{
@@ -110,12 +119,6 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
             }catch(error){
                 console.log(error)
             }
-
         },
-
-        deletePlaylist: async function (collectionId, playlistName, user){
-
-
-        }
     }
 }

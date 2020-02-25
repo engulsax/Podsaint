@@ -19,19 +19,21 @@
                         </ul>
                     </section>
                 </li>
-                <input class="" type="submit" value="Remove selected podcasts">
+                <div class="center">
+                    <input class="button podsaint-button margin-top"type="submit" value="Remove selected podcasts">
+                </div>
             </form>
             {{/each}}
         </ul>
     </div>
 </div>
-<div class="grid-x">
-    <div class="cell medium-8 medium-offset-2">
-        <form action="/{{playlistName}}/update-playlist" method="POST">
-            <label for="playlist" class="labels" id="name-label">new playlist name</label>
-            <input class="playlist" type="text" name="playlist"/>
-            <input class="" type="submit" value="Change playlist name">
-            <input class="" type="submit" value="Remove playlist">
+<div class="grid-x content">
+    <div class="cell medium-8 medium-offset-2 center">
+        <p>Remove Playlist. Warning this action cant be undone.</p>
+        {{#each model.playlist}}               
+        <form action="/{{playlistName}}/remove-playlist" method="POST">
+            <input id="delete-playlist-btn" class="button podsaint-button" type="submit" value="Remove playlist">
         </form>
+        {{/each}}
     </div>
 </div>

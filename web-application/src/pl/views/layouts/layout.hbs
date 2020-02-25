@@ -68,21 +68,14 @@
                         </li>
                         {{#if model.loggedIn}}
 
-                            
-                        <div class="dropdown">
-                            <button class="dropbtn">Menu</button>
-                            <div class="dropdown-content">
-                                <a href="#">Settings</a>
-                                <a href="#">Log out</a>
-                            </div>
-                        </div>            <!--
+                        <li><a href="/account-settings">Settings</a></li>     
                         <li>
                             <form action="/signout" method="POST">
                                 <input class="logout-button nothing" type="submit" value="Sign Out" />
                             </form>
-                        </li><a>Settings</a>
-                        -->    
                         </li>
+                        
+                          
                         {{else}}
                         <li>
                             <a id="sign-in" href="/signin">Sign In</a>
