@@ -1,0 +1,39 @@
+<div class="grid-x">
+    <div class="cell medium-8 medium-offset-2">
+        <ul>
+            {{#each model.playlist}}
+            <form action="/{{playlistName}}/remove-podcasts" method="POST">
+                <li>
+                    <h2 class="sub-text">{{playlistName}}</h2>
+                    <section id="" class="cell small-8 center">´
+                        <ul id="podcast-section" class="slick">
+                            {{#each podcastInfo}}
+                            <li>
+                                <figure id="podcast-holder">
+                                    <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image"
+                                            class="podcast-size-210" src="{{this.artworkUrl600}}"></a>
+                                </figure>
+                                <input class="" type="checkbox" name="pod_id" value="{{this.collectionId}}">
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </section>
+                </li>
+                <div class="center">
+                    <input class="button podsaint-button margin-top"type="submit" value="Remove selected podcasts">
+                </div>
+            </form>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+<div class="grid-x content">
+    <div class="cell medium-8 medium-offset-2 center">
+        <p>Remove Playlist. Warning this action cant be undone.</p>
+        {{#each model.playlist}}               
+        <form action="/{{playlistName}}/remove-playlist" method="POST">
+            <input id="delete-playlist-btn" class="button podsaint-button" type="submit" value="Remove playlist">
+        </form>
+        {{/each}}
+    </div>
+</div>

@@ -889,14 +889,15 @@ ul.social-media-list li{
     width: 100%;
     display: block;
     text-align: right;
+    margin-top: -22px;
 }
 
-form.delete, form.edit{
+form.delete,  a.edit-review{
     display: inline;
     margin: 10px;
 }
 
-form.delete button, form.edit button{
+form.delete button, a.edit-review{
     margin-top: -20px;
 }
 
@@ -907,7 +908,7 @@ i.fa.fa-remove{
 
 i.fa.fa-edit{
     font-size:22px;
-    color: rgb(0, 0, 0);
+    color: whitesmoke;
 }
 
 .fa-remove:hover, .fa-edit:hover{
@@ -1008,3 +1009,977 @@ input.tone:checked ~ label.tone svg {
     transform: rotate(0) scale(1);
     filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
   }
+/*-------------------- UNIVERSAL STYLING --------------------*/
+
+body{
+    height: 100%;
+    background: rgb(255, 254, 216);
+    background: linear-gradient(0deg, rgba(209, 178, 109, 0.897) 0%, rgb(199, 137, 163) 60%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+  color: whitesmoke;
+  font-size: 2rem;
+  font-weight: bolder;
+  margin: 10px 10px 10px 10px;
+}
+
+.nothing {
+    border: 0;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 10px white;
+}
+
+li:focus{
+    outline: none;
+    opacity: 0.8;
+}
+
+h2 {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin: 10px 10px 10px 10px;
+}
+
+h3 {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-weight: lighter;
+    font-size: 1.2rem;
+    margin: 10px 10px 10px 10px;
+}
+
+a {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1rem;
+}
+
+a:hover, a:focus{
+    color: rgba(245, 245, 245, 0.712);
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1rem;;
+    margin: 10px 10px 10px 10px;
+}
+
+ul,li {
+    list-style: none;
+}
+
+header{
+    background-color: white;
+    min-height: 4rem;
+}
+
+footer{
+    margin-top: 5rem;
+}
+
+/*-------------------- STYLING --------------------*/
+
+
+.right{
+    float: right;
+}
+
+.white{
+    background-color: white;
+    color: white;
+}
+
+.inline{
+    display: inline;
+}
+
+.content{
+    margin-top: 50px;
+}
+
+.search{
+    border-radius: 20px;
+    height:35px;
+}
+
+.inline{
+    display: inline;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.center{
+    text-align: center;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+}
+
+.float-left{
+    float: left;
+}
+
+
+.categories{
+    background: rgb(239,210,106);
+    opacity: 0.7;
+}
+
+#menu{
+    list-style: none;
+    float: right;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.padding-bottom{
+    padding-bottom: 10px;
+}
+
+.margin-bottom{
+    margin-bottom: 10px;
+}
+
+
+.block{
+    display: block;
+}
+.margin-top{
+    margin-top: 10px;
+}
+
+#menu li{
+    display:inline-block;
+    margin-right: 2vh;
+    margin-top: 2vh;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#menu a{
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#menu input{
+    background-color: white;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#menu input:hover{
+    cursor: pointer;
+}
+
+#logo{
+    margin: 2vh;
+    float: left;
+}
+
+#logo-icon{
+    float: left;
+    display: block;
+    width: 40px;
+}
+
+#logo-text{
+    float: left;
+    display: block;
+    color: rgb(107,107,107);
+    font-size: large;
+    margin-left: 1vh;
+    font-weight: 250;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#search-form input[type=text]{
+    border-radius: 20px;
+    height: 50px;
+    margin-top: 20px;
+}
+
+.head-text{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: xx-large;
+    font-family: 'Open Sans', sans-serif;
+    display: block;
+    margin: 2%;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+}
+
+@media screen and (min-width: 64em) {
+    .head-text{
+        font-size: 280%;
+    }
+}
+
+.sub-text{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: x-large;
+    font-family: 'Open Sans', sans-serif;
+    display: block;
+    margin-top: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+}
+
+.podsaint-button{
+    text-transform: uppercase;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+    border-radius: 20px;
+    background-color: rgb(152,189,139);
+}
+
+.podsaint-button:hover, .podsaint-button:focus{
+    background-color: rgb(123, 158, 108);
+}
+
+.margin{
+    margin: 10px;
+}
+
+/*MODIFY THIS*/
+
+a.sign-up-button{
+    text-transform: uppercase;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
+
+.sign-up-button{
+    width: 250px;
+    margin: 2%;
+    border-radius: 20px;
+    background-color: rgb(152,189,139);
+}
+
+.sign-up-button:hover, .sign-up-button:focus{
+    margin: 2%;
+    background-color: rgb(123, 158, 108);
+}
+
+fieldset#main-field{
+    background: linear-gradient(0deg, rgba(238, 111, 210, 0.2) 0%, rgba(199, 137, 163, 0.2) 60%);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-color: white;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
+#main-field select, #main-field input{
+    border-radius: 20px;
+}
+
+#main-field input{
+    height: 45px;
+}
+
+#itunes-search{
+    display: block;
+}
+
+#choose-search{
+    display: none;
+}
+
+/*-------------------- PODCAST HOLDER --------------------*/
+
+#categories-content{
+    display: none;
+    background: linear-gradient(0deg, rgba(238, 111, 210, 0.2) 0%, rgba(199, 137, 163, 0.2) 60%);
+    background-color: rgb(235, 190, 124);
+    z-index: 1;
+}
+  
+#categories-content ul{
+    margin: 5px;
+    padding: 0;
+    display: table;
+    width: 99%;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    list-style: none;
+    text-align: left;
+}
+
+#categories-content ul>li{
+    display:inline-block;
+    width: 20%;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+#categories-content a{
+    color: white;
+}
+
+#categories-content a:hover, #categories-content a:focus{
+    color: rgba(255,255,255,0.6);
+}
+
+#categories-button{
+    margin-right: 2vh;
+    margin-bottom: 2vh;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+    float: right;
+}
+
+
+@media screen and (max-width: 850px) {
+    #categories-content ul>li{
+      width: 33.33%;
+    }  
+}
+
+
+@media screen and (max-width: 600px) {
+    #categories-content ul>li{
+      width: 100%;
+      margin: 2px;
+      font-size: 110%;
+    }
+}
+
+
+/*-------------------- PODCAST HOLDER --------------------*/
+
+.no-result{
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+    text-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+    font-size: x-large;
+    text-align: center;
+    margin-top: 5%;
+}
+
+
+#podcast-section{
+    margin: auto auto;
+    background-color: rgba(255,255,255,0.2);
+    padding: 2px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+#podcast-section ul{
+    margin: 10px auto 0;
+    list-style: none;
+}
+
+#podcast-section li{
+    margin: 2px 2px 0px 2px;
+    list-style: none;
+    display: inline-block;
+}
+
+#podcast-holder{
+    position: relative;
+    display: inline-block;
+    margin: 30px 10px;
+    vertical-align: top;
+    text-align: center;
+    width: 210px;
+    height: auto;
+    display: inline-block;
+}
+
+#podcast-image{
+   margin: auto auto;
+   float:center;
+   box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+   width: 210px;
+   height: 210px;
+}
+
+#podcast-image:hover{
+    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.8);
+ }
+
+#podcast-image-2{
+    margin: auto auto;
+    float:center;
+    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+    max-width: 60%;
+    height: auto;
+ }
+
+ @media screen and (min-width: 64em) {
+    #podcast-image-2{
+        max-width: 75%;
+        float: left;
+    }
+}
+
+.podcast-size-210{
+    width: 210px;
+    height: 210px;
+}
+
+/*-------------------- FEED HOLDER --------------------*/
+
+.update-feed{
+    background-color:rgba(255, 255, 255, 0.356);
+    border-radius: 20px;
+}
+
+.innerbox {
+    margin: 20px;
+    border: 4px solid rgb(255, 250, 208);
+    border-radius: 20px; 
+}
+
+/*-------------------- LINK TO SWITCH BETWEEN LISTS --------------------*/
+
+#pod-links{
+    margin: 20px 10px 10px 30px;
+}
+#pod-links a{
+    font-size: x-large;
+    text-transform: uppercase;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    letter-spacing: 3px;
+}
+
+#pod-links a:hover,#pod-links a:focus {
+    color: rgba(255,255,255,0.5)
+}
+
+/*-------------------- PODCAST INFORMATION STYLING --------------------*/
+
+textarea{
+    border: none;
+    width: 100%;
+    max-width: 100%;
+    height: 100px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  #information-holder{
+      background-color: rgba(249, 244, 246, 0.2);
+      padding: 20px 20px;
+      border-radius: 10px;
+      min-height: 260px;
+      text-align: center;
+  }
+
+
+  #information-holder .float-responsive{
+     float: center;
+  }
+
+/* Large and up */
+@media screen and (min-width: 64em) {
+    #information-holder .float-responsive{
+        float: left;
+    }
+}
+  
+  .buttons {
+      float:right;
+      font-family: 'Open Sans', sans-serif;
+      color: white;
+  }
+  
+  .write-review-div{
+      background-color: rgb(213, 169, 186);
+      border-radius: 25px;
+      padding: 20px;
+  }
+
+  .action-menu{
+      display: block;
+      text-align: right;
+      margin: -20px 5px;
+  }
+
+  .action-menu li{
+    display: inline;
+    text-align: right;
+    font-size: 24px;
+    color: white;
+    margin: 0px 10px
+}
+
+  .rating-list, .rating-list li{
+      display: block;
+      text-align: left;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      color: white;
+      margin: 0;
+      padding: 0;
+  }
+
+
+/*-------------------- REVIEWS STYLING -----------------------*/
+
+.reviews {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 200px;
+    margin-bottom: 10px;
+}
+
+.reviews .cell {
+    margin: 0px;    
+}
+
+
+.review .fa {   
+    width: 10px;
+    height: 1px;
+}
+
+.fa-star {
+    color: rgb(135, 116, 116);
+    transition: all .2s;
+}
+.fa-star::before {
+    font-size: 12px;
+}
+
+.checked {
+    color: #FD4;
+  }
+
+.ratings{     
+     text-align: center;
+}
+
+.rating-text{
+    display: block;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: medium;
+}
+
+
+.rating-text.small{
+    font-size: small;
+}
+
+.review-box{
+    background-color:rgba(255, 255, 255, 0.1);
+    margin: 10px;
+    border-radius: 20px;
+}
+
+#name-text{
+    font-style: italic;
+    display: inline;
+    margin: 10px 0px;
+    text-align: left;
+}
+
+.overall-rating,.overall-rating div{
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+
+/*-------------------- STAR REVIEW ICONS --------------------*/
+
+.star-div{
+    display: inline;
+  }
+  
+  input.star{
+    display: none;
+  }
+  
+  label.star {
+    margin: 2px;
+    padding: 1px;
+    font-size: medium;
+    color: #444;
+    transition: all .2s;
+    text-align: center;
+    float: right;
+  }
+  
+  input.star:checked ~ label.star:before {
+    content:'\f005';
+    color: #FD4;
+    transition: all .25s;
+  }
+  
+  
+  input.star-5:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1:checked ~ label.star:before {
+    color: #F62;
+  }
+  
+  label.star:hover{
+    transform: rotate(-15deg) scale(1.3);
+  }
+  
+  label.star:before{
+    content:'\f006';
+    font-family: FontAwesome;
+  }
+
+  input.star-5-pq:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-pq:checked ~ label.star:before {
+    color: #F62;
+  }
+  input.star-5-cr:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-cr:checked ~ label.star:before {
+    color: #F62;
+  }
+  input.star-5-hr:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-hr:checked ~ label.star:before {
+    color: #F62;
+  }
+
+  input.star-5-or:checked ~ label.star:before {
+    color:#FE7;
+    text-shadow: 0 0 20px #952;
+  }
+  
+  input.star-1-or:checked ~ label.star:before {
+    color: #F62;
+  }
+/*-------------------- SIGN UP/SIGN IN/ LIST POP UP --------------------*/
+
+  #sign-in-pop-up, #sign-up-pop-up, #list-pop-up{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color:rgba(0,0,0,0.5)
+}
+
+.pop-up-content{
+    background: rgb(255, 254, 216);
+    background: linear-gradient(0deg, rgba(209, 178, 109, 1) 0%, rgb(199, 137, 163) 60%);
+    background-repeat: no-repeat;
+    margin: 15% auto;
+    padding: 25px;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
+
+#close-btn-sign-in, #close-btn-sign-up, #close-btn-add-to-list{
+    float: right;
+    color:white;
+    font-size: 40px;
+    position: relative;
+    top: -30px;
+    right: -10px;
+}
+
+#close-btn-sign-in:hover, #close-btn-sign-up:hover,#close-btn-sign-in:focus, #close-btn-sign-up:focus,
+#close-btn-add-to-list:hover,#close-btn-add-to-list:focus{
+    color: rgb(220,220,220);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+form{
+    margin: 0 auto;
+}
+
+#sign-in-pop-up input, #sign-up-pop-up input{
+    border-radius: 20px;
+    display: block;
+}
+
+label, legend{
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+    margin: 5px 0;
+    margin-top: 10px;
+}
+
+legend{
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.6);
+    font-size: x-large;
+}
+
+.sign-text{
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+    display: inline;
+    text-align: right;
+}
+#podcast-lists{
+    display: inline;
+    width: 50%;
+}
+#create-new-list{
+    display: none;
+}
+
+.list-pop-up-button{
+    display: inline;
+    width: 25%;
+    background-color: rgb(152,189,139);
+    color: white;
+    text-transform: uppercase;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
+.pop-up-button{
+    display: block;
+    margin: 40px auto 0;
+    width: 50%;
+    background-color: rgb(152,189,139);
+    color: white;
+    text-transform: uppercase;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
+
+.pop-up-button:hover, .pop-up-button:focus, .list-pop-up-button:hover, .list-pop-up-button:focus{
+    background-color: rgb(123, 158, 108);
+    outline:none;
+}
+
+ul.social-media-list{
+    text-align: center;
+}
+
+ul.social-media-list li{
+    display:inline-block;
+    margin-right: 2vh;
+    margin-top: 2vh;
+    font-family: 'Open Sans', sans-serif;
+    list-style: none;
+}
+
+.sign-in-link{
+    color: black;
+    font-size: small;
+    text-align: right;
+    display: inline;
+}
+
+
+.fa {
+    padding-top: 10px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+  }
+
+  /* Facebook */
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+  }
+
+  .fa-facebook:hover {
+    background: #3B5998;
+    color: white;
+  }
+  
+  /* Twitter */
+  .fa-twitter {
+    background: #55ACEE;
+    color: white;
+  }
+
+  .fa-twitter:hover {
+    background: #55ACEE;
+    color: white;
+  }
+   
+  /* Google */
+   
+  .fa-google {
+    background: rgb(202, 66, 12);
+    color: white;
+  }    
+
+
+  .fa-google:hover {
+    background: rgb(202, 66, 12);
+    color: white;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.alternative-sign-up{
+    margin-top: 20px;
+}
+
+/*-------------------- SLICK CAROUSEL --------------------*/
+.nextArrowBtn{
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    right: 0;
+    color: rgba(0, 0, 0, 0.637);
+    font-size: 150%;
+    
+}
+.prevArrowBtn{
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    left: 0;
+    color: rgba(0, 0, 0, 0.637);
+    font-size: 50px;
+}
+
+/*Comdey/Seriouss*/
+
+.checkgroup input[type="radio"].tone, .checkgroup input[type="checkbox"].tone {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: none;
+}
+
+.checkgroup input[type="radio"].tone:focus, .checkgroup input[type="checkbox"].tone:focus{
+    display: none;
+}
+
+.checkgroup{
+    display: inline;
+    margin: 0 0.2em;
+}
+
+
+label.tone svg{
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: 0.5em auto;
+}
+
+label.tone{
+    font-size: medium;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    margin: 15px;
+}
+
+label.tone svg:hover{
+    transform: rotate(-15deg) scale(1.1);
+    filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
+
+
+input.tone:checked ~ label.tone svg {
+    transform: scale(1.2);
+    filter: brightness(2.5) sepia(1) hue-rotate(7deg) saturate(5);
+    text-shadow: 0 0 7px #FFFFFF;
+  }
+
+  input.tone:checked ~ .tone {
+    color: #FFFFFF;
+    text-shadow: 2px 0 7px #FFFFFF;
+  }
+
+.review-text-boc{
+    white-space: pre-wrap;
+  }
+
+  #hide{
+      display:none;
+  }
+
+  #showcase-tone{
+    text-align: left;
+  }
+
+  #showcase-tone label.tone svg{
+    float:left;
+    filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
+
+  #showcase-tone label.tone svg:hover{
+    transform: rotate(0) scale(1);
+    filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
+  }
+
+
+
+
+  #delete-playlist-btn, #delete-account-btn{
+    background-color: rgb(171, 24, 24);   
+  }
+
+  #delete-playlist-btn:hover, #delete-account-btn:hover{
+    background-color: rgb(123, 5, 5);   
+  }
+
+  .no-margin{
+    margin: 0;
+}

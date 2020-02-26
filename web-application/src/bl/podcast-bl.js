@@ -67,12 +67,41 @@ module.exports = function ({ podcastDAL }) {
             }
         },
 
+        getAllReviewsByUser: async function getAllReviewsByUser(userId) {
+
+            try {
+                if (await podcastDAL.userHasReviews(userId)) {
+                    return await podcastDAL.getAllReviewsByUser(userId)
+                }
+                return []
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+
+            }
+        },
+
         getThreeReviewsByPodcastId: async function getThreeReviewsByPodcastId(collectionId) {
 
             const numberOfReviews = 3
             try {
                 if (await podcastDAL.podcastHasReviews(collectionId)) {
                     return await podcastDAL.getNReviewsByPodcastId(collectionId, numberOfReviews)
+                }
+                return []
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+
+            }
+        },
+
+        getThreeReviewsByUser: async function getThreeReviewsByUser(user) {
+
+            const numberOfReviews = 3
+            try {
+                if (await podcastDAL.userHasReviews(user)) {
+                    return await podcastDAL.getNReviewsByUser(user, numberOfReviews)
                 }
                 return []
             } catch (error) {
@@ -110,6 +139,33 @@ module.exports = function ({ podcastDAL }) {
             }
         },
 
+        getNReviewsByUser: async function getNReviewsByUser(user, value) {
+
+            const postPerPage = 3
+            try {
+                if (value == "all") {
+                    if (await podcastDAL.userHasReviews(user)) {
+                        return {result: await podcastDAL.getAllReviewsByUser(user), amount: postPerPage}
+                    }
+                    return []
+                } else {
+                    if(value === undefined){
+                        value = postPerPage
+                    } else {
+                        value = parseInt(value)
+                        value += postPerPage
+                    }
+                    if (await podcastDAL.userHasReviews(user)) {
+                        return {result: await podcastDAL.getNReviewsByUser(user, value), amount: value}
+                    }
+                    return []
+                }
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+
+            }
+        },
 
         getRatingInformationByPodcastId: async function getRatingInformationByPodcastId(collectionId) {
 

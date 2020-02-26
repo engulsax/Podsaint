@@ -1,0 +1,11 @@
+<div class="grid-x">
+    {{#each reviews}}
+    <div class="cell medium-10 medium-offset-1 review">
+        {{>review}}
+    </div>
+    {{/each}}
+    <div class="block grid-x cell medium-10 medium-offset-1">
+        <a href="?amount=all" class="right">Load All</a>
+        <a href="?amount={{amount}}">Load More</a>
+    </div>
+</div>

@@ -43,6 +43,3 @@ CREATE TABLE podcastlists (
     CONSTRAINT fk_podcastid FOREIGN KEY (pod_id) REFERENCES podcasts(pod_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-INSERT INTO users(username,email,password) VALUES ("johan","test@mail.se","abc123");
-INSERT INTO podcasts(pod_id) VALUES ("596047499");

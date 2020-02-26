@@ -37,16 +37,6 @@ app.engine('hbs', expressHandlebars({
         starRatings += '<span class="fa fa-star"></span>'
       }
       return starRatings
-    },
-    equal: function (value1, value2, options) {
-
-      console.log("FASFQWRFSF" + value1 +"   " +value2)
-
-      if(value1 === value2) {
-        return options.fn(this)
-      } else {
-        return options.inverse(this)
-      }
     }
   }
 }))
@@ -75,6 +65,7 @@ app.use("/", container.resolve('homePL'))
 app.use("/category", container.resolve('categoryPL'))
 app.use("/search", container.resolve('searchPL'))
 app.use("/podcast", container.resolve('podcastPL'))
+app.use("/my-review", container.resolve('myReviewPL'))
 
 
 

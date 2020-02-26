@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(){
 
-    const podSections = document.getElementById("podcast-section")
+    const podSections = document.getElementById("podcast-lists-section")
     const playlists = podSections.children
 
     for(let playlist of playlists){
+
+        playlist.style.display = "none"
    
         const podLink = document.getElementById(playlist.id+"-link")
        
@@ -14,10 +16,10 @@ document.addEventListener("DOMContentLoaded", function(){
             playlist.style.display = "block"
         })
 
-        if(playlist.id == "your-podcasts"){
-            continue
-        }
-        playlist.style.display="none"
+        //if(playlist.id == "your-podcasts"){
+        //    continue
+        //}
+        //playlist.style.display="none"
     }
 
 })

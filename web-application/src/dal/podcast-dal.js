@@ -114,10 +114,10 @@ module.exports = function({}){
 			}
 		},
 		
-		getAllReviewsByUser: async function getAllReviewsByUser(userId) {
+		getAllReviewsByUser: async function getAllReviewsByUser(user) {
 		
-			const query = "SELECT * FROM reviews WHERE user_id = ? ORDER BY post_date DESC"
-			const value = [userId]
+			const query = "SELECT * FROM reviews WHERE review_poster = ? ORDER BY post_date DESC"
+			const value = [user]
 		
 			try {
 				const response = await db(query, value)
@@ -129,10 +129,10 @@ module.exports = function({}){
 			}
 		},
 
-		etNReviewsByUser: async function getNReviewsByPodcastId(userId, amount) {
+		getNReviewsByUser: async function getNReviewsByPodcastId(user, amount) {
 		
-			const query = "SELECT * FROM reviews WHERE user_id = ? ORDER BY post_date DESC LIMIT ?"
-			const value = [userId, amount]
+			const query = "SELECT * FROM reviews WHERE review_poster = ? ORDER BY post_date DESC LIMIT ?"
+			const value = [user, amount]
 		
 			try {
 				const response = await db(query, value)
@@ -149,7 +149,7 @@ module.exports = function({}){
 		
 			try {
 				const ratings = await getRatingsFromPodcast(collectionId)
-				const numberOfReviewsRaw = await getNumberOfReviews(collectionId)
+				const numberOfReviewsRaw = await getNumberOfReviewsById(collectionId)
 				const numberOfReviews = await numberOfReviewsRaw[0]["COUNT(*)"]
 				
 				const averageRatings = {}
@@ -170,7 +170,7 @@ module.exports = function({}){
 		
 			toneInformation = {}
 		
-			const numberOfReviewsRaw = await getNumberOfReviews(collectionId)
+			const numberOfReviewsRaw = await getNumberOfReviewsById(collectionId)
 			const numberOfReviews = numberOfReviewsRaw[0]["COUNT(*)"]
 		
 			dramaQuery = "SELECT drama_rating FROM podcasts WHERE pod_id = ?"
@@ -196,7 +196,13 @@ module.exports = function({}){
 		},
 		
 		podcastHasReviews: async function podcastHasReviews(collectionId){
-			const numberOfReviws = await getNumberOfReviews(collectionId)
+			const numberOfReviws = await getNumberOfReviewsById(collectionId)
+			console.log("NUMBER OF MF REVIES------"+numberOfReviws[0]['COUNT(*)'])
+			return numberOfReviws[0]['COUNT(*)']
+		},
+
+		userHasReviews: async function userHasReviews(user){
+			const numberOfReviws = await getNumberOfReviewsByUser(user)
 			console.log("NUMBER OF MF REVIES------"+numberOfReviws[0]['COUNT(*)'])
 			return numberOfReviws[0]['COUNT(*)']
 		}
@@ -228,11 +234,16 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 
 }
 
-/* WHAT AM I DOING?*/
-
-async function getNumberOfReviews(collectionId) {
+async function getNumberOfReviewsById(collectionId) {
 	query = "SELECT COUNT(*) FROM reviews WHERE pod_id = ?"
 	value = [collectionId]
+
+	return await db(query, value)
+}
+
+async function getNumberOfReviewsByUser(user) {
+	query = "SELECT COUNT(*) FROM reviews WHERE review_poster = ?"
+	value = [user]
 
 	return await db(query, value)
 }

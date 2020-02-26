@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
+module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }) {
 
     router.use(async function (request, response, next) {
 
@@ -12,24 +12,23 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
         next()
     })
 
-    router.use('/:id', async function (request,response, next) {
+    router.use('/:id', async function (request, response, next) {
 
         const collectionId = request.params.id
         const informationRespons = await searchItunesBL.searchPodcast(collectionId)
         const information = informationRespons.results
 
-        if(response.model.loggedIn){
+        if (response.model.loggedIn) {
             response.model.user = request.session.key.user
-        } else  {
+        } else {
             response.model.user = undefined
         }
-        
+
         response.model.collectionId = collectionId,
-        response.model.information = information,
-        response.model.description =  await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
+            response.model.information = information,
+            response.model.description = await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
 
         next()
-
     })
 
     router.get('/:id', function (request, response) {
@@ -47,10 +46,16 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
             model.reviews = reviews
             model.podcastsInSameCategory = podcastsInSameCategory.results
 
-            for(review of reviews){
-                if(review.review_poster === response.model.user){
+
+            if (model.loggedIn) {
+                const userPlaylists = await playlistBL.getAllPlaylistsByUser(model.loggedIn.user)
+                model.userPlaylists = userPlaylists
+            }
+
+            for (review of reviews) {
+                if (review.review_poster === response.model.user) {
                     review.myReview = true
-                } 
+                }
             }
 
             response.render("podcast.hbs", { model })
@@ -70,7 +75,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
         }
     })
 
-    router.get('/:id/all-reviews', async function (request, response){
+    router.get('/:id/all-reviews', async function (request, response) {
 
         const value = request.query.amount
 
@@ -78,9 +83,9 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
         const reviews = await podcastBL.getNReviewsByPodcastId(response.model.collectionId, value)
         model.reviews = reviews.result
         model.amount = reviews.amount
-                
+
         response.render("all-reviews.hbs", { model })
-        
+
     })
 
 
@@ -100,12 +105,12 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
                 const reviewPoster = request.session.key.user
 
                 const errors = await podcastBL.newPodcastReview(
-                    collectionId, reviewPoster, podCreator, collectionName, 
+                    collectionId, reviewPoster, podCreator, collectionName,
                     toneRating, topicRelevenceRating, productionQualty,
                     overallRating, reviewText
                 )
 
-                if(errors){
+                if (errors) {
                     const model = response.model
                     model.text = reviewText
                     model.errors = errors
@@ -115,6 +120,66 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL }) {
                     response.redirect("/podcast/" + collectionId)
                 }
             })()
+        } else {
+            response.render("signin.hbs")
+        }
+    }),
+
+        router.post('/:id/create-list', function (request, response) {
+
+            if (request.session.key) {
+                (async function () {
+                    const playlistName = request.body.playlistName
+                    const model = response.model.information[0]
+                    const collectionId = request.params.id
+                    const loggedIn = request.session.key
+
+                    await playlistBL.addPodcastToPlaylist(collectionId, playlistName, loggedIn.user, model.collectionName, model.artistName)
+                    response.redirect("/podcast/" + collectionId)
+                })()
+            } else {
+                response.render("signin.hbs")
+            }
+        })
+
+    router.post('/:id/add-to-playlist', function (request, response) {
+
+        const model = response.model
+
+        if (model.loggedIn) {
+            (async function () {
+                const podcastInfo = model.information[0]
+                const collectionId = request.params.id
+                const playlist = request.body.playlist
+                await playlistBL.addPodcastToPlaylist(collectionId, playlist, model.loggedIn.user, podcastInfo.collectionName, podcastInfo.artistName)
+                response.redirect("/podcast/" + collectionId)
+            })()
+
+        } else {
+            response.render("signin.hbs")
+        }
+    })
+
+    router.get('/:id/add-to-playlist', function (request, response) {
+
+        const model = response.model
+
+        if (model.loggedIn) {
+
+            (async function () {
+                const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn.user)
+                model.userPlaylists = userPlaylists
+                response.render("add-to-playlist.hbs", { model })
+            })()
+
+            /*(async function(){
+                const model = response.model.information[0]
+                const collectionId = request.params.id
+                const playlist = request.body.playlist
+                await playlistBL.addPodcastToPlaylist(collectionId, playlist, response.model.loggedIn.user, model.collectionName, model.artistName)
+                response.redirect("/podcast/" + collectionId)
+            })()*/
+
         } else {
             response.render("signin.hbs")
         }

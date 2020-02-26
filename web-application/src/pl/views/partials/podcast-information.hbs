@@ -1,13 +1,17 @@
 <div class="grid-x">
+    
+    {{#if model.loggedIn}}
     <div class="cell action-menu">
         <ul>
-            <li><a href="#">Add to your podcasts</a></li>
-            <li><a href="#">Add to want to listen </a></li>
+            <li><a href="/podcast/{{model.collectionId}}/add-to-playlist" id="add-to-list">Add to your podcasts</a></li>
         </ul>
     </div>
+    {{/if}}
+
 </div>
 <div class="grid-x">
     <div id="information-holder" class="cell">
+        <!-- each need to get into scope-->
         {{#with model}}
         {{#with information.[0]}}
         <div class="cell">
@@ -46,6 +50,6 @@
         </div>
         {{/with}}
     </div>
-
+    
 
 </div>

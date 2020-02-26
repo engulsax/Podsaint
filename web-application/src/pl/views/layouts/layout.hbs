@@ -40,6 +40,7 @@
     <script src="/js/search-option.js"></script>
     <script src="/js/feed.js"></script>
     <script src="/js/pod-info.js"></script>
+    <script src="/js/add-to-list-pop-up.js"></script>
 
     <!-- Icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -66,6 +67,7 @@
                         </li>
                         {{#if model.loggedIn}}
                         <li>
+                            <li><a href="/account-settings">Settings</a></li>
                             <form action="/signout" method="POST">
                                 <input class="logout-button nothing" type="submit" value="Sign Out" />
                             </form>

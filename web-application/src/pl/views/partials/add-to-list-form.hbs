@@ -1,0 +1,12 @@
+<form action="/podcast/{{model.collectionId}}/add-to-playlist" method="POST">
+    <h2>Add to list</h2>
+    <label for="list">Choose a playlist:</label>
+    <select class= search id="podcast-lists" name="playlist">
+        {{#each model.userPlaylists}}
+            <option value="{{name}}">{{name}}</option>
+        {{/each}}
+    </select>
+    <input class="button podsaint-button" type="submit" value="ADD">
+</form>
+<a id="create-new-list-link">Or create a new list</a>
+{{>create-new-list-form}}

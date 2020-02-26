@@ -2,35 +2,75 @@
 
     <div class="cell small-12 medium-10 large-8 small-offset-0 medium-offset-1 large-offset-2">
         <ul id="pod-links" class="menu align-center">
-            <li><a id="your-podcasts-link" href="#your-podcasts">Your podcasts</a></li>
-            <li><a id="want-to-listen-link" href="#want-to-listen">Want to listen</a></li>
-            <li><a id="recommendations-link" href="#recommendations">Recommendations</a></li>
-            <li><a id="friend-favourites-link" href="#friend-favourites">Friend Favourites</a></li>
+            <li><a id="your-podcasts-link" href="#your-podcasts">My Podcasts</a></li>
+            <li><a id="your-reviews-link" id="#your-reviews">My Reviews</a></li>
         </ul>
     </div>
 
 
-    <div id="podcast-section" class="cell small-10 medium-8 large-8 small-offset-1 medium-offset-2 large-offset-2">
+    <div id="podcast-lists-section"
+        class="cell small-10 medium-8 large-8 small-offset-1 medium-offset-2 large-offset-2">
 
-        <section id="your-podcasts" class="cell center">
-            <h1>Your Podcasts</h1>
+        <section id="your-podcasts" class="cell">
+            <div class="grid-x">
+                <div class="cell medium-8 medium-offset-2">
+                    <h1>My Podcasts</h1>
+                    <ul>
+                        {{#if model.playlists}}
+                        {{#each model.playlists}}
+                        <li>
+                            <div class="grid-x">
+                                <div class="cell small-11">
+                                    <h2 class="sub-text no-margin left">{{playlistName}}</h2>
+                                </div>
+                                <div class="cell small-1">
+                                    <a class="no-margin right" href="/{{playlistName}}/edit"><i
+                                            class="fa fa-edit"></i></a>
+                                </div>
+                            </div>
+                            <section class="cell small-8 center margin-bottom">
+                                <ul id="podcast-section" class="slick">
+                                    {{#each podcastInfo}}
+                                    <li>
+                                        <figure id="podcast-holder">
+                                            <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image"
+                                                    class="podcast-size-210" src="{{this.artworkUrl600}}"></a>
+                                        </figure>
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                            </section>
+                        </li>
+                        {{/each}}
+                        {{else}}
+                        <h1>You dont have any playlists</h1>
+                        {{/if}}
+                    </ul>
+                </div>
+            </div>
         </section>
 
-        <section id="want-to-listen" class="cell center">
-            <h1>Want to listen</h1>
-        </section>
+        <section id="your-reviews" class="cell">
+            <h1>My Reviews</h1>
+            <div class="grid-x">
+                {{#each model.reviews}}
+                <div class="cell review">
+                    {{>my-review}}
+                </div>
+                {{/each}}
 
-        <section id="recommendations" class="cell center">
-            <h1> Recommendations</h1>
-        </section>
+                <div class="grid-x">
+                    <div class="cell large-12">
+                        <a class="buttons" href="my-review/all">View more reviews</a>
+                    </div>
+                </div>
 
-        <section id="friend-favourites" class="cell center">
-            <h1>Friend Favourites</h1>
+            </div>
         </section>
 
     </div>
 </div>
-
+<!--
 <div class="grid-x">
     <div class="cell small-10 medium-8 large-6 small-offset-1 medium-offset-2 large-offset-3">
         <h1 class="head-text">Updates</h1>
@@ -44,3 +84,4 @@
     </div>
 
 </div>
+-->
