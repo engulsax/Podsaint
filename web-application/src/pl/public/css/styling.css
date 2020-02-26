@@ -30,6 +30,13 @@ h1 {
     box-shadow: none;
 }
 
+.search-menu{
+    float: right;
+    margin-right: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
 
 .nothing {
     border: 0;
@@ -165,7 +172,24 @@ li.errorInput, .errorInput{
 
 #menu{
     list-style: none;
-    float: right;
+    display: block;
+}
+
+#menu form, #menu form input{
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+#menu ul{
+    margin: 0;
+    text-align: right;
+}
+
+#menu ul li{
+    display: inline;
+    margin: 0;
+    padding: 5px;
 }
 
 .text-right {
@@ -374,11 +398,9 @@ fieldset#main-field{
 }
 
 #categories-button{
-    margin-right: 2vh;
-    margin-bottom: 2vh;
     color: rgb(107,107,107);
     font-family: 'Open Sans', sans-serif;
-    float: right;
+    margin-right: 5px;
 }
 
 
@@ -1350,14 +1372,6 @@ fieldset#main-field{
 
 #categories-content a:hover, #categories-content a:focus{
     color: rgba(255,255,255,0.6);
-}
-
-#categories-button{
-    margin-right: 2vh;
-    margin-bottom: 2vh;
-    color: rgb(107,107,107);
-    font-family: 'Open Sans', sans-serif;
-    float: right;
 }
 
 

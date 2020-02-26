@@ -44,7 +44,7 @@
 
     <!-- Icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- 
+
     <!--meta http-equiv="X-UA-Compatible" content="ie=edge"-->
 
     <title>Podsaint</title>
@@ -52,37 +52,43 @@
 
 <body>
     <header id="header">
-        <div class="grid-x">
-            <div class="cell">
-                <div id="logo">
-                    <a href="/"><img id="logo-icon" src="/images/Podsaint_logo.png"></a>
-                    <div id="logo-text">Podsaint</div>
-                </div>
-                <nav id="menu">
-                    <ul>
-                        <li>
-                            <form method="GET" action="/search/itunes">
-                                <input name="searchText" class="search" type="text" placeholder="Search...">
-                            </form>
-                        </li>
+        <div class="grid-x cell">
+            <div id="logo">
+                <a href="/"><img id="logo-icon" src="/images/Podsaint_logo.png"></a>
+                <div id="logo-text">Podsaint</div>
+            </div>
+            <form class="search-menu" method="GET" action="/search/itunes">
+                <input name="searchText" class="search" type="text" placeholder="Search...">
+            </form>
+            <div class="grid-x cell">
+                <nav id="menu" class="cell">
+                    <ul class="cell">
                         {{#if model.loggedIn}}
                         <li>
-                            <li><a href="/account-settings">Settings</a></li>
+                            <a href="/home">Home</a>
+                        </li>
+                        <li>
+                            <a href="/account-settings">Settings</a>
+                        </li>
+                        <li>
                             <form action="/signout" method="POST">
                                 <input class="logout-button nothing" type="submit" value="Sign Out" />
                             </form>
-                            
+                        </li>
                         </li>
                         {{else}}
                         <li>
                             <a id="sign-in" href="/signin">Sign In</a>
                         </li>
                         {{/if}}
+                        <li>
+                            <a href="#" id="categories-button">Categories &#x25BC;</a>
+                        </li>
                     </ul>
-                    <a href="#" id="categories-button">Categories &#x25BC;</a>
                 </nav>
             </div>
         </div>
+
         <div class="grid-x">
             <div id="categories-content" class="cell">
                 <ul>
