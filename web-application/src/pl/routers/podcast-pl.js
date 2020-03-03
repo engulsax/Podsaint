@@ -68,7 +68,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
     })
 
     router.get('/:id/write-review', function (request, response, error) {
-        
+
         try {
             if (request.session.key) {
 
@@ -166,10 +166,9 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
                 const podcastInfo = model.information[0]
                 const collectionId = request.params.id
                 const playlist = request.body.playlist
-                await playlistBL.addPodcastToPlaylist(collectionId, playlist, model.loggedIn.user, podcastInfo.collectionName, podcastInfo.artistName)
+                await playlistBL.addPodcastToPlaylist(collectionId, playlist, request.session.key.user, podcastInfo.collectionName, podcastInfo.artistName)
                 response.redirect("/podcast/" + collectionId)
             })()
-
         } else {
             response.render("signin.hbs")
         }

@@ -5,14 +5,11 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL, errors, aut
     return{
 
         addPodcastToPlaylist: async function(collectionId, playlistName, user, collectionName, artistName){
-            try{
-                const podcast = await podcastDAL.getPodcastById(collectionId)
-                
-                if(podcast){
-                   await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
 
+            try{    
+                if(await podcastDAL.podcastExist(collectionId)){
+                   await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
                 }else{
-    
                     await podcastDAL.addPodcast(collectionId, collectionName, artistName)
                     await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
                 }

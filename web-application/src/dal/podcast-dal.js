@@ -6,7 +6,7 @@ const db = util.promisify(conn.query).bind(conn)
 const ratingDatabaseNames = ["overall_rating", "production_quality_rating", "topic_relevence_rating", "comedy_rating", "drama_rating"]
 const ratingsVaribleNames = ["overall", "quality", "topic", "comedy", "drama"]
 
-module.exports = function ({errors}) {
+module.exports = function ({ errors }) {
 
 	return {
 
@@ -223,104 +223,103 @@ module.exports = function ({errors}) {
 				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 
+		},
+
+		podcastExist: async function podcastExist(collectionId) {
+			try {
+				const query = "SELECT EXISTS(SELECT * FROM podcasts WHERE pod_id = ?) as response"
+				const value = [collectionId]
+				const response = await db(query, value)
+				return (response[0]['response'])
+			} catch (error) {
+				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			}
+		}
+	}
+
+	async function addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
+
+		try {
+			const ratings = await getRatingsFromPodcast(collectionId)
+
+			ratings.overall += overallRating
+			ratings.quality += productionQuality
+			ratings.topic += topicRelevence
+			ratings.drama += dramaRating
+
+			/*Added recently, I feel like this should be here, if any issues aries take closer lookS*/
+			ratings.comedy += comedyRating
+
+			/*Finding all value in objects with the help of ratingsVaribleNames'
+			which has the name of all the keys aka the varible names (in this case)*/
+			ratingDatabaseNames.forEach(async function (rating, i) {
+				await addNewRatingsToPodcast(collectionId, rating, ratings[ratingsVaribleNames[i]])
+			})
+
+		} catch (error) {
+			console.log(error)
+			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 		}
 
 	}
-}
 
-async function podcastExist(collectionId) {
-	try {
-		const query = "SELECT EXISTS(SELECT * FROM podcasts WHERE pod_id = ?) as response"
-		const value = [collectionId]
-		const response = await db(query, value)
-		return(response[0]['response'])
-	} catch (error) {
-		console.log(error)
-		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
-	}
-}
+	async function getNumberOfReviewsById(collectionId) {
+		query = "SELECT COUNT(*) FROM reviews WHERE pod_id = ?"
+		value = [collectionId]
 
-async function addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
-
-	try {
-		const ratings = await getRatingsFromPodcast(collectionId)
-
-		ratings.overall += overallRating
-		ratings.quality += productionQuality
-		ratings.topic += topicRelevence
-		ratings.drama += dramaRating
-
-		/*Added recently, I feel like this should be here, if any issues aries take closer lookS*/
-		ratings.comedy += comedyRating
-
-		/*Finding all value in objects with the help of ratingsVaribleNames'
-		which has the name of all the keys aka the varible names (in this case)*/
-		ratingDatabaseNames.forEach(async function (rating, i) {
-			await addNewRatingsToPodcast(collectionId, rating, ratings[ratingsVaribleNames[i]])
-		})
-
-	} catch (error) {
-		console.log(error)
-		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+		try {
+			return await db(query, value)
+		} catch (error) {
+			console.log(error)
+			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+		}
 	}
 
-}
+	async function getNumberOfReviewsByUser(user) {
+		query = "SELECT COUNT(*) FROM reviews WHERE review_poster = ?"
+		value = [user]
 
-async function getNumberOfReviewsById(collectionId) {
-	query = "SELECT COUNT(*) FROM reviews WHERE pod_id = ?"
-	value = [collectionId]
-
-	try {
-		return await db(query, value)
-	} catch (error) {
-		console.log(error)
-		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+		try {
+			return await db(query, value)
+		} catch (error) {
+			console.log(error)
+			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+		}
 	}
-}
 
-async function getNumberOfReviewsByUser(user) {
-	query = "SELECT COUNT(*) FROM reviews WHERE review_poster = ?"
-	value = [user]
+	async function addNewRatingsToPodcast(collectionId, ratingName, ratingScore) {
+		query = "UPDATE podcasts SET " + ratingName + " = ? WHERE pod_id = ?"
 
-	try {
-		return await db(query, value)
-	} catch (error) {
-		console.log(error)
-		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+
+		values = [ratingScore, collectionId]
+		try {
+			await db(query, values)
+		} catch (error) {
+			console.log(error)
+			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+		}
 	}
-}
 
-async function addNewRatingsToPodcast(collectionId, ratingName, ratingScore) {
-	query = "UPDATE podcasts SET " + ratingName + " = ? WHERE pod_id = ?"
+	async function getRatingsFromPodcast(collectionId) {
 
-	
-	values = [ratingScore, collectionId]
-	try {
-		await db(query, values)
-	} catch (error) {
-		console.log(error)
-		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
-	}
-}
+		query = "SELECT * FROM podcasts WHERE pod_id = ?"
+		value = [collectionId]
 
-async function getRatingsFromPodcast(collectionId) {
+		try {
 
-	query = "SELECT * FROM podcasts WHERE pod_id = ?"
-	value = [collectionId]
+			const result = await db(query, value)
+			const ratings = {}
 
-	try {
+			ratingDatabaseNames.forEach(async function (rating, i) {
+				ratings[ratingsVaribleNames[i]] = result[0][rating]
+			})
 
-		const result = await db(query, value)
-		const ratings = {}
-
-		ratingDatabaseNames.forEach(async function (rating, i) {
-			ratings[ratingsVaribleNames[i]] = result[0][rating]
-		})
-
-		return ratings
-	} catch (error) {
-		console.log(error)
-		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
-		//return ratings
+			return ratings
+		} catch (error) {
+			console.log(error)
+			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			//return ratings
+		}
 	}
 }
