@@ -6,11 +6,14 @@ const db = util.promisify(conn.query).bind(conn)
 const ratingDatabaseNames = ["overall_rating", "production_quality_rating", "topic_relevence_rating", "comedy_rating", "drama_rating"]
 const ratingsVaribleNames = ["overall", "quality", "topic", "comedy", "drama"]
 
-module.exports = function({}){
-	
-	return{
+module.exports = function ({errors}) {
 
-		newPodcastReview: async function newPodcastReview(collectionId, reviewPoster, collectionName, podCreators, comedyRating, dramaRating, topicRelevence, productionQuality, overallRating, reviewText) {
+	return {
+
+		newPodcastReview: async function newPodcastReview(
+			collectionId, reviewPoster, collectionName, podCreators,
+			comedyRating, dramaRating, topicRelevence, productionQuality,
+			overallRating, reviewText) {
 
 			const query = `INSERT INTO reviews(
 				review_poster, 
@@ -23,46 +26,44 @@ module.exports = function({}){
 				review_text
 			) 
 			VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`
-			const values = [reviewPoster, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating, reviewText]
-		
+			const values = [reviewPoster, collectionId, productionQuality,
+				topicRelevence, comedyRating, dramaRating,
+				overallRating, reviewText]
+
 			try {
-		
-				const podcast = await this.getPodcastById(collectionId)
-		
-				if (podcast == undefined) {
-		
+
+				if (!await podcastExist(collectionId)) {
 					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
-		
+
 				await addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
 				await db(query, values)
-		
+
 				return
-		
+
 			} catch (error) {
 				console.log(error)
-				console.log("error when write new review in db")
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
-			
-		
+
+
 		getPodcastById: async function getPodcastById(collectionId) {
-		
-		
+
+
 			const query = "SELECT * FROM podcasts WHERE pod_id = ?"
 			const value = [collectionId]
-		
+
 			try {
 				const response = await db(query, value)
-				//console.log(response)
 				return response[0].pod_id
-		
+
 			} catch (error) {
 				console.log(error)
-				console.log("error in getPodcastById")
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
-		
+
 		addPodcast: async function addPodcast(collectionId, collectionName, podCreators) {
 			const query = `INSERT INTO podcasts(
 				pod_id, 
@@ -76,137 +77,166 @@ module.exports = function({}){
 			) 
 			VALUES(?, ?, ? ,? ,? ,? ,?, ?)`
 			const values = [collectionId, collectionName, podCreators, 0, 0, 0, 0, 0]
-		
+
 			try {
 				const response = await db(query, values)
 				return response
 			} catch (error) {
-				console.log("error in addPodcast")
 				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
-		
+
 		getAllReviewsByPodcastId: async function getAllReviewsByPodcastId(collectionId) {
-		
+
 			const query = "SELECT * FROM reviews WHERE pod_id = ? ORDER BY post_date DESC"
 			const value = [collectionId]
-		
+
 			try {
 				const response = await db(query, value)
 				return response
 			} catch (error) {
-				console.log("error in getallreviewsbypodcast")
 				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
 
 		getNReviewsByPodcastId: async function getNReviewsByPodcastId(collectionId, amount) {
-		
+
 			const query = "SELECT * FROM reviews WHERE pod_id = ? ORDER BY post_date DESC LIMIT ?"
 			const value = [collectionId, amount]
-		
+
 			try {
 				const response = await db(query, value)
 				return response
 			} catch (error) {
-				console.log("error in getallreviewsbypodcast")
 				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
-		
+
 		getAllReviewsByUser: async function getAllReviewsByUser(user) {
-		
+
 			const query = "SELECT * FROM reviews WHERE review_poster = ? ORDER BY post_date DESC"
 			const value = [user]
-		
+
 			try {
 				const response = await db(query, value)
 				return response
-		
+
 			} catch (error) {
-				console.log("error in getallreviewsbyid")
 				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
 
 		getNReviewsByUser: async function getNReviewsByPodcastId(user, amount) {
-		
+
 			const query = "SELECT * FROM reviews WHERE review_poster = ? ORDER BY post_date DESC LIMIT ?"
 			const value = [user, amount]
-		
+
 			try {
 				const response = await db(query, value)
 				return response
 			} catch (error) {
-				console.log("error in getallreviewsbypodcast")
 				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
 		},
 
 		getAverageRatingsByPodcastId: async function getAverageRatingsByPodcastId(collectionId) {
 
 			/*Unnecessary awaits ?*/
-		
+
 			try {
 				const ratings = await getRatingsFromPodcast(collectionId)
 				const numberOfReviewsRaw = await getNumberOfReviewsById(collectionId)
 				const numberOfReviews = await numberOfReviewsRaw[0]["COUNT(*)"]
-				
+
 				const averageRatings = {}
 				for (key in ratings) {
 					averageRatings[key] = Math.round(ratings[key] / (await numberOfReviews))
-					console.log("average ratings---------- " + await averageRatings[key])
 				}
-		
+
 				return averageRatings
-		
+
 			} catch (error) {
-				console.log("error in getAverageRatingsByPodcastId")
 				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 			}
-		},
-		
-		getToneInformationByPodcastId: async function getToneInformationByPodcastId(collectionId) {
-		
-			toneInformation = {}
-		
-			const numberOfReviewsRaw = await getNumberOfReviewsById(collectionId)
-			const numberOfReviews = numberOfReviewsRaw[0]["COUNT(*)"]
-		
-			dramaQuery = "SELECT drama_rating FROM podcasts WHERE pod_id = ?"
-			comedyQuery = "SELECT comedy_rating FROM podcasts WHERE pod_id = ?"
-		
-			value = [collectionId]
-		
-			const dramaScoreRaw = await db(dramaQuery, value)
-			const comedyScoreRaw = await db(comedyQuery, value)
-			const dramaScore = dramaScoreRaw[0]['drama_rating']
-			const comedyScore = comedyScoreRaw[0]['comedy_rating']
-		
-			if (dramaScore < comedyScore) {
-				toneInformation.mostPicked = "Comedy/Relaxed"
-				/*mulitplication by 100 to make decimal into precentage*/
-				toneInformation.precentage = Math.round(((comedyScore) / numberOfReviews) * 100)
-			} else {
-				toneInformation.mostPicked = "Drama/Serious"
-				toneInformation.precentage = Math.round(((dramaScore) / numberOfReviews) * 100)
-			}
-		
-			return toneInformation
-		},
-		
-		podcastHasReviews: async function podcastHasReviews(collectionId){
-			const numberOfReviws = await getNumberOfReviewsById(collectionId)
-			console.log("NUMBER OF MF REVIES------"+numberOfReviws[0]['COUNT(*)'])
-			return numberOfReviws[0]['COUNT(*)']
 		},
 
-		userHasReviews: async function userHasReviews(user){
-			const numberOfReviws = await getNumberOfReviewsByUser(user)
-			console.log("NUMBER OF MF REVIES------"+numberOfReviws[0]['COUNT(*)'])
-			return numberOfReviws[0]['COUNT(*)']
+		getToneInformationByPodcastId: async function getToneInformationByPodcastId(collectionId) {
+			try {
+
+				toneInformation = {}
+
+				const numberOfReviewsRaw = await getNumberOfReviewsById(collectionId)
+				const numberOfReviews = numberOfReviewsRaw[0]["COUNT(*)"]
+
+				dramaQuery = "SELECT drama_rating FROM podcasts WHERE pod_id = ?"
+				comedyQuery = "SELECT comedy_rating FROM podcasts WHERE pod_id = ?"
+
+				value = [collectionId]
+
+				const dramaScoreRaw = await db(dramaQuery, value)
+				const comedyScoreRaw = await db(comedyQuery, value)
+				const dramaScore = dramaScoreRaw[0]['drama_rating']
+				const comedyScore = comedyScoreRaw[0]['comedy_rating']
+
+				if (dramaScore < comedyScore) {
+					toneInformation.mostPicked = "Comedy/Relaxed"
+					/*mulitplication by 100 to make decimal into precentage*/
+					toneInformation.precentage = Math.round(((comedyScore) / numberOfReviews) * 100)
+				} else {
+					toneInformation.mostPicked = "Drama/Serious"
+					toneInformation.precentage = Math.round(((dramaScore) / numberOfReviews) * 100)
+				}
+
+				return toneInformation
+
+			} catch (error) {
+				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			}
+
+		},
+
+		podcastHasReviews: async function podcastHasReviews(collectionId) {
+
+			try {
+				const numberOfReviws = await getNumberOfReviewsById(collectionId)
+				return numberOfReviws[0]['COUNT(*)']
+			} catch (error) {
+				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			}
+		},
+
+		userHasReviews: async function userHasReviews(user) {
+
+			try {
+				const numberOfReviws = await getNumberOfReviewsByUser(user)
+				return numberOfReviws[0]['COUNT(*)']
+			} catch (error) {
+				console.log(error)
+				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			}
+
 		}
-		
+
+	}
+}
+
+async function podcastExist(collectionId) {
+	try {
+		const query = "SELECT EXISTS(SELECT * FROM podcasts WHERE pod_id = ?) as response"
+		const value = [collectionId]
+		const response = await db(query, value)
+		return(response[0]['response'])
+	} catch (error) {
+		console.log(error)
+		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 	}
 }
 
@@ -215,11 +245,13 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 	try {
 		const ratings = await getRatingsFromPodcast(collectionId)
 
-		ratings.overall += await overallRating
-		ratings.quality += await productionQuality
-		ratings.topic += await topicRelevence
-		ratings.drama += await dramaRating
-		ratings.comedy += await comedyRating
+		ratings.overall += overallRating
+		ratings.quality += productionQuality
+		ratings.topic += topicRelevence
+		ratings.drama += dramaRating
+
+		/*Added recently, I feel like this should be here, if any issues aries take closer lookS*/
+		ratings.comedy += comedyRating
 
 		/*Finding all value in objects with the help of ratingsVaribleNames'
 		which has the name of all the keys aka the varible names (in this case)*/
@@ -229,7 +261,7 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 
 	} catch (error) {
 		console.log(error)
-		//throw(error)
+		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 	}
 
 }
@@ -238,20 +270,37 @@ async function getNumberOfReviewsById(collectionId) {
 	query = "SELECT COUNT(*) FROM reviews WHERE pod_id = ?"
 	value = [collectionId]
 
-	return await db(query, value)
+	try {
+		return await db(query, value)
+	} catch (error) {
+		console.log(error)
+		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+	}
 }
 
 async function getNumberOfReviewsByUser(user) {
 	query = "SELECT COUNT(*) FROM reviews WHERE review_poster = ?"
 	value = [user]
 
-	return await db(query, value)
+	try {
+		return await db(query, value)
+	} catch (error) {
+		console.log(error)
+		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+	}
 }
 
 async function addNewRatingsToPodcast(collectionId, ratingName, ratingScore) {
 	query = "UPDATE podcasts SET " + ratingName + " = ? WHERE pod_id = ?"
+
+	
 	values = [ratingScore, collectionId]
-	db(query, values)
+	try {
+		await db(query, values)
+	} catch (error) {
+		console.log(error)
+		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+	}
 }
 
 async function getRatingsFromPodcast(collectionId) {
@@ -264,15 +313,14 @@ async function getRatingsFromPodcast(collectionId) {
 		const result = await db(query, value)
 		const ratings = {}
 
-		/*async - await unecessary?*/
 		ratingDatabaseNames.forEach(async function (rating, i) {
-			ratings[ratingsVaribleNames[i]] = await result[0][rating]
+			ratings[ratingsVaribleNames[i]] = result[0][rating]
 		})
 
 		return ratings
 	} catch (error) {
 		console.log(error)
-		return ratings
-		//throw error
+		throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+		//return ratings
 	}
 }

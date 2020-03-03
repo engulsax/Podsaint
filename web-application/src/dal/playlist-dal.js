@@ -2,7 +2,7 @@ const conn = require("./db")
 const util = require('util')
 const db = util.promisify(conn.query).bind(conn)
 
-module.exports = function({}){
+module.exports = function({errors}){
 	
     return{
 
@@ -16,8 +16,8 @@ module.exports = function({}){
                 return response
 
             } catch (error) {
-                console.log("error in new podcast list")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -31,8 +31,8 @@ module.exports = function({}){
                 return response
 
             } catch (error) {
-                console.log("error in remove podcasts")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -45,8 +45,8 @@ module.exports = function({}){
                 return await db(query, values)
 
             } catch (error) {
-                console.log("error in new podcast list")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -60,8 +60,8 @@ module.exports = function({}){
                 return result
 
             }catch(error){
-                console.log("error in get all playlists and podcasts")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
     
@@ -75,8 +75,8 @@ module.exports = function({}){
                 return result
 
             }catch(error){
-                console.log("error in delete playlist")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -87,7 +87,8 @@ module.exports = function({}){
             try{
                 return await db(query,values)
             }catch(error){
-
+                console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         }
     }

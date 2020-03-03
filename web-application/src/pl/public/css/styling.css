@@ -8,6 +8,19 @@ body{
     background-attachment: fixed;
 }
 
+body::-webkit-scrollbar{
+    width: 5px;
+}
+
+body::-webkit-scrollbar-track{
+    background: white;
+}
+
+body::-webkit-scrollbar-thumb{
+    background: rgba(209, 178, 109, 0.897);
+}
+
+
 h1 {
   font-family: 'Open Sans', sans-serif;
   color: whitesmoke;

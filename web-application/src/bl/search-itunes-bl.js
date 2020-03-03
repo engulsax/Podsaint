@@ -1,58 +1,99 @@
 const fetch = require('node-fetch')
 const defaultHTTPS = "https://itunes.apple.com/search?media=podcast"
 
-module.exports = function () {
+module.exports = function ({ errors }) {
 
     return {
 
         searchPodcastsWithIdAndTerm: async function (term, subCategoryId, mainCategoryId) {
-            if (subCategoryId === "all") {
-                return await searchPodcastsWithIdAndTerm(term, mainCategoryId)
+            try {
+                if (subCategoryId === "all") {
+                    return await searchPodcastsWithIdAndTerm(term, mainCategoryId)
+                }
+                return await searchPodcastsWithIdAndTerm(term, subCategoryId)
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
             }
-            return await searchPodcastsWithIdAndTerm(term, subCategoryId)
         },
 
         searchPodcastsWithId: async function (id) {
-            return await getPodcastsWithId(id)
+            try {
+                return await getPodcastsWithId(id)
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            }
         },
 
         searchPodcasts: async function (term) {
-            return await getPodcasts(term)
+            try {
+                return await getPodcasts(term)
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            }
         },
 
         searchPodcast: async function (term) {
-            return await getPodcast(term)
+            try {
+                return await getPodcast(term)
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            }
         }
     }
-}
 
-async function getPodcasts(term){
-    const limit = "&limit=80"
-    let https = defaultHTTPS +limit+ "&term=" + term
-    console.log(https)
-    const response = await fetch(https)
-    return await response.json()
-}
 
-async function getPodcast(term){
-    let https = defaultHTTPS + "&term=" + term
-    console.log(https)
-    const response = await fetch(https)
-    return await response.json()
-}
+    async function getPodcasts(term) {
 
-async function searchPodcastsWithIdAndTerm(term, categoryId){
-    const limit = "&limit=80"
-    let https = defaultHTTPS + limit + "&term=" + term + "&genreId=" + categoryId
-    console.log(https)
-    const response = await fetch(https)
-    return await response.json()
-}
+        const limit = "&limit=80"
+        let https = defaultHTTPS + limit + "&term=" + term
+        const response = await fetch(https)
+        const responseJSON = await response.json()
+        if (responseJSON.resultCount == 0) {
+            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+        }
+        return responseJSON
 
-async function getPodcastsWithId (categoryId){
-    const limit = "&limit=20"
-    let https = defaultHTTPS + limit + "&term=podcast" + "&genreId=" + categoryId
-    console.log(https)
-    const response = await fetch(https)
-    return await response.json()
+    }
+
+    async function getPodcast(term) {
+
+        let https = defaultHTTPS + "&term=" + term
+        const response = await fetch(https)
+        const responseJSON = await response.json()
+        if (responseJSON.resultCount == 0) {
+            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+        }
+        return await responseJSON
+
+
+    }
+
+    async function searchPodcastsWithIdAndTerm(term, categoryId) {
+
+        const limit = "&limit=80"
+        let https = defaultHTTPS + limit + "&term=" + term + "&genreId=" + categoryId
+        const response = await fetch(https)
+        const responseJSON = await response.json()
+        if (responseJSON.resultCount == 0) {
+            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+        }
+        return responseJSON
+
+    }
+
+    async function getPodcastsWithId(categoryId) {
+
+        const limit = "&limit=20"
+        let https = defaultHTTPS + limit + "&term=podcast" + "&genreId=" + categoryId
+        const response = await fetch(https)
+        const responseJSON = await response.json()
+        if (responseJSON.resultCount == 0) {
+            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+        }
+        return responseJSON
+    }
 }

@@ -9,11 +9,11 @@ const EMAIL_MIN_LENGTH = 7
 const EMAIL_MAX_LENGTH = 40
 
 
-module.exports = function ({ accountDAL }) {
+module.exports = function ({ accountDAL, errors, authBL }) {
 
     return {
 
-        userRegistration: async function (username, password, email) {
+        userRegistration: async function (username, password, email, errors) {
             
             try {
                 
@@ -24,13 +24,13 @@ module.exports = function ({ accountDAL }) {
                 return user
 
             } catch (error) {
-
+                console.log(error)
                 let validationErrors = {}
 
-                if (error.code == "ER_DUP_ENTRY" && error.sqlMessage.includes('username')) {
+                if (error == errors.errors.DUP_EMAIL_ERROR) {
                     validationErrors.userDupError = "username_duplication_error"
                 }
-                if (error.code == "ER_DUP_ENTRY" && error.sqlMessage.includes('email')) {
+                if (error == errors.errors.DUP_USER_ERROR) {
                     validationErrors.emailDupError = "email_duplication_error"
                 }
                 if (error == "email_length_error") {
@@ -133,7 +133,8 @@ module.exports = function ({ accountDAL }) {
             try{
                 return await accountDAL.deleteAccount(user)
             }catch(error){
-
+                console.log(error)
+                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
             }
         }
     }

@@ -2,7 +2,7 @@ const conn = require("./db")
 const util = require('util')
 const db = util.promisify(conn.query).bind(conn)
 
-module.exports = function ({ }) {
+module.exports = function ({errors}) {
 
     return {
 
@@ -15,8 +15,15 @@ module.exports = function ({ }) {
                 return await db(query, values)
 
             } catch (error) {
-                console.log("----ERRRRROOORRRR---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                if (error.code === 'ER_DUP_ENTRY' && error.sqlMessage.includes('email')){
+                    throw new Error(errors.errors.DUP_EMAIL_ER)
+                }
+                if(error.code === 'ER_DUP_ENTRY' && error.sqlMessage.includes('PRIMARY')) {
+                    throw new Error(errors.errors.DUP_USER_ER)
+                } else {
+                    throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                }
             }
         },
 
@@ -27,48 +34,48 @@ module.exports = function ({ }) {
 
             try {
                 return await db(query, values)
-
             } catch (error) {
-                console.log("----ERRRRROOORRRR NUMBAH TWO---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
-        updateEmail: async function(username, email){
+        updateEmail: async function (username, email) {
 
             const query = "UPDATE users SET email = ? WHERE username = ?"
             const values = [email, username]
-            
-            try{
-                return await db(query, values)
 
-            }catch(error){
-                console.log("----ERRRRROOORRRR NUMBAH THREE---- " + JSON.stringify(error))
-                throw error
+            try {
+                return await db(query, values)
+            } catch (error) {
+                console.log(error)
+                if(error.code === 'ER_DUP_ENTRY'){
+                    throw new Error(errors.errors.DUP_EMAIL_ER)
+                } else {
+                    throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                }
             }
         },
 
-        updatePassword: async function(username, password){
+        updatePassword: async function (username, password) {
             const query = "UPDATE users SET password = ? WHERE username = ?"
             const values = [password, username]
-            try{
+            try {
                 return await db(query, values)
-
-            }catch(error){
-                console.log("----ERRRRROOORRRR NUMBAH FOUR---- " + JSON.stringify(error))
-                throw error
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
-        deleteAccount: async function(username){
+        deleteAccount: async function (username) {
             const query = "DELETE FROM users WHERE username = ?"
             const values = [username]
-            try{
+            try {
                 return await db(query, values)
-
-            }catch(error){
-                console.log("----ERRRRROOORRRR NUMBAH FIVE---- " + JSON.stringify(error))
-                throw error
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         }
     }

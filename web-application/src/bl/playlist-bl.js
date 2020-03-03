@@ -1,8 +1,6 @@
 
 
-module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
-    
-    
+module.exports = function ({playlistDAL, podcastDAL, searchItunesBL, errors, authBL}) {
     
     return{
 
@@ -21,6 +19,7 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
 
             }catch(error){
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -32,35 +31,38 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
                 }
 
                 for (let i = 0; i < podcastsToRemove.length; i++) {
-                    console.log("testtesttest")
-                    console.log(i)
                     await playlistDAL.removePodcastFromPlaylist(podcastsToRemove[i], playlistName, user)
                 }
                 return
             } catch (error) {
-                console.log("ERRRROR in removepodfromlist")
                 console.log(error)
-
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
         
         removePlaylist: async function (playlistName, user){
             try{
-                return await playlistDAL.removePlaylist(playlistName, user)
+                if(authBL.isLoggedIn(userloginKey)){
+                    return await playlistDAL.removePlaylist(playlistName, user)
+                } else {
+                    throw new Error(errors.errors.AUTH_USER_ERROR)
+                }
 
             }catch(error){
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
-        getAllPlaylistsByUser: async function (user){
+
+        getAllPlaylistsByUser: async function (userloginKey){
             
             try{
-                console.log("---------------------playlists-bl-------------------------")
-                return await playlistDAL.getAllPlaylistsByUser(user)
-
+                if(authBL.isLoggedIn(userloginKey)){
+                    return await playlistDAL.getAllPlaylistsByUser(userloginKey.user)
+                }
             }catch (error){
-                console.log("---------------------playlists bl catch-------------------------")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -89,7 +91,8 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
             return(sortedResult)
 
           }catch(error){
-
+            console.log(error)
+            throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
           }   
         },
 
@@ -118,6 +121,7 @@ module.exports = function ({playlistDAL, podcastDAL, searchItunesBL}) {
 
             }catch(error){
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
     }

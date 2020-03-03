@@ -19,16 +19,15 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         (async function () {
 
             const model = response.model
-            if (model.loggedIn) {
-                const playlists = await playlistBL.getAllPlaylistsAndPodcastsByUser(model.loggedIn.user)
-                const reviews = await podcastBL.getThreeReviewsByUser(model.loggedIn.user)
+            try {
+                const playlists = await playlistBL.getAllPlaylistsAndPodcastsByUser(model.loggedIn.user, model.loggedInKey)
+                const reviews = await podcastBL.getThreeReviewsByUser(model.loggedInKey)
 
                 model.reviews = reviews
                 model.playlists = playlists
 
                 response.render("feed.hbs", { model })
-            }
-            else {
+            } catch (error) {
                 const mainPodcasts = await searchItunesBL.searchPodcasts('podcast')
                 model.mainPodcasts = mainPodcasts.results
                 response.render("home.hbs", { model })
@@ -47,13 +46,12 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
                 model.playlist = playlist
                 response.render("editplaylist.hbs", { model })
             } else {
-                response.render("signin.hbs")
+                response.redirect('/signin')
             }
         })()
     })
 
     router.post('/:id/remove-playlist', function (request, response) {
-        console.log("härhärhär")
         const model = response.model
         if (model.loggedIn) {
             (async function () {
@@ -61,25 +59,24 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
                 response.redirect("/home")
             })()
         } else {
-            response.render("signin.hbs")
+            response.redirect('/signin')
         }
     })
+
     router.post('/:id/remove-podcasts', function (request, response) {
 
-        const playlist = request.params.id
+        const playlistId = request.params.id
         const model = response.model
         const podcastsToRemove = request.body.pod_id
         const user = model.loggedIn.user
 
         if (model.loggedIn) {
             (async function () {
-                await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlist, user)
-                const playlists = await playlistBL.getAllPlaylistsAndPodcastsByUser(model.loggedIn.user)
-                model.playlists = playlists
-                response.render("feed.hbs", { model })
+                await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, user)
+                response.redirect(`/:${playlistId}/edit`)
             })()
         } else {
-            response.render("signin.hbs")
+            response.redirect("/signin")
         }
     })
 
@@ -88,7 +85,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         if (model.loggedIn) {
             response.render("account-settings.hbs", { model })
         } else {
-            response.render("signup.hbs")
+            response.redirect("/signin")
         }
     })
 
@@ -115,7 +112,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
             })()
 
         } else {
-            response.render("signup.hbs")
+            response.redirect("/signin")
         }
     })
 
@@ -143,7 +140,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
             })()
 
         } else {
-            response.render("signup.hbs")
+            response.redirect("/signin")
         }
     })
 
@@ -161,7 +158,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
             })()
 
         } else {
-            response.render("signup.hbs")
+            response.redirect("/sigin")
         }
     })
 

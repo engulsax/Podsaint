@@ -12,7 +12,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + "/public"))
 app.set("views", "src/pl/views")
 
-/*TODO REMOVE SVG FILES, USE PNG INSTEAD, WILL WORK THE SAME FOR ME*/
 /*LOADING SVG FILES*/
 var sprites = svgstore([{ cleanDefs: 'true' }, { cleanSymbols: 'true' }])
   .add('funny', fs.readFileSync(__dirname + '/public/sprites/funny.svg', 'utf8'))
@@ -62,33 +61,12 @@ app.use(function(request, response, next){
 })*/
 
 /*---------------------------------ROUTERS-------------------------------------*/
+app.use("/", container.resolve('restHomePL'))
+app.use("/category", container.resolve('restCategoryPL'))
+app.use("/search", container.resolve('restSearchPL'))
+app.use("/podcast", container.resolve('restPodcastPL'))
+app.use("/my-review", container.resolve('restMyReviewPL'))
 
-app.use("/", container.resolve('homePL'))
-app.use("/category", container.resolve('categoryPL'))
-app.use("/search", container.resolve('searchPL'))
-app.use("/podcast", container.resolve('podcastPL'))
-app.use("/my-review", container.resolve('myReviewPL'))
-
-
-
-//Catching the errors
-
-app.use(function (request, response, next) {
-  response.status(404)
-  const model = {}
-  model.error = "Page Not Found"
-  model.code = "404"
-  response.render('error.hbs', model)
-})
-
-app.use(function (error, request, response, next) {
-  response.status(500)
-  const model = {}
-  model.error = error
-  console.log(error)
-  model.code = "500"
-  response.render('error.hbs', model)
-})
 
 
 app.listen(8080, function () {

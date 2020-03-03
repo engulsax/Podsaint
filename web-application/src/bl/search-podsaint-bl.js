@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 const defaultHTTPS = "https://itunes.apple.com/search?media=podcast"
 const ALL_POD_ID = '26'
 
-module.exports = function ({ searchPodsaintDAL }) {
+module.exports = function ({ searchPodsaintDAL, errors }) {
 
     return {
         getSearchMatch: async function (
@@ -14,28 +14,31 @@ module.exports = function ({ searchPodsaintDAL }) {
             minOverallRating
         ) {
 
-            if(categoryId === 'all'){
+            if (categoryId === 'all') {
                 categoryId = ALL_POD_ID
             }
 
-            const response = await searchPodsaintDAL.getPodcastWithNameOrCreator(searchTerm)
+            try {
 
-            const podcastAnswerList = []
+                const response = await searchPodsaintDAL.getPodcastWithNameOrCreator(searchTerm)
 
-            //console.log("RESPONSE " + JSON.stringify(response))
+                const podcastAnswerList = []
 
-            for (result of response) {
-                if (await checkIfToneIsOk(result.pod_id, toneRating)
-                    && await checkIfMinRatingIsOk(result.pod_id, minTopicRelevence, minProductionQualty, minOverallRating)
-                    && await checkIfCategoryIdIsOk(result.pod_id, categoryId)) {
-                    const podcast = await getPodcast(result.pod_id)
-                    podcastAnswerList.push(podcast.results[0])
+                for (result of response) {
+                    if (await checkIfToneIsOk(result.pod_id, toneRating)
+                        && await checkIfMinRatingIsOk(result.pod_id, minTopicRelevence, minProductionQualty, minOverallRating)
+                        && await checkIfCategoryIdIsOk(result.pod_id, categoryId)) {
+                        const podcast = await getPodcast(result.pod_id)
+                        podcastAnswerList.push(podcast.results[0])
+                    }
                 }
+
+                return podcastAnswerList
+
+            } catch (error) {
+                console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
-
-            //console.log("ANSWER " + JSON.stringify(podcastAnswerList))
-
-            return podcastAnswerList
         }
     }
 
@@ -60,7 +63,7 @@ module.exports = function ({ searchPodsaintDAL }) {
         let https = defaultHTTPS + "&term=" + podId
         const response = await fetch(https)
         const result = await response.json()
-        console.log(JSON.stringify(result.results[0].genreId))
+
         for (category of result.results[0].genreIds) {
             if (category === categoryId) {
                 return true

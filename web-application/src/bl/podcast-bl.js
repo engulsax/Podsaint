@@ -2,7 +2,7 @@
 const axios = require("axios")
 const cheerio = require('cheerio')
 
-module.exports = function ({ podcastDAL }) {
+module.exports = function ({ podcastDAL, errors, authBL }) {
 
     return {
         newPodcastReview: async function newPodcastReview(
@@ -14,12 +14,17 @@ module.exports = function ({ podcastDAL }) {
             topicRelevence,
             productionQuality,
             overallRating,
-            reviewText
+            reviewText,
+            userLoginKey
         ) {
+
+            if (!authBL.isLoggedIn(userLoginKey)) {
+                throw new Error(errors.errors.AUTH_USER_ERROR)
+            }
 
             const errorMessages = reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality)
             console.log(errorMessages)
-            if(errorMessages.length != 0){
+            if (errorMessages.length != 0) {
                 return errorMessages
             }
 
@@ -32,7 +37,6 @@ module.exports = function ({ podcastDAL }) {
             }
 
             try {
-                console.log("kommit hit hit")
 
                 return await podcastDAL.newPodcastReview(
                     collectionId,
@@ -49,20 +53,22 @@ module.exports = function ({ podcastDAL }) {
 
             } catch (error) {
                 console.log(error)
-                console.log("podcast-bl-error")
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
-        getAllReviewsByPodcastId: async function getAllReviewsByPodcastId(collectionId) {
+        getAllReviewsByPodcastId: async function getAllReviewsByPodcastId(collectionId, userLoginKey) {
 
             try {
                 if (await podcastDAL.podcastHasReviews(collectionId)) {
-                    return await podcastDAL.getAllReviewsByPodcastId(collectionId)
+                    let reviews = await podcastDAL.getAllReviewsByPodcastId(collectionId)
+                    reviews = addMyReviewsFlag(userLoginKey, reviews)
+                    return { result: reviews, amount: postPerPage }
                 }
                 return []
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 
             }
         },
@@ -76,23 +82,23 @@ module.exports = function ({ podcastDAL }) {
                 return []
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
-
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
-        getThreeReviewsByPodcastId: async function getThreeReviewsByPodcastId(collectionId) {
+        getThreeReviewsByPodcastId: async function getThreeReviewsByPodcastId(collectionId, userLoginKey) {
 
             const numberOfReviews = 3
             try {
                 if (await podcastDAL.podcastHasReviews(collectionId)) {
-                    return await podcastDAL.getNReviewsByPodcastId(collectionId, numberOfReviews)
+                    let reviews = await podcastDAL.getNReviewsByPodcastId(collectionId, numberOfReviews)
+                    reviews = addMyReviewsFlag(userLoginKey, reviews)
+                    return reviews
                 }
                 return []
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
-
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -106,35 +112,38 @@ module.exports = function ({ podcastDAL }) {
                 return []
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
-
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
-        getNReviewsByPodcastId: async function getNReviewsByPodcastId(collectionId, value) {
+        getNReviewsByPodcastId: async function getNReviewsByPodcastId(collectionId, value, userLoginKey) {
 
             const postPerPage = 3
             try {
                 if (value == "all") {
                     if (await podcastDAL.podcastHasReviews(collectionId)) {
-                        return {result: await podcastDAL.getAllReviewsByPodcastId(collectionId), amount: postPerPage}
+                        let reviews = await podcastDAL.getAllReviewsByPodcastId(collectionId, value)
+                        reviews = addMyReviewsFlag(userLoginKey, reviews)
+                        return { result: reviews, amount: postPerPage }
                     }
                     return []
                 } else {
-                    if(value === undefined){
+                    if (value === undefined) {
                         value = postPerPage
                     } else {
                         value = parseInt(value)
                         value += postPerPage
                     }
                     if (await podcastDAL.podcastHasReviews(collectionId)) {
-                        return {result: await podcastDAL.getNReviewsByPodcastId(collectionId, value), amount: value}
+                        const reviews = await podcastDAL.getNReviewsByPodcastId(collectionId, value)
+                        addMyReviewsFlag(userLoginKey, reviews)
+                        return { result: reviews, amount: value }
                     }
                     return []
                 }
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
 
             }
         },
@@ -145,25 +154,24 @@ module.exports = function ({ podcastDAL }) {
             try {
                 if (value == "all") {
                     if (await podcastDAL.userHasReviews(user)) {
-                        return {result: await podcastDAL.getAllReviewsByUser(user), amount: postPerPage}
+                        return { result: await podcastDAL.getAllReviewsByUser(user), amount: postPerPage }
                     }
                     return []
                 } else {
-                    if(value === undefined){
+                    if (value === undefined) {
                         value = postPerPage
                     } else {
                         value = parseInt(value)
                         value += postPerPage
                     }
                     if (await podcastDAL.userHasReviews(user)) {
-                        return {result: await podcastDAL.getNReviewsByUser(user, value), amount: value}
+                        return { result: await podcastDAL.getNReviewsByUser(user, value), amount: value }
                     }
                     return []
                 }
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
-
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -180,8 +188,6 @@ module.exports = function ({ podcastDAL }) {
                     /*returns tone of podcast - comdey | drama, as well as the precentage of tone choices*/
                     ratingInformation.tone = await podcastDAL.getToneInformationByPodcastId(collectionId)
 
-                    console.log("RATING RATING ----- " + JSON.stringify(ratingInformation))
-
                     return ratingInformation
                 }
 
@@ -191,8 +197,8 @@ module.exports = function ({ podcastDAL }) {
                 return ratingInformation
 
             } catch (error) {
-                console.log("getRatingInformationByPodcastId error")
                 console.log(error)
+                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -200,34 +206,45 @@ module.exports = function ({ podcastDAL }) {
             return fetchPodInfo(url)
         }
     }
+    function addMyReviewsFlag(userLoginKey, reviews) {
+
+        if (authBL.isLoggedIn(userLoginKey)) {
+            for (review of reviews) {
+                if (review.review_poster === userLoginKey.user) {
+                    review.myReview = true
+                }
+            }
+        }
+        return reviews
+    }
+
+    function reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality) {
+        errorMessages = []
+
+        if (overallRating <= 0 || overallRating > 5) {
+            errorMessages.push("invalid overall rating")
+        }
+
+        if (toneRating !== "comedy" && toneRating !== "drama") {
+            errorMessages.push("invalid tone rating")
+        }
+
+        if (topicRelevence <= 0 || topicRelevence > 5) {
+            errorMessages.push("invalid topic relevance rating")
+        }
+
+        if (productionQuality <= 0 || productionQuality > 5) {
+            errorMessages.push("invalid production quality rating")
+        }
+
+        return errorMessages
+    }
+
+    async function fetchPodInfo(url) {
+        const html = await axios.get(url)
+        const $ = cheerio.load(html.data)
+        return $('.product-hero-desc').find('p').first().text()
+    }
+
 }
 
-function  reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality){
-    errorMessages = []
-
-    console.log("overallRating: " +overallRating+ "topicRelevence: " +topicRelevence+ "toneRating: " +toneRating+ "productionQuality: " +productionQuality)
-
-    if(overallRating <= 0 || overallRating > 5){
-        errorMessages.push("invalid overall rating")
-    }
-
-    if(toneRating !== "comedy" && toneRating !=="drama"){
-        errorMessages.push("invalid tone rating")
-    }
-
-    if(topicRelevence <= 0 || topicRelevence > 5){
-        errorMessages.push("invalid topic relevance rating")
-    }
-
-    if(productionQuality <= 0 || productionQuality > 5){
-        errorMessages.push("invalid production quality rating")
-    }
-
-    return errorMessages
-}
-
-async function fetchPodInfo(url) {
-    const html = await axios.get(url)
-    const $ = cheerio.load(html.data)
-    return $('.product-hero-desc').find('p').first().text()
-}
