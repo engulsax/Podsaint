@@ -13,8 +13,17 @@ const accountBLFun = require('../src/bl/account-bl')
 const podcastBLFun = require('../src/bl/podcast-bl')
 const playlistBLFun = require('../src/bl/playlist-bl')
 
-const playlistDALFun = require('../src/dal/playlist-dal') 
+/*Postgres-dal with sequelize*/
+/*
+const playlistDALFun = require('../src/dal2/playlist-dal2') 
+const searchPodsaintDALFun = require('../src/dal2/search-podsaint-dal2')
+const podcastDALFun = require('../src/dal2/podcast-dal2')
+const accountDALFun = require('../src/dal2/account-dal2')
+*/
+/*Mysql-dal*/
+
 const accountDALFun = require('../src/dal/account-dal')
+const playlistDALFun = require('../src/dal/playlist-dal') 
 const searchPodsaintDALFun = require('../src/dal/search-podsaint-dal')
 const podcastDALFun = require('../src/dal/podcast-dal')
 

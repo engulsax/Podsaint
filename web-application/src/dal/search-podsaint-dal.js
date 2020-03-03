@@ -9,7 +9,13 @@ module.exports = function () {
         getPodcastWithNameOrCreator: async function (searchTerm) {
             query = "SELECT * FROM podcasts WHERE pod_name LIKE CONCAT(?, '%') OR pod_creators LIKE CONCAT(?, '%')"
             value = [searchTerm, searchTerm]
-            return await db(query, value)
+            try{
+                const result = await db(query, value)
+                console.log(`RESULT FROM SEARCH>>>>>>>>>>>>>>>>>> ${result}`)
+            }
+            catch{
+
+            } 
         },
         
         checkIfPodIsOverMinOverallRating: async function (podId, min) {

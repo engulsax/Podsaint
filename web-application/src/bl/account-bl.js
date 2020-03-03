@@ -17,6 +17,7 @@ module.exports = function ({ accountDAL }) {
             
             try {
                 
+
                 signInSignUpInputValidation(username, email, password)
                 const hashed = await hashPassword(password)
                 const user = await accountDAL.userRegistration(username, hashed, email)

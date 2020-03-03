@@ -203,6 +203,8 @@ module.exports = function({}){
 
 		userHasReviews: async function userHasReviews(user){
 			const numberOfReviws = await getNumberOfReviewsByUser(user)
+			console.log(numberOfReviws)
+			console.log(numberOfReviws[0])
 			console.log("NUMBER OF MF REVIES------"+numberOfReviws[0]['COUNT(*)'])
 			return numberOfReviws[0]['COUNT(*)']
 		}
@@ -214,6 +216,8 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 
 	try {
 		const ratings = await getRatingsFromPodcast(collectionId)
+		console.log("RATINGS---------------------------")
+		console.log(ratings)
 
 		ratings.overall += await overallRating
 		ratings.quality += await productionQuality
@@ -262,6 +266,8 @@ async function getRatingsFromPodcast(collectionId) {
 	try {
 
 		const result = await db(query, value)
+		console.log("RATINGS FROM PODCASTS_----------------------")
+		console.log(result)
 		const ratings = {}
 
 		/*async - await unecessary?*/
