@@ -51,6 +51,42 @@ module.exports = function ({ podcastDAL }) {
                 console.log(error)
                 console.log("podcast-bl-error")
             }
+        }, 
+
+        getReviewById : async function getReviewById(reviewId){
+
+            try {
+                const result = await podcastDAL.getReviewById(reviewId)
+                console.log(`>>>>>RESULT: ${result}`)
+                return result
+
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+            }
+
+        },
+
+        deleteReviewById: async function deleteReviewById(reviewId){
+
+            try {
+                
+
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+            }
+        },
+
+        updateReviewById: async function updateReviewById(reviewId, reviewText){
+
+            try {
+                return await podcastDAL.updateReviewById(reviewId, reviewText)
+
+            } catch (error) {
+                console.log(error)
+                console.log("get all reviewsbypodcastid error")
+            }
         },
 
         getAllReviewsByPodcastId: async function getAllReviewsByPodcastId(collectionId) {

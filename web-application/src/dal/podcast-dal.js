@@ -48,7 +48,6 @@ module.exports = function({}){
 		
 		getPodcastById: async function getPodcastById(collectionId) {
 		
-		
 			const query = "SELECT * FROM podcasts WHERE pod_id = ?"
 			const value = [collectionId]
 		
@@ -83,6 +82,46 @@ module.exports = function({}){
 			} catch (error) {
 				console.log("error in addPodcast")
 				console.log(error)
+			}
+		},
+
+		getReviewById: async function getReviewById(reviewId){
+			
+			const query = "SELECT * FROM reviews WHERE id = ?"
+			const values = [reviewId]
+			
+			try {
+				return await db(query, values)
+			
+			} catch (error){
+				console.log("error in getreviewsbyid")
+				console.log(error)
+			}
+		},
+
+		updateReviewById: async function updateReviewById(reviewId, reviewText){
+			
+			const query = "UPDATE reviews SET review_text = ? WHERE id = ?"
+			const values = [reviewText, reviewId]
+
+			try {
+				return await db(query, values)
+			
+			} catch (error) {
+				console.log("error in getreviewsbyid")
+				console.log(error)
+			}
+
+		},
+
+		deleteReviewById: async function deleteReviewById(reviewId){
+
+			const query = "DELETE FROM reviews WHERE id = ?"
+			const values = [reviewId]
+			try{
+				return await db(query, values)
+			} catch (error) {
+
 			}
 		},
 		
