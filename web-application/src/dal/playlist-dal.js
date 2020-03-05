@@ -18,7 +18,7 @@ module.exports = function(){
 
             } catch (error) {
                 console.log(error)
-                throw new Error(err.err.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -33,7 +33,7 @@ module.exports = function(){
 
             } catch (error) {
                 console.log(error)
-                throw new Error(err.err.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -49,7 +49,7 @@ module.exports = function(){
 
             } catch (error) {
                 console.log(error)
-                throw new Error(err.err.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -64,7 +64,7 @@ module.exports = function(){
 
             }catch(error){
                 console.log(error)
-                throw new Error(err.err.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
     
@@ -79,7 +79,7 @@ module.exports = function(){
 
             }catch(error){
                 console.log(error)
-                throw new Error(err.err.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -91,7 +91,7 @@ module.exports = function(){
                 return await db(query,values)
             }catch(error){
                 console.log(error)
-                throw new Error(err.err.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         }
     }

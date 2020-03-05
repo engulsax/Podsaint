@@ -218,9 +218,6 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
             response.redirect('/')
         } catch (error) {
             console.log(error)
-            if (err.errorExist(error)) {
-                error = err.err.INTERNAL_SERVER_ERROR
-            }
             next(error)
         }
     })

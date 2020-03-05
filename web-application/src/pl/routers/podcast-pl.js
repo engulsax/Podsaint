@@ -20,14 +20,6 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
             const informationRespons = await searchItunesBL.searchPodcast(collectionId)
             const information = informationRespons.results
-            /*
-                        //REDO SEE OTHER
-                        if (response.model.loggedIn) {
-                            response.model.user = request.session.key.user
-                        } else {
-                            response.model.user = undefined
-                        }*/
-
             response.model.collectionId = collectionId
             response.model.information = information
             response.model.description = await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
@@ -35,13 +27,8 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             next()
 
         } catch (error) {
-            if (error.message == err.err.PODCAST_FETCH_ERROR) {
-                //MAKE ERROR PAGE!!!
-                response.redirect('/')
-            } else {
-                console.log(error)
-                next(error)
-            }
+            console.log(error)
+            next(error)
         }
     })
 
@@ -52,17 +39,10 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
             response.model.userPlaylists = userPlaylists
             next()
-            
+
         } catch (error) {
-            if (error == err.err.AUTH_USER_ERROR) {
-                next()
-            } else {
-                console.log(error)
-                if(rr.errorExist(error)){
-                    error = err.err.INTERNAL_SERVER_ERROR
-                }
-                next(error)
-            }
+            console.log(error)
+            next(error)
         }
 
     })
@@ -70,6 +50,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
     router.get('/:id', async function (request, response, next) {
 
         try {
+            
             const mainCategoryId = response.model.information[0].genreIds[0]
             const podcastsInSameCategory = await searchItunesBL.searchPodcastsWithId(mainCategoryId)
             const reviews = await podcastBL.getThreeReviewsByPodcastId(response.model.collectionId, request.session.key)

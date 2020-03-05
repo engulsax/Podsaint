@@ -90,16 +90,22 @@ app.use(function (request, response, next) {
 app.use(function (error, request, response, next) {
 
   console.log(error)
+  if (err.errorExist(error)) {
+    error = err.err.INTERNAL_SERVER_ERROR
+  }
 
   const model = response.model
   const message = error
-  console.log(error)
+
   const code = err.getErrCode(error)
-  console.log(code)
+
   response.status(code)
+
   if (code == 401) {
-    model.podsaintError = message
+    inputErrors = []
+    model.inputErrors = inputErrors.concat(error)
     response.render("signin.hbs", model)
+
   } else {
     model.code = code
     model.error = message

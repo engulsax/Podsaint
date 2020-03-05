@@ -1,6 +1,10 @@
 <div class="grid-x">
     <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
-        <p>{{podsaintError}}</p>
+        <ul>
+            {{#each inputErrors}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
         {{>sign-in-form}}
         <div class="sign-in-link sign-text cell">
             Don't have an account?
