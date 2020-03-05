@@ -42,7 +42,15 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
         } catch (error) {
             console.log(error)
-            next(error)
+            if (error == err.err.AUTH_USER_ERROR) {
+                next()
+                return
+            } else {
+                if (err.errorExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                next(error)
+            }
         }
 
     })
@@ -50,7 +58,6 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
     router.get('/:id', async function (request, response, next) {
 
         try {
-            
             const mainCategoryId = response.model.information[0].genreIds[0]
             const podcastsInSameCategory = await searchItunesBL.searchPodcastsWithId(mainCategoryId)
             const reviews = await podcastBL.getThreeReviewsByPodcastId(response.model.collectionId, request.session.key)
