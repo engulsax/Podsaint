@@ -1,8 +1,9 @@
 const conn = require("./db")
 const util = require('util')
+const err = require('../errors/error')
 const db = util.promisify(conn.query).bind(conn)
 
-module.exports = function({errors}){
+module.exports = function(){
 	
     return{
 
@@ -17,7 +18,7 @@ module.exports = function({errors}){
 
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -32,7 +33,7 @@ module.exports = function({errors}){
 
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -46,7 +47,7 @@ module.exports = function({errors}){
 
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -61,7 +62,7 @@ module.exports = function({errors}){
 
             }catch(error){
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
     
@@ -76,7 +77,7 @@ module.exports = function({errors}){
 
             }catch(error){
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -88,7 +89,7 @@ module.exports = function({errors}){
                 return await db(query,values)
             }catch(error){
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         }
     }

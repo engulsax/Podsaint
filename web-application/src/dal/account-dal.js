@@ -1,8 +1,9 @@
 const conn = require("./db")
 const util = require('util')
+const err = require('../errors/error')
 const db = util.promisify(conn.query).bind(conn)
 
-module.exports = function ({errors}) {
+module.exports = function () {
 
     return {
 
@@ -17,12 +18,12 @@ module.exports = function ({errors}) {
             } catch (error) {
                 console.log(error)
                 if (error.code === 'ER_DUP_ENTRY' && error.sqlMessage.includes('email')){
-                    throw new Error(errors.errors.DUP_EMAIL_ER)
+                    throw err.err.DUP_EMAIL_ERROR
                 }
                 if(error.code === 'ER_DUP_ENTRY' && error.sqlMessage.includes('PRIMARY')) {
-                    throw new Error(errors.errors.DUP_USER_ER)
+                    throw err.err.DUP_USER_ERROR
                 } else {
-                    throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                    throw err.err.INTERNAL_SERVER_ERROR
                 }
             }
         },
@@ -36,7 +37,7 @@ module.exports = function ({errors}) {
                 return await db(query, values)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -50,9 +51,9 @@ module.exports = function ({errors}) {
             } catch (error) {
                 console.log(error)
                 if(error.code === 'ER_DUP_ENTRY'){
-                    throw new Error(errors.errors.DUP_EMAIL_ER)
+                    throw err.err.DUP_EMAIL_ERROR
                 } else {
-                    throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                    throw err.err.INTERNAL_SERVER_ERROR
                 }
             }
         },
@@ -64,7 +65,7 @@ module.exports = function ({errors}) {
                 return await db(query, values)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -75,7 +76,7 @@ module.exports = function ({errors}) {
                 return await db(query, values)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         }
     }

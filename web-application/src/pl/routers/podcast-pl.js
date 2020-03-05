@@ -1,7 +1,8 @@
 const express = require('express')
+const err = require('../../errors/error')
 const router = express.Router()
 
-module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, errors }) {
+module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }) {
 
     router.use(async function (request, response, next) {
 
@@ -34,7 +35,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
             next()
 
         } catch (error) {
-            if (error.message == errors.errors.PODCAST_FETCH_ERROR) {
+            if (error.message == err.err.PODCAST_FETCH_ERROR) {
                 //MAKE ERROR PAGE!!!
                 response.redirect('/')
             } else {
@@ -47,6 +48,23 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
 
         try {
 
+            const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
+            response.model.userPlaylists = userPlaylists
+            next()
+            
+        } catch (error) {
+            if (error == err.err.AUTH_USER_ERROR) {
+                next()
+            } else {
+                next(error)
+            }
+        }
+
+    })
+
+    router.get('/:id', async function (request, response, next) {
+
+        try {
             const mainCategoryId = response.model.information[0].genreIds[0]
             const podcastsInSameCategory = await searchItunesBL.searchPodcastsWithId(mainCategoryId)
             const reviews = await podcastBL.getThreeReviewsByPodcastId(response.model.collectionId, request.session.key)
@@ -57,9 +75,6 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
             model.average = ratingInformation.average
             model.reviews = reviews
             model.podcastsInSameCategory = podcastsInSameCategory.results
-
-            const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
-            model.userPlaylists = userPlaylists
 
             response.render("podcast.hbs", { model })
         } catch (error) {
@@ -87,10 +102,10 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
 
     router.get('/:id/all-reviews', async function (request, response, next) {
 
-        try {
-            const value = request.query.amount
+        const value = request.query.amount
+        const model = response.model
 
-            const model = response.model
+        try {
             const reviews = await podcastBL.getNReviewsByPodcastId(response.model.collectionId, value, request.session.key)
             model.reviews = reviews.result
             model.amount = reviews.amount
@@ -104,87 +119,85 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
     })
 
 
-    router.post('/:id/write-review', function (request, response, next) {
+    router.post('/:id/write-review', async function (request, response, next) {
+
+        const collectionId = request.params.id
+        const collectionName = request.body.collectionName
+        const podCreator = request.body.artistName
+        const toneRating = request.body.podcastTone
+        const topicRelevenceRating = parseInt(request.body.topicRelevenceRating) || 0
+        const productionQualty = parseInt(request.body.productionQuality) || 0
+        const overallRating = parseInt(request.body.overallRating) || 0
+        const reviewText = request.body.reviewText
+        const reviewPoster = request.session.key.user
 
         try {
-            (async function () {
+            const err = await podcastBL.newPodcastReview(
+                collectionId, reviewPoster, podCreator, collectionName,
+                toneRating, topicRelevenceRating, productionQualty,
+                overallRating, reviewText, request.session.key
+            )
 
-                const collectionId = request.params.id
-                const collectionName = request.body.collectionName
-                const podCreator = request.body.artistName
-                const toneRating = request.body.podcastTone
-                const topicRelevenceRating = parseInt(request.body.topicRelevenceRating) || 0
-                const productionQualty = parseInt(request.body.productionQuality) || 0
-                const overallRating = parseInt(request.body.overallRating) || 0
-                const reviewText = request.body.reviewText
-                const reviewPoster = request.session.key.user
+            if (err) {
+                const model = response.model
+                model.text = reviewText
+                model.err = err
+                console.log(model)
+                response.render("write-review.hbs", { model })
+            } else {
+                response.redirect("/podcast/" + collectionId)
+            }
 
-                const errors = await podcastBL.newPodcastReview(
-                    collectionId, reviewPoster, podCreator, collectionName,
-                    toneRating, topicRelevenceRating, productionQualty,
-                    overallRating, reviewText, request.session.key
-                )
-
-                if (errors) {
-                    const model = response.model
-                    model.text = reviewText
-                    model.errors = errors
-                    console.log(model)
-                    response.render("write-review.hbs", { model })
-                } else {
-                    response.redirect("/podcast/" + collectionId)
-                }
-            })()
         } catch (error) {
             next(error)
         }
-    }),
+    })
 
-        router.post('/:id/create-list', function (request, response) {
+    router.post('/:id/create-list', async function (request, response, next) {
 
-            if (request.session.key) {
-                (async function () {
-                    const playlistName = request.body.playlistName
-                    const model = response.model.information[0]
-                    const collectionId = request.params.id
-                    const loggedIn = request.session.key
+        const playlistName = request.body.playlistName
+        const model = response.model.information[0]
+        const collectionId = request.params.id
 
-                    await playlistBL.addPodcastToPlaylist(collectionId, playlistName, loggedIn.user, model.collectionName, model.artistName)
-                    response.redirect("/podcast/" + collectionId)
-                })()
-            } else {
-                response.render("signin.hbs")
-            }
-        })
+        try {
+            await playlistBL.addPodcastToPlaylist(
+                collectionId, playlistName,
+                request.session.key.user, model.collectionName,
+                model.artistName, request.session.key)
 
-    router.post('/:id/add-to-playlist', function (request, response) {
+            response.redirect("/podcast/" + collectionId)
+        } catch (error) {
+            next(error)
+        }
 
-        const model = response.model
+    })
 
-        if (model.loggedIn) {
-            (async function () {
-                const podcastInfo = model.information[0]
-                const collectionId = request.params.id
-                const playlist = request.body.playlist
-                await playlistBL.addPodcastToPlaylist(collectionId, playlist, request.session.key.user, podcastInfo.collectionName, podcastInfo.artistName)
-                response.redirect("/podcast/" + collectionId)
-            })()
-        } else {
-            response.render("signin.hbs")
+    router.post('/:id/add-to-playlist', async function (request, response) {
+
+        try {
+            const model = response.model
+            const podcastInfo = model.information[0]
+            const collectionId = request.params.id
+            const playlist = request.body.playlist
+            await playlistBL.addPodcastToPlaylist(
+                collectionId, playlist,
+                request.session.key.user, podcastInfo.collectionName,
+                podcastInfo.artistName, request.session.key)
+            response.redirect("/podcast/" + collectionId)
+        } catch (error) {
+            throw (error)
         }
     })
 
-    router.get('/:id/add-to-playlist', function (request, response) {
+    router.get('/:id/add-to-playlist', async function (request, response) {
 
         const model = response.model
 
-        if (model.loggedIn) {
+        try {
 
-            (async function () {
-                const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn.user)
-                model.userPlaylists = userPlaylists
-                response.render("add-to-playlist.hbs", { model })
-            })()
+            const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn.user)
+            model.userPlaylists = userPlaylists
+            response.render("add-to-playlist.hbs", { model })
 
             /*(async function(){
                 const model = response.model.information[0]
@@ -194,8 +207,8 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL, 
                 response.redirect("/podcast/" + collectionId)
             })()*/
 
-        } else {
-            response.render("signin.hbs")
+        } catch (error) {
+            throw (error)
         }
     })
 

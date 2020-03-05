@@ -1,20 +1,23 @@
-
 <div class="grid-x content">
     <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
-        
+
+        {{#each inputErrors}}
+        <ul>
+            <li>
+                {{this}}
+            </li>
+        </ul>
+        {{/each}}
+
         <section class="content">
             <h2>Update your email address</h2>
             <form class="margin-top" action="/account-settings/update-email" method="POST">
                 <label>New email
                     <input class="search" id="new-email" type="email" name="newEmail">
                 </label>
-                <p>{{inputError.passwordLengthError}}</p>        
                 <label>Confirm email
                     <input class="search" id="confirm-new-email" type="email" name="confirmEmail">
                 </label>
-                <p>{{inputError.confirmedEmailLengthError}}</p>
-                <P>{{inputError.emailMatchError}}</P>
-                <p>{{inputError.emailUndefinedError}}</p>
 
                 <input id="" class="button podsaint-button" type="submit" value="UPDATE EMAIL ADDRESS">
             </form>
@@ -22,17 +25,14 @@
 
         <section class="content">
             <h2>Update your password</h2>
-            <form class="margin-top" action="/account-settings/update-passsword"method="POST">
+            <form class="margin-top" action="/account-settings/update-passsword" method="POST">
                 <label>New password
                     <input class="search" id="new-password" type="password" name="newPassword">
                 </label>
-                <p>{{inputError.passwordLengthError}}</p>
                 <label>Confirm New password
                     <input class="search" id="confirm-new-password" type="password" name="confimPassword">
                 </label>
-                <p>{{inputError.confirmedPasswordLengthError}}</p>
-                <p>{{inputError.passwordMatchError}}</p>
-                <p>{{inputError.passwordUndefinedError}}</p>
+
                 <input id="" class="button podsaint-button" type="submit" value="UPDATE PASSWORD">
             </form>
         </section>
@@ -46,5 +46,3 @@
         </section>
     </div>
 </div>
-       
-    

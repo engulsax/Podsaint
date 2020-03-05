@@ -1,12 +1,11 @@
-
-
 const conn = require("./db")
 const util = require('util')
+const err = require('../errors/error')
 const db = util.promisify(conn.query).bind(conn)
 const ratingDatabaseNames = ["overall_rating", "production_quality_rating", "topic_relevence_rating", "comedy_rating", "drama_rating"]
 const ratingsVaribleNames = ["overall", "quality", "topic", "comedy", "drama"]
 
-module.exports = function ({ errors }) {
+module.exports = function () {
 
 	return {
 
@@ -26,13 +25,14 @@ module.exports = function ({ errors }) {
 				review_text
 			) 
 			VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`
+			
 			const values = [reviewPoster, collectionId, productionQuality,
 				topicRelevence, comedyRating, dramaRating,
 				overallRating, reviewText]
 
 			try {
 
-				if (!await podcastExist(collectionId)) {
+				if (!await this.podcastExist(collectionId)) {
 					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
 
@@ -43,7 +43,7 @@ module.exports = function ({ errors }) {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -60,7 +60,7 @@ module.exports = function ({ errors }) {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -83,7 +83,7 @@ module.exports = function ({ errors }) {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -97,7 +97,7 @@ module.exports = function ({ errors }) {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -111,7 +111,7 @@ module.exports = function ({ errors }) {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -126,7 +126,7 @@ module.exports = function ({ errors }) {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -140,7 +140,7 @@ module.exports = function ({ errors }) {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -162,7 +162,7 @@ module.exports = function ({ errors }) {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -197,7 +197,7 @@ module.exports = function ({ errors }) {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 
 		},
@@ -209,7 +209,7 @@ module.exports = function ({ errors }) {
 				return numberOfReviws[0]['COUNT(*)']
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		},
 
@@ -220,7 +220,7 @@ module.exports = function ({ errors }) {
 				return numberOfReviws[0]['COUNT(*)']
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 
 		},
@@ -233,7 +233,7 @@ module.exports = function ({ errors }) {
 				return (response[0]['response'])
 			} catch (error) {
 				console.log(error)
-				throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+				throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			}
 		}
 	}
@@ -259,7 +259,7 @@ module.exports = function ({ errors }) {
 
 		} catch (error) {
 			console.log(error)
-			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			throw new Error(err.err.INTERNAL_SERVER_ERROR)
 		}
 
 	}
@@ -272,7 +272,7 @@ module.exports = function ({ errors }) {
 			return await db(query, value)
 		} catch (error) {
 			console.log(error)
-			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			throw new Error(err.err.INTERNAL_SERVER_ERROR)
 		}
 	}
 
@@ -284,7 +284,7 @@ module.exports = function ({ errors }) {
 			return await db(query, value)
 		} catch (error) {
 			console.log(error)
-			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			throw new Error(err.err.INTERNAL_SERVER_ERROR)
 		}
 	}
 
@@ -297,7 +297,7 @@ module.exports = function ({ errors }) {
 			await db(query, values)
 		} catch (error) {
 			console.log(error)
-			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			throw new Error(err.err.INTERNAL_SERVER_ERROR)
 		}
 	}
 
@@ -318,7 +318,7 @@ module.exports = function ({ errors }) {
 			return ratings
 		} catch (error) {
 			console.log(error)
-			throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+			throw new Error(err.err.INTERNAL_SERVER_ERROR)
 			//return ratings
 		}
 	}

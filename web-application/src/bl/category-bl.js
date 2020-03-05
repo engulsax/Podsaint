@@ -1,5 +1,6 @@
 const axios = require("axios")
 const cheerio = require('cheerio')
+const err = require('../errors/error')
 const URL = "https://podcasts.apple.com/us/genre/podcasts/id26"
 let categoriesDetails = []
 const idRegex = /(?:\/id(\d+))/
@@ -7,7 +8,7 @@ const fs = require('fs')
 const fsPromises = fs.promises;
 
 
-module.exports = function ({errors, authBL}) {
+module.exports = function () {
 
     return {
 
@@ -17,8 +18,8 @@ module.exports = function ({errors, authBL}) {
                     await fetchData()
                 } catch (error) {
                     console.log(error)
-                    if (!(error in errors.errors)) {
-                        error = errors.errors.INTERNAL_SERVER_ERROR
+                    if (!(Object.values(err.err).includes(error))) {
+                        error = err.err.INTERNAL_SERVER_ERROR
                     }
                     throw (error)
                 }
@@ -32,8 +33,8 @@ module.exports = function ({errors, authBL}) {
                     await fetchData()
                 } catch (error) {
                     console.log(error)
-                    if (!(error in errors.errors)) {
-                        error = errors.errors.INTERNAL_SERVER_ERROR
+                    if (!(Object.values(err.err).includes(error))) {
+                        error = err.err.INTERNAL_SERVER_ERROR
                     }
                     throw (error)
                 }
@@ -47,8 +48,8 @@ module.exports = function ({errors, authBL}) {
                     await fetchData()
                 } catch (error) {
                     console.log(error)
-                    if (!(error in errors.errors)) {
-                        error = errors.errors.INTERNAL_SERVER_ERROR
+                    if (!(Object.values(err.err).includes(error))) {
+                        error = err.err.INTERNAL_SERVER_ERROR
                     }
                     throw (error)
                 }
@@ -89,7 +90,7 @@ async function fetchData() {
             await readCategoriesFromFile()
         } catch (error) {
             console.log(error)
-            throw new Error(errors.errors.CATEGORY_FETCH_ERROR)
+            throw err.err.CATEGORY_FETCH_ERROR
         }
     }
 }
@@ -103,7 +104,7 @@ async function readCategoriesFromFile() {
         categoriesDetails = await JSON.parse(fsPromises.readFile('/web-application/src/json/categories.json'))
     } catch (error) {
         console.log(error)
-        throw new Error(errors.errors.CATEGORY_FETCH_ERROR)
+        throw err.err.CATEGORY_FETCH_ERROR
     }
 }
 

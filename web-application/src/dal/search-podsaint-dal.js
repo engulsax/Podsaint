@@ -1,8 +1,9 @@
 const conn = require("./db")
 const util = require('util')
+const err = require('../errors/error')
 const db = util.promisify(conn.query).bind(conn)
 
-module.exports = function({errors}) {
+module.exports = function() {
 
     return {
 
@@ -13,7 +14,7 @@ module.exports = function({errors}) {
                 return await db(query, value)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
 
         },
@@ -29,7 +30,7 @@ module.exports = function({errors}) {
                 return (average > min)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
 
         },
@@ -45,7 +46,7 @@ module.exports = function({errors}) {
                 return (average > min)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -60,7 +61,7 @@ module.exports = function({errors}) {
                 return (average > min)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         },
 
@@ -72,7 +73,7 @@ module.exports = function({errors}) {
                 return (response[0].comedy_rating > response[0].drama_rating)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw new Error(err.err.INTERNAL_SERVER_ERROR)
             }
         }
     }
@@ -85,7 +86,7 @@ async function getNumberOfReviews(podId) {
         return await db(query, value)
     } catch (error) {
         console.log(error)
-        throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+        throw new Error(err.err.INTERNAL_SERVER_ERROR)
     }
 }
 
@@ -97,6 +98,6 @@ async function getAverageRatingsByPodcastId(podId, rating) {
         return rating / numberOfReviews
     } catch (error) {
         console.log(error)
-        throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+        throw new Error(err.err.INTERNAL_SERVER_ERROR)
     }
 }

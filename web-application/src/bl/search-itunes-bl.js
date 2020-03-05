@@ -1,7 +1,8 @@
 const fetch = require('node-fetch')
+const err = require('../errors/error')
 const defaultHTTPS = "https://itunes.apple.com/search?media=podcast"
 
-module.exports = function ({ errors }) {
+module.exports = function () {
 
     return {
 
@@ -13,7 +14,7 @@ module.exports = function ({ errors }) {
                 return await searchPodcastsWithIdAndTerm(term, subCategoryId)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+                throw err.err.PODCAST_FETCH_ERROR
             }
         },
 
@@ -22,7 +23,7 @@ module.exports = function ({ errors }) {
                 return await getPodcastsWithId(id)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+                throw err.err.PODCAST_FETCH_ERROR
             }
         },
 
@@ -31,7 +32,7 @@ module.exports = function ({ errors }) {
                 return await getPodcasts(term)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+                throw err.err.PODCAST_FETCH_ERROR
             }
         },
 
@@ -40,7 +41,7 @@ module.exports = function ({ errors }) {
                 return await getPodcast(term)
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+                throw err.err.PODCAST_FETCH_ERROR
             }
         }
     }
@@ -53,7 +54,7 @@ module.exports = function ({ errors }) {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
-            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            throw err.err.PODCAST_FETCH_ERROR
         }
         return responseJSON
 
@@ -65,7 +66,7 @@ module.exports = function ({ errors }) {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
-            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            throw err.err.PODCAST_FETCH_ERROR
         }
         return await responseJSON
 
@@ -79,7 +80,7 @@ module.exports = function ({ errors }) {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
-            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            throw err.err.PODCAST_FETCH_ERROR
         }
         return responseJSON
 
@@ -92,7 +93,7 @@ module.exports = function ({ errors }) {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
-            throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+            throw err.err.PODCAST_FETCH_ERROR
         }
         return responseJSON
     }

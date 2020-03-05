@@ -1,6 +1,6 @@
 const awilix = require('awilix')
 
-const errors = require('./errors/error')
+//const errors = require('./errors/error')
 
 const categoryPLRouter = require('./pl/routers/category-pl')
 const searchPLRouter = require('./pl/routers/search-pl')
@@ -23,7 +23,7 @@ const podcastDALFun = require('../src/dal/podcast-dal')
 
 const container = awilix.createContainer()
 
-container.register('errors', awilix.asFunction(errors))
+//container.register('err', awilix.asFunction(errors))
 
 container.register('homePL', awilix.asFunction(homePLRouter))
 container.register('categoryPL', awilix.asFunction(categoryPLRouter))

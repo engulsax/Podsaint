@@ -1,5 +1,5 @@
 
-module.exports = function ({ errors }) {
+module.exports = function () {
 
     return {
         isLoggedIn: function (userId) {

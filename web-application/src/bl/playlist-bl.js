@@ -1,124 +1,156 @@
 
+const err = require('../errors/error')
 
-module.exports = function ({playlistDAL, podcastDAL, searchItunesBL, errors, authBL}) {
-    
-    return{
+module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) {
 
-        addPodcastToPlaylist: async function(collectionId, playlistName, user, collectionName, artistName){
+    return {
 
-            try{    
-                if(await podcastDAL.podcastExist(collectionId)){
-                   await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
-                }else{
-                    await podcastDAL.addPodcast(collectionId, collectionName, artistName)
-                    await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
+        addPodcastToPlaylist: async function (collectionId, playlistName, user, collectionName, artistName, userloginKey) {
+
+            try {
+                if (authBL.isLoggedIn(userloginKey)) {
+
+                    if (await podcastDAL.podcastExist(collectionId)) {
+                        await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
+                    } else {
+                        await podcastDAL.addPodcast(collectionId, collectionName, artistName)
+                        await playlistDAL.addPodcastToPlaylist(collectionId, playlistName, user)
+                    }
+                } else {
+                    throw err.err.AUTH_USER_ERROR
                 }
 
-            }catch(error){
-                console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
-            }
-        },
-
-        removePodcastsFromPlaylist: async function(podcastsToRemove, playlistName, user){
-            
-            try { 
-                if (typeof podcastsToRemove === 'string') {
-                    podcastsToRemove = [podcastsToRemove]
-                }
-
-                for (let i = 0; i < podcastsToRemove.length; i++) {
-                    await playlistDAL.removePodcastFromPlaylist(podcastsToRemove[i], playlistName, user)
-                }
-                return
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
-        
-        removePlaylist: async function (playlistName, user){
-            try{
-                if(authBL.isLoggedIn(userloginKey)){
+
+        removePodcastsFromPlaylist: async function (podcastsToRemove, playlistName, user, userloginKey) {
+
+            try {
+
+                if (authBL.isLoggedIn(userloginKey)) {
+
+                    if (typeof podcastsToRemove === 'string') {
+                        podcastsToRemove = [podcastsToRemove]
+                    }
+
+                    for (let i = 0; i < podcastsToRemove.length; i++) {
+                        await playlistDAL.removePodcastFromPlaylist(podcastsToRemove[i], playlistName, user)
+                    }
+                } else {
+                    throw err.err.AUTH_USER_ERROR
+                }
+            } catch (error) {
+                console.log(error)
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
+            }
+        },
+
+        removePlaylist: async function (playlistName, user, userloginKey) {
+            try {
+                if (authBL.isLoggedIn(userloginKey)) {
                     return await playlistDAL.removePlaylist(playlistName, user)
                 } else {
-                    throw new Error(errors.errors.AUTH_USER_ERROR)
+                    throw err.err.AUTH_USER_ERROR
                 }
 
-            }catch(error){
+            } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
-        getAllPlaylistsByUser: async function (userloginKey){
-            
-            try{
-                if(authBL.isLoggedIn(userloginKey)){
+        getAllPlaylistsByUser: async function (userloginKey) {
+
+            try {
+                if (authBL.isLoggedIn(userloginKey)) {
                     return await playlistDAL.getAllPlaylistsByUser(userloginKey.user)
+                } else {
+                    throw err.err.AUTH_USER_ERROR
                 }
-            }catch (error){
+            } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
-        getAllPlaylistsAndPodcastsByUser: async function (user){
-          try{
-           
-            const result = await playlistDAL.getAllPlaylistsAndPodcastsByUser(user)
-            let podcastList = []
-            let val = {} 
-            
-            for(let i = 0; i < result.length; i++){
-                const podInfo = await searchItunesBL.searchPodcast(result[i].pod_id)
-                val.playlistName = result[i].name
-                val.podcastInfo = podInfo.results[0]
-                podcastList.push(val)
-                val = {}
+        getAllPlaylistsAndPodcastsByUser: async function (userloginKey) {
+            try {
+
+                if (authBL.isLoggedIn(userloginKey)) {
+                    const result = await playlistDAL.getAllPlaylistsAndPodcastsByUser(userloginKey.user)
+                    let podcastList = []
+                    let val = {}
+
+                    for (let i = 0; i < result.length; i++) {
+                        const podInfo = await searchItunesBL.searchPodcast(result[i].pod_id)
+                        val.playlistName = result[i].name
+                        val.podcastInfo = podInfo.results[0]
+                        podcastList.push(val)
+                        val = {}
+                    }
+
+                    let sortRes = podcastList.reduce(function (obj, item) {
+                        obj[item.playlistName] = obj[item.playlistName] || []
+                        obj[item.playlistName].push(item.podcastInfo)
+                        return obj;
+                    }, {})
+
+                    sortedResult = Object.entries(sortRes).map(([playlistName, podcastInfo]) => ({ playlistName, podcastInfo }))
+                    return (sortedResult)
+                }
+                throw err.err.AUTH_USER_ERROR
+
+            } catch (error) {
+                console.log(error)
+                console.log(Object.values(err.err).includes(error))
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
-            
-            let sortRes = podcastList.reduce(function (obj, item) {
-                obj[item.playlistName] = obj[item.playlistName] || []
-                obj[item.playlistName].push(item.podcastInfo)
-                return obj;
-            }, {})
-
-            sortedResult = Object.entries(sortRes).map(([playlistName, podcastInfo]) => ({ playlistName, podcastInfo }))
-            return(sortedResult)
-
-          }catch(error){
-            console.log(error)
-            throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
-          }   
         },
 
-        getAllPodcastsByPlaylist: async function(user, playlist){
-            try{
-                const result = await playlistDAL.getAllPodcastsByPlaylist(user,playlist)
+        getAllPodcastsByPlaylist: async function (user, playlist) {
+            try {
+                const result = await playlistDAL.getAllPodcastsByPlaylist(user, playlist)
                 let podcastList = []
-                let val = {} 
-                
-                for(let i = 0; i < result.length; i++){
+                let val = {}
+
+                for (let i = 0; i < result.length; i++) {
                     const podInfo = await searchItunesBL.searchPodcast(result[i].pod_id)
                     val.playlistName = playlist
                     val.podcastInfo = podInfo.results[0]
                     podcastList.push(val)
                     val = {}
                 }
-                
+
                 let sortRes = podcastList.reduce(function (obj, item) {
                     obj[item.playlistName] = obj[item.playlistName] || []
                     obj[item.playlistName].push(item.podcastInfo)
                     return obj;
                 }, {})
-    
-                sortedResult = Object.entries(sortRes).map(([playlistName, podcastInfo]) => ({ playlistName, podcastInfo }))
-                return(sortedResult)
 
-            }catch(error){
+                sortedResult = Object.entries(sortRes).map(([playlistName, podcastInfo]) => ({ playlistName, podcastInfo }))
+                return (sortedResult)
+
+            } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
     }

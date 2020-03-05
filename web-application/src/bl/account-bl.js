@@ -1,48 +1,35 @@
 
 var bcrypt = require('bcryptjs')
+const err = require('../errors/error')
 
-const USERNAME_MIN_LENGTH = 5
+
+const USERNAME_MIN_LENGTH = 0
 const USERNAME_MAX_LENGTH = 40
-const PASSWORD_MIN_LENGTH = 5
+const PASSWORD_MIN_LENGTH = 8
 const PASSWORD_MAX_LENGTH = 40
-const EMAIL_MIN_LENGTH = 7
+const EMAIL_MIN_LENGTH = 0
 const EMAIL_MAX_LENGTH = 40
 
 
-module.exports = function ({ accountDAL, errors, authBL }) {
+module.exports = function ({ accountDAL }) {
 
     return {
 
-        userRegistration: async function (username, password, email, errors) {
-            
+        userRegistration: async function (username, password, email) {
+
             try {
-                
-                signInSignUpInputValidation(username, email, password)
+
+                signUpInputValidation(username, email, password)
                 const hashed = await hashPassword(password)
                 const user = await accountDAL.userRegistration(username, hashed, email)
-                console.log("USER: "+JSON.stringify(user))
                 return user
 
             } catch (error) {
                 console.log(error)
-                let validationErrors = {}
-
-                if (error == errors.errors.DUP_EMAIL_ERROR) {
-                    validationErrors.userDupError = "username_duplication_error"
+                if(err.errorExist(error)){
+                    error = err.err.INTERNAL_SERVER_ERROR
                 }
-                if (error == errors.errors.DUP_USER_ERROR) {
-                    validationErrors.emailDupError = "email_duplication_error"
-                }
-                if (error == "email_length_error") {
-                    validationErrors.emailLengthError = "email_length_error"
-                }
-                if (error == "password_length_error") {
-                    validationErrors.passwordLengthError = "password_length_error"
-                }
-                if (error == "username_length_error") {
-                    validationErrors.usernameLengthError = "username_length_error"
-                }
-                throw validationErrors
+                throw error
             }
         },
 
@@ -50,165 +37,164 @@ module.exports = function ({ accountDAL, errors, authBL }) {
 
             try {
 
-                signInSignUpInputValidation(username, null, password)
                 const user = await accountDAL.getUser(username)
-                const correctPassword = await unHashPassword(password, user[0].password)
-                return (user[0].username == username && correctPassword)
+                if (user[0] && await passwordCorrect(password, user[0].password)) {
+                    return true
+                } else {
+                    console.log("error - userLogin - account-bl.js")
+                    throw err.err.LOGIN_ERROR
+                }
 
             } catch (error) {
-                console.log("ERROR: "+JSON.stringify(error) + error)
-                let validationErrors = {}
-                if (error == "username_length_error") {
-                    validationErrors.usernameLengthError = error
+                console.log(error)
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
                 }
-                if (error == "password_length_error") {
-                    validationErrors.passwordLengthError = error
-                }
-                throw validationErrors
+                throw error
             }
         },
 
-        updateEmail: async function(user, email, confirmedEmail){
-            
-            try{
+        updateEmail: async function (user, email, confirmedEmail) {
+
+            try {
                 console.log("-------email---")
                 console.log(email)
                 console.log(confirmedEmail)
-                updateEmailInputValidation(email,confirmedEmail)
-                return await accountDAL.updateEmail(user,email)
+                updateEmailInputValidation(email, confirmedEmail)
+                return await accountDAL.updateEmail(user, email)
 
-            }catch (error){
-                console.log("ERROR BLOCK IN update email")
+            } catch (error) {
                 console.log(error)
-                let validationErrors = {}
-
-                if(error.code = "email_undefined_error"){
-                    validationErrors.emailUndefinedError = "Enter new email address"
+                if (!(Object.values(err.err).includes(error))) {
+                    error = err.err.INTERNAL_SERVER_ERROR
                 }
-
-                if (error.code == "ER_DUP_ENTRY" && error.sqlMessage.includes('email')) {
-                    validationErrors.emailDupError = "email_duplication_error"
-                }
-                if (error == "email_length_error") {
-                    validationErrors.emailLengthError = "email_length_error"
-                }
-                if (error == "confirmed_email_length_error") {
-                    validationErrors.confirmedEmailLengthError = "confirmed_email_length_error"
-                }
-                if(error == "email_match_error"){
-                    validationErrors.emailMatchError = "email_match_error"
-                }
-                throw validationErrors
+                throw error
             }
         },
 
-        updatePassword: async function(user, password, confirmedPassword){
-            
-            try{
-                updatePasswordInputValidation(password,confirmedPassword)
+        updatePassword: async function (user, password, confirmedPassword) {
+
+            try {
+                updatePasswordInputValidation(password, confirmedPassword)
                 const hashed = await hashPassword(password)
                 return await accountDAL.updatePassword(user, hashed)
 
-            }catch(error){
-
-                let validationErrors = {}
-
-                if(error = "password_undefined_error"){
-                    validationErrors.passwordUndefinedError = "Enter a new password"
+            } catch (errors) {
+                if(err.errorExist(errors)){
+                    errors = err.err.INTERNAL_SERVER_ERROR
                 }
-                if (error == "password_length_error") {
-                    validationErrors.passwordLengthError = "password_length_error"
-                }
-                if (error == "confirmed_password_length_error") {
-                    validationErrors.confirmedPasswordLengthError = "confirmed_password_length_error"
-                }
-                if (error == "password_match_error"){
-                    validationErrors.passwordMatchError = "password_match_error"
-                }
-                throw validationErrors
+                throw errors
             }
         },
 
-        deleteAccount: async function(user){
-            try{
+        deleteAccount: async function (user) {
+            try {
                 return await accountDAL.deleteAccount(user)
-            }catch(error){
+            } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.PODCAST_FETCH_ERROR)
+                throw err.err.PODCAST_FETCH_ERROR
             }
         }
     }
-}
 
+    function updatePasswordInputValidation(password, confirmedPassword) {
 
-function updatePasswordInputValidation(password, confirmedPassword){
-    
-    if (!password || !confirmedPassword){
-        throw "password_undefined_error"
-    }
-    if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
-        throw "password_length_error"
-    }
-    if (confirmedPassword.length < PASSWORD_MIN_LENGTH || confirmedPassword.length > PASSWORD_MAX_LENGTH) {
-        throw "confirmed_password_length_error"
-    }
-    if(password != confirmedPassword){
-        throw "password_match_error"
-    }
-}
-
-function updateEmailInputValidation(email, confirmedEmail){
-    if(!email || !confirmedEmail){
-        throw "email_undefined_error"
-    }
-    if (email.length < EMAIL_MIN_LENGTH || email.length > EMAIL_MAX_LENGTH) {
-        throw "email_length_error"
-    }
-    if (confirmedEmail.length < EMAIL_MIN_LENGTH || confirmedEmail.length > EMAIL_MAX_LENGTH) {
-        throw "confirmed_email_length_error"
-    }
-    if(email != confirmedEmail){
-        throw "email_match_error"
-    }
-        
-}
-
-function signInSignUpInputValidation(username, email, password) {
-
-    if (email != null) {
-        if (email.length < EMAIL_MIN_LENGTH || email.length > EMAIL_MAX_LENGTH) {
-            throw "email_length_error"
+        const passwordErrors = []
+        if (!password || !confirmedPassword) {
+            passwordErrors.push(err.err.PASSWORD_UNDEFINED_ERROR)
+        }
+        if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
+            passwordErrors.push(err.err.PASSWORD_LENGTH_ERROR)
+        }
+        if (password != confirmedPassword) {
+            passwordErrors.push(err.err.PASSWORD_MATCH_ERROR)
+        }
+        if (passwordErrors.length != 0) {
+            throw passwordErrors
         }
     }
 
-    if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
-        throw "password_length_error"
+    function updateEmailInputValidation(email, confirmedEmail) {
+
+        const emailErrors = []
+
+        if (!email || !confirmedEmail) {
+            emailErrors.push(err.err.EMAIL_UNDEFINED_ERROR)
+        }
+
+        if (email.length < EMAIL_MIN_LENGTH || email.length > EMAIL_MAX_LENGTH) {
+            emailErrors.push(err.err.EMAIL_LENGTH_ERROR)
+        }
+        if (email != confirmedEmail) {
+            emailErrors.push(err.err.EMAIL_MATCH_ERROR)
+        }
+        if (emailErrors.length != 0) {
+            throw emailErrors
+        }
+
     }
 
-    if (username.length < USERNAME_MIN_LENGTH || username.length > USERNAME_MAX_LENGTH) {
-        throw "username_length_error"
+    function signUpInputValidation(username, email, password) {
+
+        const signInErrors = []
+
+        if (!password) {
+            signInErrors.push(err.err.PASSWORD_UNDEFINED_ERROR)
+        }
+
+        if (!username) {
+            signInErrors.push(err.err.USERNAME_UNDEFINED_ERROR)
+        }
+
+        if (!email) {
+            signInErrors.push(err.err.EMAIL_UNDEFINED_ERROR)
+        }
+
+        if (email != null) {
+            if (email.length < EMAIL_MIN_LENGTH || email.length > EMAIL_MAX_LENGTH) {
+                signInErrors.push(err.err.EMAIL_LENGTH_ERROR)
+            }
+        }
+
+        if (password.length > PASSWORD_MAX_LENGTH) {
+            signInErrors.push(err.err.PASSWORD_LENGTH_LONG_ERROR)
+        }
+
+        if(password && password.length < PASSWORD_MIN_LENGTH){
+            signInErrors.push(err.err.PASSWORD_LENGTH_SHORT_ERROR)
+        }
+
+        if (username.length < USERNAME_MIN_LENGTH || username.length > USERNAME_MAX_LENGTH) {
+            signInErrors.push(err.err.USERNAME_LENGTH_ERROR)
+        }
+
+        if (signInErrors.length != 0) {
+            throw signInErrors
+        }
+    }
+
+    async function hashPassword(password) {
+
+        const saltRounds = 10
+        try {
+            return await bcrypt.hash(password, saltRounds)
+
+        } catch (error) {
+            console.log(error)
+            throw err.err.INTERNAL_SERVER_ERROR
+        }
+    }
+
+    async function passwordCorrect(password, hashed) {
+
+        try {
+            return await bcrypt.compare(password, hashed)
+
+        } catch (error) {
+            console.log(JSON.stringify(error))
+            throw err.err.INTERNAL_SERVER_ERROR
+        }
     }
 }
 
-async function hashPassword(password) {
 
-    const saltRounds = 10
-    try {
-        return await bcrypt.hash(password, saltRounds)
-
-    } catch (error) {
-        console.log("error when hashing")
-        console.log(error)
-    }
-}
-
-async function unHashPassword(password, hashed) {
-
-    try {
-        return await bcrypt.compare(password, hashed)
-
-    } catch (error) {
-        console.log("error when unhash")
-        console.log(JSON.stringify(error))
-    }
-}

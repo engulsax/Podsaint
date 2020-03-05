@@ -11,9 +11,8 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
         next()
     })
 
-    router.get('/:id', function (request, response) {
-        (async function () {
-
+    router.get('/:id', async function (request, response, next) {
+        try{
             const mainCategoryId = request.params.id
             const currentCategoryDetails = await categoryBL.getCategoryDetails(mainCategoryId)
             const mainPodcasts = await searchItunesBL.searchPodcastsWithId(mainCategoryId)
@@ -36,7 +35,9 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
             model.subCategories = currentCategoryDetails.subCategories
 
             response.render('category.hbs', { model })
-        })()
+        } catch(error) {
+            next(error)
+        }
     })
 
     return router

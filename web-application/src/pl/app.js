@@ -6,6 +6,7 @@ const fs = require('fs');
 const redis = require('redis')
 const session = require('express-session')
 const container = require('../main.js')
+const err = require('../errors/error')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -43,8 +44,7 @@ app.engine('hbs', expressHandlebars({
 }))
 
 let redisClient = redis.createClient(6379, 'podsaint_redis_1')
-var RedisStore = require('connect-redis')(session)
-
+let RedisStore = require('connect-redis')(session)
 
 app.use(session({
   secret: "ldasdgewbodkodkfkrsldfsbgtdhhtyu",
@@ -69,28 +69,46 @@ app.use("/search", container.resolve('searchPL'))
 app.use("/podcast", container.resolve('podcastPL'))
 app.use("/my-review", container.resolve('myReviewPL'))
 
+app.use(async function (request, response, next) {
+  response.model = {
+    categories: await categoryBL.getCategoriesDetails(),
+    loggedIn: (request.session.key)
+  }
+  next()
+})
 
-
-//Catching the errors
-
+//ERROR HANDLING
 app.use(function (request, response, next) {
+
+  const model = response.model
   response.status(404)
-  const model = {}
   model.error = "Page Not Found"
   model.code = "404"
   response.render('error.hbs', model)
 })
 
 app.use(function (error, request, response, next) {
-  response.status(500)
-  const model = {}
-  model.error = error
-  console.log(error)
-  model.code = "500"
-  response.render('error.hbs', model)
-})
 
+  console.log(error)
+
+  const model = response.model
+  const message = error
+  console.log(error)
+  const code = err.getErrCode(error)
+  console.log(code)
+  response.status(code)
+  if (code == 401) {
+    model.podsaintError = message
+    response.render("signin.hbs", model)
+  } else {
+    model.code = code
+    model.error = message
+    response.render('error.hbs', model)
+  }
+
+})
 
 app.listen(8080, function () {
   console.log("Web application listening on port 8080.")
 })
+

@@ -1,8 +1,8 @@
-
+const err = require('../errors/error')
 const axios = require("axios")
 const cheerio = require('cheerio')
 
-module.exports = function ({ podcastDAL, errors, authBL }) {
+module.exports = function ({ podcastDAL, authBL }) {
 
     return {
         newPodcastReview: async function newPodcastReview(
@@ -19,7 +19,8 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
         ) {
 
             if (!authBL.isLoggedIn(userLoginKey)) {
-                throw new Error(errors.errors.AUTH_USER_ERROR)
+                console.log("error - newPodcastReview - podcast-bl.js")
+                throw err.err.AUTH_USER_ERROR
             }
 
             const errorMessages = reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality)
@@ -53,7 +54,7 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
 
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -68,7 +69,7 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
                 return []
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
 
             }
         },
@@ -82,7 +83,7 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
                 return []
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -98,21 +99,21 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
                 return []
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
-        getThreeReviewsByUser: async function getThreeReviewsByUser(user) {
+        getThreeReviewsByUser: async function getThreeReviewsByUser(userLoginKey) {
 
             const numberOfReviews = 3
             try {
-                if (await podcastDAL.userHasReviews(user)) {
-                    return await podcastDAL.getNReviewsByUser(user, numberOfReviews)
+                if (await podcastDAL.userHasReviews(userLoginKey.user)) {
+                    return await podcastDAL.getNReviewsByUser(userLoginKey.user, numberOfReviews)
                 }
                 return []
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -143,7 +144,7 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
                 }
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
 
             }
         },
@@ -171,7 +172,7 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
                 }
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -198,7 +199,7 @@ module.exports = function ({ podcastDAL, errors, authBL }) {
 
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 

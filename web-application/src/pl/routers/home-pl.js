@@ -1,5 +1,7 @@
 const express = require('express')
+const err = require('../../errors/error')
 const router = express.Router()
+
 
 module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, podcastBL }) {
 
@@ -15,150 +17,142 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         response.redirect('/home')
     })
 
-    router.get('/home', function (request, response) {
-        (async function () {
+    router.get('/home', async function (request, response, next) {
+        const model = response.model
+        try {
+            const playlists = await playlistBL.getAllPlaylistsAndPodcastsByUser(request.session.key)
+            const reviews = await podcastBL.getThreeReviewsByUser(request.session.key)
 
-            const model = response.model
-            try {
-                const playlists = await playlistBL.getAllPlaylistsAndPodcastsByUser(model.loggedIn.user, model.loggedInKey)
-                const reviews = await podcastBL.getThreeReviewsByUser(model.loggedInKey)
+            model.reviews = reviews
+            model.playlists = playlists
 
-                model.reviews = reviews
-                model.playlists = playlists
-
-                response.render("feed.hbs", { model })
-            } catch (error) {
+            response.render("feed.hbs", { model })
+        } catch (error) {
+            console.log(error)
+            if (error === err.err.AUTH_USER_ERROR) {
                 const mainPodcasts = await searchItunesBL.searchPodcasts('podcast')
                 model.mainPodcasts = mainPodcasts.results
                 response.render("home.hbs", { model })
-            }
-        })()
-    })
-
-    router.get('/:id/edit', function (request, response) {
-        (async function () {
-
-            const model = response.model
-            if (model.loggedIn) {
-                const playlist = await playlistBL.getAllPodcastsByPlaylist(model.loggedIn.user, request.params.id)
-                console.log("playlists----")
-                console.log(playlist)
-                model.playlist = playlist
-                response.render("editplaylist.hbs", { model })
             } else {
-                response.redirect('/signin')
+                next(error)
             }
-        })()
-    })
-
-    router.post('/:id/remove-playlist', function (request, response) {
-        const model = response.model
-        if (model.loggedIn) {
-            (async function () {
-                await playlistBL.removePlaylist(request.params.id, model.loggedIn.user)
-                response.redirect("/home")
-            })()
-        } else {
-            response.redirect('/signin')
         }
     })
 
-    router.post('/:id/remove-podcasts', function (request, response) {
+    router.get('/:id/edit', async function (request, response, next) {
+        const model = response.model
+        try {
+            const playlist = await playlistBL.getAllPodcastsByPlaylist(request.session.key.user, request.params.id, request.session.key)
+            model.playlist = playlist
+            response.render("editplaylist.hbs", { model })
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    })
+
+    router.post('/:id/remove-playlist', async function (request, response, next) {
+        try {
+            await playlistBL.removePlaylist(request.params.id, request.session.key.user, request.session.key)
+            response.redirect("/home")
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    router.post('/:id/remove-podcasts', function (request, response, next) {
 
         const playlistId = request.params.id
         const model = response.model
         const podcastsToRemove = request.body.pod_id
-        const user = model.loggedIn.user
 
-        if (model.loggedIn) {
+        try {
             (async function () {
-                await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, user)
+                await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, request.session.key.user, request.session.key)
                 response.redirect(`/:${playlistId}/edit`)
             })()
-        } else {
-            response.redirect("/signin")
+        } catch (error) {
+            next(error)
         }
     })
 
-    router.get('/account-settings', function (request, response) {
+    router.get('/account-settings', function (request, response, next) {
         const model = response.model
-        if (model.loggedIn) {
+        if (request.session.key) {
             response.render("account-settings.hbs", { model })
         } else {
-            response.redirect("/signin")
+            next(err.err.AUTH_USER_ERROR)
         }
     })
 
-    router.post('/account-settings/update-passsword', function (request, response) {
+    router.post('/account-settings/update-passsword', async function (request, response, next) {
 
         const model = response.model
+        const newPassword = request.body.newPassword
+        const confirmedPassword = request.body.confimPassword
 
-        if (model.loggedIn) {
-            (async function () {
-
-                const newPassword = request.body.newPassword
-                const confirmedPassword = request.body.confimPassword
-
-                try {
-                    await accountBL.updatePassword(model.loggedIn.user, newPassword, confirmedPassword)
-                    response.redirect('/home')
-                } catch (error) {
-                    console.log("----error")
-                    console.log(error)
-                    const model = response.model
-                    model.inputError = error
-                    response.render("account-settings.hbs", model)
-                }
-            })()
-
-        } else {
-            response.redirect("/signin")
+        try {
+            await accountBL.updatePassword(model.loggedIn.user, newPassword, confirmedPassword)
+            response.redirect('/home')
+        } catch (errors) {
+            console.log(error)
+            if (err.errorExist(error)) {
+                error = err.err.INTERNAL_SERVER_ERROR
+                next(error)
+                return
+            }
+            if (error === err.err.AUTH_USER_ERROR) {
+                next(error)
+                return
+            }
+            inputErrors = []
+            model.inputErrors = inputErrors.concat(error)
+            response.render("account-settings.hbs", model)
         }
     })
 
-    router.post('/account-settings/update-email', function (request, response) {
+    router.post('/account-settings/update-email', async function (request, response, next) {
 
         const model = response.model
         const newEmail = request.body.newEmail
         const confirmedEmail = request.body.confirmEmail
 
-        if (model.loggedIn) {
+        try {
 
-            (async function () {
+            await accountBL.updateEmail(model.loggedIn.user, newEmail, confirmedEmail)
+            response.redirect('/home')
 
-                try {
-                    await accountBL.updateEmail(model.loggedIn.user, newEmail, confirmedEmail)
-                    response.redirect('/home')
-
-                } catch (error) {
-
-                    const model = response.model
-                    model.inputError = error
-                    console.log(model)
-                    response.render("account-settings.hbs", model)
-                }
-            })()
-
-        } else {
-            response.redirect("/signin")
+        } catch (errors) {
+            console.log(error)
+            if (err.errorExist(error)) {
+                error = err.err.INTERNAL_SERVER_ERROR
+                next(error)
+                return
+            }
+            if (error == err.err.AUTH_USER_ERROR) {
+                next(error)
+                return
+            }
+            inputErrors = []
+            model.inputErrors = inputErrors.concat(error)
+            response.render("account-settings.hbs", model)
         }
+
     })
 
-    router.post('/account-settings/delete-account', function (request, response) {
-
+    router.post('/account-settings/delete-account', async function (request, response, next) {
         const model = response.model
-
-        if (model.loggedIn) {
-
-            (async function () {
-                await accountBL.deleteAccount(model.loggedIn.user)
-                request.session.destroy(function () {
-                    response.redirect('/')
-                })
-            })()
-
-        } else {
-            response.redirect("/sigin")
+        try {
+            await accountBL.deleteAccount(model.loggedIn.user)
+            request.session.destroy(function () {
+                response.redirect('/')
+            })
+        } catch (error) {
+            console.log(error)
+            if (err.errorExist(error)) {
+                error = err.err.INTERNAL_SERVER_ERROR
+            }
+            next(error)
         }
     })
 
@@ -174,7 +168,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
 
     router.post('/signout', function (request, response) {
 
-        if (response.model.loggedIn) {
+        if (request.session.key) {
             request.session.destroy(function () {
                 response.redirect('/')
             })
@@ -183,47 +177,52 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         }
     })
 
-    router.post('/signup', function (request, response) {
-        (async function () {
+    router.post('/signup', async function (request, response, next) {
 
-            const username = request.body.username
-            const password = request.body.password
-            const email = request.body.email
+        const model = response.model
+        const username = request.body.username
+        const password = request.body.password
+        const email = request.body.email
 
+        try {
+            await accountBL.userRegistration(username, password, email)
 
-            try {
-                await accountBL.userRegistration(username, password, email)
-
-                if (await accountBL.userLogin(username, password)) {
-                    request.session.key = { user: username }
-                }
-                response.redirect('/')
-
-            } catch (error) {
-                const model = response.model
-                model.inputError = error
-                response.render("signup.hbs", model)
+            if (await accountBL.userLogin(username, password)) {
+                request.session.key = { user: username }
             }
-        })()
+            response.redirect('/')
+
+        } catch (error) {
+            console.log(error)
+            if (err.errorExist(error)) {
+                error = err.err.INTERNAL_SERVER_ERROR
+                next(error)
+                return
+            }
+            inputErrors = []
+            model.inputErrors = inputErrors.concat(error)
+            response.render("signup.hbs", model)
+        }
     })
 
-    router.post('/signin', function (request, response) {
-        (async function () {
+    router.post('/signin', async function (request, response, next) {
 
-            const username = request.body.username
-            const password = request.body.password
+        const username = request.body.username
+        const password = request.body.password
+        const model = response.model
 
-            try {
-                if (await accountBL.userLogin(username, password)) {
-                    request.session.key = { user: username }
-                }
-                response.redirect('/')
-            } catch (error) {
-                const model = response.model
-                model.inputError = error
-                response.render("signin.hbs", model)
+        try {
+            if (await accountBL.userLogin(username, password)) {
+                request.session.key = { user: username }
             }
-        })()
+            response.redirect('/')
+        } catch (error) {
+            console.log(error)
+            if (err.errorExist(error)) {
+                error = err.err.INTERNAL_SERVER_ERROR
+            }
+            next(error)
+        }
     })
 
     return router

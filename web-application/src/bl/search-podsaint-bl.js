@@ -1,8 +1,9 @@
 const fetch = require('node-fetch')
+const err = require('../errors/error')
 const defaultHTTPS = "https://itunes.apple.com/search?media=podcast"
 const ALL_POD_ID = '26'
 
-module.exports = function ({ searchPodsaintDAL, errors }) {
+module.exports = function ({ searchPodsaintDAL }) {
 
     return {
         getSearchMatch: async function (
@@ -37,7 +38,7 @@ module.exports = function ({ searchPodsaintDAL, errors }) {
 
             } catch (error) {
                 console.log(error)
-                throw new Error(errors.errors.INTERNAL_SERVER_ERROR)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         }
     }
