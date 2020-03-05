@@ -57,12 +57,11 @@ module.exports = function ({ podcastDAL }) {
 
             try {
                 const result = await podcastDAL.getReviewById(reviewId)
-                console.log(`>>>>>RESULT: ${result}`)
                 return result
 
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
+                console.log("get all reviewbyid error")
             }
 
         },
@@ -70,7 +69,16 @@ module.exports = function ({ podcastDAL }) {
         deleteReviewById: async function deleteReviewById(reviewId){
 
             try {
+                const result = await podcastDAL.getReviewById(reviewId)
                 
+                const collectionId = result[0].pod_id
+                const productionQuality = result[0].production_quality_rating
+                const topicRelevence = result[0].topic_relevence_rating
+                const comedyRating = result[0].comedy_rating
+                const dramaRating = result[0].drama_rating
+                const overallRating = result[0].overall_rating
+
+                return podcastDAL.deleteReviewById(reviewId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)                
 
             } catch (error) {
                 console.log(error)

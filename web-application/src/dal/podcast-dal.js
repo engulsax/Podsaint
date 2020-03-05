@@ -105,6 +105,7 @@ module.exports = function({}){
 			const values = [reviewText, reviewId]
 
 			try {
+
 				return await db(query, values)
 			
 			} catch (error) {
@@ -114,12 +115,16 @@ module.exports = function({}){
 
 		},
 
-		deleteReviewById: async function deleteReviewById(reviewId){
+		deleteReviewById: async function deleteReviewById(reviewId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating){
 
 			const query = "DELETE FROM reviews WHERE id = ?"
 			const values = [reviewId]
+			
 			try{
+
+				await removeRatingFromPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
 				return await db(query, values)
+
 			} catch (error) {
 
 			}
@@ -131,8 +136,10 @@ module.exports = function({}){
 			const value = [collectionId]
 		
 			try {
+
 				const response = await db(query, value)
 				return response
+
 			} catch (error) {
 				console.log("error in getallreviewsbypodcast")
 				console.log(error)
@@ -255,14 +262,35 @@ async function addNewInfoToPodcast(collectionId, productionQuality, topicReleven
 
 	try {
 		const ratings = await getRatingsFromPodcast(collectionId)
-		console.log("RATINGS---------------------------")
-		console.log(ratings)
 
-		ratings.overall += await overallRating
-		ratings.quality += await productionQuality
-		ratings.topic += await topicRelevence
-		ratings.drama += await dramaRating
-		ratings.comedy += await comedyRating
+		ratings.overall += overallRating
+		ratings.quality += productionQuality
+		ratings.topic += topicRelevence
+		ratings.drama += dramaRating
+		ratings.comedy += comedyRating
+
+		/*Finding all value in objects with the help of ratingsVaribleNames'
+		which has the name of all the keys aka the varible names (in this case)*/
+		ratingDatabaseNames.forEach(async function (rating, i) {
+			await addNewRatingsToPodcast(collectionId, rating, ratings[ratingsVaribleNames[i]])
+		})
+
+	} catch (error) {
+		console.log(error)
+		//throw(error)
+	}
+
+}
+async function removeRatingFromPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
+
+	try {
+		const ratings = await getRatingsFromPodcast(collectionId)
+
+		ratings.overall -= overallRating
+		ratings.quality -= productionQuality
+		ratings.topic -= topicRelevence
+		ratings.drama -= dramaRating
+		ratings.comedy -= comedyRating
 
 		/*Finding all value in objects with the help of ratingsVaribleNames'
 		which has the name of all the keys aka the varible names (in this case)*/

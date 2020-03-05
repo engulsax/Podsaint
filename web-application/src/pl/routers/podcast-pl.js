@@ -88,40 +88,6 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
     })
 
-    router.get('/my-review/edit-review/:id', function(request,response){
-
-        const reviewId = request.params.id
-        if (request.session.key) {
-
-            (async function () {
-
-                const model = response.model
-                const review = await podcastBL.getReviewById(reviewId)
-                model.review = review
-                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-                console.log(model)
-                response.render("editreview.hbs",{ model })
-
-            })()
-        } else {
-            response.render("signin.hbs")
-        }
-    })
-
-    router.post('/my-review/edit-review/:id', function (request, response) {
-        
-        const reviewId = request.params.id
-        if (request.session.key) {
-            (async function () {
-                const user = request.session.key
-                await podcastBL.updateReviewById(reviewId,user)
-            })()
-        } else {
-            response.render("signin.hbs")
-        }
-
-    })
-
 
     router.post('/:id/write-review', function (request, response, next) {
 
