@@ -43,7 +43,9 @@ module.exports = function(){
             const values = [user]
            
             try {
-                return await db(query, values)
+                const result = await db(query, values)
+                console.log("RESULT FROM GET ALL PLAYLISTS BY USER")
+                console.log(result)
 
             } catch (error) {
                 console.log(error)
@@ -81,10 +83,10 @@ module.exports = function(){
             }
         },
 
-        getAllPodcastsByPlaylist: async function(user, playlist){
+        getAllPodcastsByPlaylist: async function(user, playlistName){
             
             const query = "SELECT pod_id FROM podcastlists WHERE list_owner = ? AND name = ?"
-            const values = [user, playlist]
+            const values = [user, playlistName]
             try{
                 return await db(query,values)
             }catch(error){

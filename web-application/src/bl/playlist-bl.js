@@ -22,7 +22,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
 
             } catch (error) {
                 console.log(error)
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -47,7 +47,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
                 }
             } catch (error) {
                 console.log(error)
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -64,7 +64,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
 
             } catch (error) {
                 console.log(error)
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -81,7 +81,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
                 }
             } catch (error) {
                 console.log(error)
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -117,8 +117,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
 
             } catch (error) {
                 console.log(error)
-                console.log(Object.values(err.err).includes(error))
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error

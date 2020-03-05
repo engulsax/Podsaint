@@ -47,7 +47,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -65,7 +65,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if (!(Object.values(err.err).includes(error))) {
+                if(err.errorExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -79,11 +79,12 @@ module.exports = function ({ accountDAL }) {
                 const hashed = await hashPassword(password)
                 return await accountDAL.updatePassword(user, hashed)
 
-            } catch (errors) {
-                if(err.errorExist(errors)){
-                    errors = err.err.INTERNAL_SERVER_ERROR
+            } catch (error) {
+                console.log(error)
+                if(err.errorExist(error)){
+                    error = err.err.INTERNAL_SERVER_ERROR
                 }
-                throw errors
+                throw error
             }
         },
 

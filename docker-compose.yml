@@ -10,7 +10,8 @@ services:
     depends_on:
       - redis
       - database
-        
+      - pgb
+
   database:
     build: ./database
     ports:
@@ -24,5 +25,16 @@ services:
     ports: 
       - "6379:6379"
    
- 
+  pgb:
+    
+    container_name: postgres_container
+    build: ./postgres
+    ports: 
+    - "5432:5432"
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=theRootPassword
+      - POSTGRES_USER=root
+      - POSTGRES_DB=postgres
+
     

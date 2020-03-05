@@ -25,7 +25,7 @@ module.exports = function () {
 				review_text
 			) 
 			VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`
-			
+
 			const values = [reviewPoster, collectionId, productionQuality,
 				topicRelevence, comedyRating, dramaRating,
 				overallRating, reviewText]
@@ -43,14 +43,12 @@ module.exports = function () {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
 
 		getPodcastById: async function getPodcastById(collectionId) {
-
-
 			const query = "SELECT * FROM podcasts WHERE pod_id = ?"
 			const value = [collectionId]
 
@@ -60,7 +58,7 @@ module.exports = function () {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -83,7 +81,52 @@ module.exports = function () {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
+			}
+		},
+
+		getReviewById: async function getReviewById(reviewId) {
+
+			const query = "SELECT * FROM reviews WHERE id = ?"
+			const values = [reviewId]
+
+			try {
+				return await db(query, values)
+
+			} catch (error) {
+				console.log("error in getreviewsbyid")
+				console.log(error)
+			}
+		},
+
+		updateReviewById: async function updateReviewById(reviewId, reviewText) {
+
+			const query = "UPDATE reviews SET review_text = ? WHERE id = ?"
+			const values = [reviewText, reviewId]
+
+			try {
+
+				return await db(query, values)
+
+			} catch (error) {
+				console.log("error in getreviewsbyid")
+				console.log(error)
+			}
+
+		},
+
+		deleteReviewById: async function deleteReviewById(reviewId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
+
+			const query = "DELETE FROM reviews WHERE id = ?"
+			const values = [reviewId]
+
+			try {
+
+				await removeRatingFromPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
+				return await db(query, values)
+
+			} catch (error) {
+
 			}
 		},
 
@@ -93,11 +136,13 @@ module.exports = function () {
 			const value = [collectionId]
 
 			try {
+
 				const response = await db(query, value)
 				return response
+
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -111,7 +156,7 @@ module.exports = function () {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -126,7 +171,7 @@ module.exports = function () {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -140,7 +185,7 @@ module.exports = function () {
 				return response
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -162,7 +207,7 @@ module.exports = function () {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -197,7 +242,7 @@ module.exports = function () {
 
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 
 		},
@@ -205,11 +250,11 @@ module.exports = function () {
 		podcastHasReviews: async function podcastHasReviews(collectionId) {
 
 			try {
-				const numberOfReviws = await getNumberOfReviewsById(collectionId)
-				return numberOfReviws[0]['COUNT(*)']
+				const numberOfReviews = await getNumberOfReviewsById(collectionId)
+				return numberOfReviews[0]['COUNT(*)']
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -220,7 +265,7 @@ module.exports = function () {
 				return numberOfReviws[0]['COUNT(*)']
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 
 		},
@@ -233,7 +278,7 @@ module.exports = function () {
 				return (response[0]['response'])
 			} catch (error) {
 				console.log(error)
-				throw new Error(err.err.INTERNAL_SERVER_ERROR)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		}
 	}
@@ -247,8 +292,6 @@ module.exports = function () {
 			ratings.quality += productionQuality
 			ratings.topic += topicRelevence
 			ratings.drama += dramaRating
-
-			/*Added recently, I feel like this should be here, if any issues aries take closer lookS*/
 			ratings.comedy += comedyRating
 
 			/*Finding all value in objects with the help of ratingsVaribleNames'
@@ -259,7 +302,30 @@ module.exports = function () {
 
 		} catch (error) {
 			console.log(error)
-			throw new Error(err.err.INTERNAL_SERVER_ERROR)
+			throw err.err.INTERNAL_SERVER_ERROR
+		}
+
+	}
+	async function removeRatingFromPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
+
+		try {
+			const ratings = await getRatingsFromPodcast(collectionId)
+
+			ratings.overall -= overallRating
+			ratings.quality -= productionQuality
+			ratings.topic -= topicRelevence
+			ratings.drama -= dramaRating
+			ratings.comedy -= comedyRating
+
+			/*Finding all value in objects with the help of ratingsVaribleNames'
+			which has the name of all the keys aka the varible names (in this case)*/
+			ratingDatabaseNames.forEach(async function (rating, i) {
+				await addNewRatingsToPodcast(collectionId, rating, ratings[ratingsVaribleNames[i]])
+			})
+
+		} catch (error) {
+			console.log(error)
+			throw err.err.INTERNAL_SERVER_ERROR
 		}
 
 	}
@@ -267,12 +333,11 @@ module.exports = function () {
 	async function getNumberOfReviewsById(collectionId) {
 		query = "SELECT COUNT(*) FROM reviews WHERE pod_id = ?"
 		value = [collectionId]
-
 		try {
 			return await db(query, value)
 		} catch (error) {
 			console.log(error)
-			throw new Error(err.err.INTERNAL_SERVER_ERROR)
+			throw err.err.INTERNAL_SERVER_ERROR
 		}
 	}
 
@@ -284,20 +349,19 @@ module.exports = function () {
 			return await db(query, value)
 		} catch (error) {
 			console.log(error)
-			throw new Error(err.err.INTERNAL_SERVER_ERROR)
+			throw err.err.INTERNAL_SERVER_ERROR
 		}
 	}
 
 	async function addNewRatingsToPodcast(collectionId, ratingName, ratingScore) {
 		query = "UPDATE podcasts SET " + ratingName + " = ? WHERE pod_id = ?"
 
-
 		values = [ratingScore, collectionId]
 		try {
 			await db(query, values)
 		} catch (error) {
 			console.log(error)
-			throw new Error(err.err.INTERNAL_SERVER_ERROR)
+			throw err.err.INTERNAL_SERVER_ERROR
 		}
 	}
 
@@ -307,7 +371,6 @@ module.exports = function () {
 		value = [collectionId]
 
 		try {
-
 			const result = await db(query, value)
 			const ratings = {}
 
@@ -318,7 +381,7 @@ module.exports = function () {
 			return ratings
 		} catch (error) {
 			console.log(error)
-			throw new Error(err.err.INTERNAL_SERVER_ERROR)
+			throw err.err.INTERNAL_SERVER_ERROR
 			//return ratings
 		}
 	}

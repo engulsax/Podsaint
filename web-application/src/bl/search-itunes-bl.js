@@ -22,7 +22,7 @@ module.exports = function () {
             try {
                 return await getPodcastsWithId(id)
             } catch (error) {
-                console.log(error)
+                console.log("POOOP" + error)
                 throw err.err.PODCAST_FETCH_ERROR
             }
         },

@@ -18,10 +18,10 @@ module.exports = function () {
                     await fetchData()
                 } catch (error) {
                     console.log(error)
-                    if (!(Object.values(err.err).includes(error))) {
+                    if(err.errorExist(error)){
                         error = err.err.INTERNAL_SERVER_ERROR
                     }
-                    throw (error)
+                    throw error
                 }
             }
             return categoriesDetails
@@ -33,10 +33,10 @@ module.exports = function () {
                     await fetchData()
                 } catch (error) {
                     console.log(error)
-                    if (!(Object.values(err.err).includes(error))) {
+                    if(err.errorExist(error)){
                         error = err.err.INTERNAL_SERVER_ERROR
                     }
-                    throw (error)
+                    throw error
                 }
             }
             return categoriesDetails.map(obj => obj.category)
@@ -48,10 +48,10 @@ module.exports = function () {
                     await fetchData()
                 } catch (error) {
                     console.log(error)
-                    if (!(Object.values(err.err).includes(error))) {
+                    if(err.errorExist(error)){
                         error = err.err.INTERNAL_SERVER_ERROR
                     }
-                    throw (error)
+                    throw error
                 }
             }
             return categoriesDetails.find(obj => { return obj.id === id })

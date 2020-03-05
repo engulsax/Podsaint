@@ -39,6 +39,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
                 //MAKE ERROR PAGE!!!
                 response.redirect('/')
             } else {
+                console.log(error)
                 next(error)
             }
         }
@@ -56,6 +57,10 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             if (error == err.err.AUTH_USER_ERROR) {
                 next()
             } else {
+                console.log(error)
+                if(rr.errorExist(error)){
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
                 next(error)
             }
         }
@@ -78,6 +83,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
             response.render("podcast.hbs", { model })
         } catch (error) {
+            console.log(error)
             next(error)
         }
     })
@@ -149,6 +155,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             }
 
         } catch (error) {
+            console.log(error)
             next(error)
         }
     })
@@ -167,6 +174,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
             response.redirect("/podcast/" + collectionId)
         } catch (error) {
+            console.log(error)
             next(error)
         }
 
@@ -185,6 +193,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
                 podcastInfo.artistName, request.session.key)
             response.redirect("/podcast/" + collectionId)
         } catch (error) {
+            console.log(error)
             throw (error)
         }
     })
@@ -208,6 +217,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             })()*/
 
         } catch (error) {
+            console.log(error)
             throw (error)
         }
     })
