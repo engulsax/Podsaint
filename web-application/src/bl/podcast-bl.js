@@ -301,13 +301,14 @@ module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
     }
 
 
-    async function addPodcastInfoToReview(review){
+    async function addPodcastInfoToReview(reviews){
         try{
-            const podInfo = await searchItunesBL.searchPodcast(review[0].pod_id)
-            console.log(JSON.stringify(podInfo))
-            review[0].posterUrl = podInfo.results[0].artworkUrl600
-            console.log("REVIEW ---- +" + JSON.stringify(review))
-            return review
+            for(review of reviews){
+                const podInfo = await searchItunesBL.searchPodcast(review.pod_id)
+                review.posterUrl = podInfo.results[0].artworkUrl600
+                console.log("REVIEW ---- +" + JSON.stringify(review))
+            }
+            return reviews
         } catch (error) {
             console.log(error)
             throw error
