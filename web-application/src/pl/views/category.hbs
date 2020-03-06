@@ -1,17 +1,17 @@
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
-        <h1 class="head-text">{{model.category}}</h1>
-        {{>search-field}}
+        <h1 class="head-text">{{category}}</h1>
+        {{>search-itunes}}
     </div>
 </div>
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
         <ul>
             <li>
-                <h2 class="sub-text">Popular in {{model.category}}</h2>
+                <h2 class="sub-text">Popular in {{category}}</h2>
                 <section id="slideshow" class="cell small-8 center">
                     <ul id="podcast-section" class="slick">
-                        {{#each model.mainPodcasts}}
+                        {{#each mainPodcasts}}
                         <li>
                             {{>podcast-figure}}
                         </li>
@@ -19,7 +19,7 @@
                     </ul>
                 </section>
             </li>
-            {{#each model.categoryLists}}
+            {{#each categoryLists}}
             <li>
                 <h2 class="sub-text">{{category}}</h2>
                 <section id="slideshow" class="cell small-8 center">

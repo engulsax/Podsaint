@@ -22,7 +22,7 @@ module.exports = function () {
             try {
                 return await getPodcastsWithId(id)
             } catch (error) {
-                console.log("POOOP" + error)
+                console.log(error)
                 throw err.err.PODCAST_FETCH_ERROR
             }
         },
@@ -46,7 +46,6 @@ module.exports = function () {
         }
     }
 
-
     async function getPodcasts(term) {
 
         const limit = "&limit=80"
@@ -69,7 +68,6 @@ module.exports = function () {
             throw err.err.PODCAST_FETCH_ERROR
         }
         return await responseJSON
-
 
     }
 

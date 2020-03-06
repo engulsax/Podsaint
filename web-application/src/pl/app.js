@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const expressHandlebars = require('express-handlebars')
-const svgstore = require('svgstore');
+const svgstore = require('svgstore')
 const fs = require('fs');
 const redis = require('redis')
 const session = require('express-session')
@@ -13,9 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + "/public"))
 app.set("views", "src/pl/views")
 
+
 /*TODO REMOVE SVG FILES, USE PNG INSTEAD, WILL WORK THE SAME FOR ME*/
 /*LOADING SVG FILES*/
-var sprites = svgstore([{ cleanDefs: 'true' }, { cleanSymbols: 'true' }])
+const sprites = svgstore([{ cleanDefs: 'true' }, { cleanSymbols: 'true' }])
   .add('funny', fs.readFileSync(__dirname + '/public/sprites/funny.svg', 'utf8'))
   .add('serious', fs.readFileSync(__dirname + '/public/sprites/serious.svg', 'utf8'))
 
@@ -69,9 +70,10 @@ app.use("/search", container.resolve('searchPL'))
 app.use("/podcast", container.resolve('podcastPL'))
 app.use("/my-review", container.resolve('myReviewPL'))
 
+/*YOU DO NOT GET THE CATEGORIES HERE :( */
 app.use(async function (request, response, next) {
   response.model = {
-    categories: await categoryBL.getCategoriesDetails(),
+    //categories: await categoryBL.getCategoriesDetails(),
     loggedIn: (request.session.key)
   }
   next()
@@ -80,7 +82,8 @@ app.use(async function (request, response, next) {
 //ERROR HANDLING
 app.use(function (request, response, next) {
 
-  const model = response.model
+  const model = {}
+
   response.status(404)
   model.error = "Page Not Found"
   model.code = "404"
@@ -89,26 +92,26 @@ app.use(function (request, response, next) {
 
 app.use(function (error, request, response, next) {
 
+  const model = {}
+
   console.log(error)
-  if (err.errorExist(error)) {
+  if (err.errorNotExist(error)) {
     error = err.err.INTERNAL_SERVER_ERROR
   }
-
-  const model = response.model
-  const message = error
 
   const code = err.getErrCode(error)
 
   response.status(code)
 
-  if (code == 401) {
-    inputErrors = []
+
+  if (code === 401) {
+    const inputErrors = []
     model.inputErrors = inputErrors.concat(error)
     response.render("signin.hbs", model)
 
   } else {
     model.code = code
-    model.error = message
+    model.error = error
     response.render('error.hbs', model)
   }
 

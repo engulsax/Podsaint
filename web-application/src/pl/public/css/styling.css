@@ -116,10 +116,17 @@ footer{
     margin-top: 5rem;
 }
 
+ul.errorInput{
+    background-color: rgba(245, 245, 245, 0.1);
+    border-radius: 20px;
+}
+
 li.errorInput, .errorInput{
- color: rgb(211, 85, 85);
+font-family: 'Open Sans', sans-serif;
+ color: rgb(201, 69, 69);  
  margin: 10px; 
  font-weight: 600;
+ text-align: center;
 }
 
 /*-------------------- STYLING --------------------*/
@@ -936,10 +943,20 @@ form.delete button, a.edit-review{
     margin-top: -20px;
 }
 
+
 i.fa.fa-remove{
     font-size:24px;
-    color: rgb(211, 85, 85);
+    color: rgb(171, 24, 24);  
 }
+
+button[type=submit]>i.fa.fa-remove{
+    border: transparent;
+    box-shadow: none;
+    outline: none;
+    outline-style: none;
+    border-style: none;
+}
+
 
 i.fa.fa-edit{
     font-size:22px;

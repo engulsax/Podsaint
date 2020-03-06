@@ -46,7 +46,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
                 next()
                 return
             } else {
-                if (err.errorExist(error)) {
+                if (err.errorNotExist(error)) {
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 next(error)
@@ -69,24 +69,22 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             model.reviews = reviews
             model.podcastsInSameCategory = podcastsInSameCategory.results
 
-            response.render("podcast.hbs", { model })
+            response.render("podcast.hbs", model )
         } catch (error) {
             console.log(error)
             next(error)
         }
     })
 
-    router.get('/:id/write-review', function (request, response, error) {
+    router.get('/:id/write-review', function (request, response, next) {
+
+        const model = response.model
 
         try {
             if (request.session.key) {
-
-                (async function () {
-                    const model = response.model
-                    response.render("write-review.hbs", { model })
-                })()
+                response.render("write-review.hbs", model )
             } else {
-                response.render("signin.hbs")
+                throw err.err.AUTH_USER_ERROR
             }
         } catch (error) {
             console.log(error)
@@ -104,7 +102,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             model.reviews = reviews.result
             model.amount = reviews.amount
 
-            response.render("all-reviews.hbs", { model })
+            response.render("all-reviews.hbs",  model )
         } catch (error) {
             console.log(error)
             next(error)
@@ -112,8 +110,10 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
     })
 
-
+    //THIS NEED FIXING, ERROR HANDLING IS HORRENDOUS
     router.post('/:id/write-review', async function (request, response, next) {
+
+        const model = response.model
 
         const collectionId = request.params.id
         const collectionName = request.body.collectionName
@@ -132,19 +132,23 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
                 overallRating, reviewText, request.session.key
             )
 
-            if (err) {
-                const model = response.model
-                model.text = reviewText
-                model.err = err
-                console.log(model)
-                response.render("write-review.hbs", { model })
-            } else {
-                response.redirect("/podcast/" + collectionId)
-            }
+            response.redirect("/podcast/" + collectionId)
 
         } catch (error) {
             console.log(error)
-            next(error)
+            if (err.errorNotExist(error)) {
+                error = err.err.INTERNAL_SERVER_ERROR
+                next(error)
+                return
+            }
+            if (error === err.err.AUTH_USER_ERROR) {
+                next(error)
+                return
+            }
+            model.text = reviewText
+            inputErrors = []
+            model.inputErrors = inputErrors.concat(error)
+            response.render("write-review.hbs",  model )
         }
     })
 
@@ -182,7 +186,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             response.redirect("/podcast/" + collectionId)
         } catch (error) {
             console.log(error)
-            throw (error)
+            next(error)
         }
     })
 
@@ -194,7 +198,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
             const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn.user)
             model.userPlaylists = userPlaylists
-            response.render("add-to-playlist.hbs", { model })
+            response.render("add-to-playlist.hbs",  model )
 
             /*(async function(){
                 const model = response.model.information[0]
@@ -206,7 +210,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
         } catch (error) {
             console.log(error)
-            throw (error)
+            next(error)
         }
     })
 

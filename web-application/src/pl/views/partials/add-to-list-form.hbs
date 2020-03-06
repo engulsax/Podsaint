@@ -1,8 +1,8 @@
-<form action="/podcast/{{model.collectionId}}/add-to-playlist" method="POST">
+<form action="/podcast/{{collectionId}}/add-to-playlist" method="POST">
     <h2>Add to list</h2>
     <label for="list">Choose a playlist:</label>
     <select class= search id="podcast-lists" name="playlist">
-        {{#each model.userPlaylists}}
+        {{#each userPlaylists}}
             <option value="{{name}}">{{name}}</option>
         {{/each}}
     </select>

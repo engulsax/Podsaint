@@ -17,7 +17,11 @@ const errors = {
     EMAIL_MATCH_ERROR: "The emails doesn't match.",
     USERNAME_LENGTH_ERROR: "Username is too long.",
     USERNAME_UNDEFINED_ERROR: "Please enter a username.",
-    LOGIN_ERROR: "Username or password is not correct."
+    LOGIN_ERROR: "Username or password is not correct.",
+    INVALID_OVERALL_RATING: "Invalid overall rating.",
+    INVALID_TONE_RATING: "Invalid tone rating",
+    INVALID_TOPIC_RATING: "Invalid topic rating",
+    INVALID_PRODUCTION_RATING: "Invalid production rating"
 }
 
 function getErrorStatusCode(error) {
@@ -32,25 +36,25 @@ function getErrorStatusCode(error) {
         case errors['CATEGORY_FETCH_ERROR']:
             return 404
         default:
-            return -1
+            return 500
     }
 }
 
-function errorExist(errs){
+function errorNotExist(errs){
     if(Array.isArray(errs)){
         for(err of errs){
-            if(Object.keys(errors).includes(err)){
-                return true
+            if(Object.values(errors).includes(err)){
+                return false
             }
         }
     } else {
-        if(Object.keys(errors).includes(errs)){
-            return true
+        if(Object.values(errors).includes(errs)){
+            return false
         }
     }
-    return false
+    return true
 }
 
-module.exports.errorExist = errorExist
+module.exports.errorNotExist = errorNotExist
 module.exports.err = errors
 module.exports.getErrCode = getErrorStatusCode

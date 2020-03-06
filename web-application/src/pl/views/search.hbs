@@ -1,15 +1,15 @@
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
-        <h1 class="head-text">{{model.category}}</h1>
-        {{>search-field}}
+        <h1 class="head-text">{{category}}</h1>
+        {{>search-itunes}}}
     </div>
 </div>
 <div class="grid-x">
     <section class="cell medium-8 medium-offset-2">
-        {{#if model.result}}
+        {{#if result}}
         <h1 class="head-text">Results</h1>
         <ul id="podcast-section">
-            {{#each model.result}}
+            {{#each result}}
             <li>
                 {{>podcast-figure}}
             </li>

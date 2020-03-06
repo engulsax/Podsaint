@@ -1,7 +1,7 @@
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
         <ul>
-            {{#each model.playlist}}
+            {{#each playlist}}
             <form action="/{{playlistName}}/remove-podcasts" method="POST">
                 <li>
                     <h2 class="sub-text">{{playlistName}}</h2>
@@ -30,7 +30,7 @@
 <div class="grid-x content">
     <div class="cell medium-8 medium-offset-2 center">
         <p>Remove Playlist. Warning this action cant be undone.</p>
-        {{#each model.playlist}}               
+        {{#each playlist}}               
         <form action="/{{playlistName}}/remove-playlist" method="POST">
             <input id="delete-playlist-btn" class="button podsaint-button" type="submit" value="Remove playlist">
         </form>

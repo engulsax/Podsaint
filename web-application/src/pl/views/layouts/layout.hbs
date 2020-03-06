@@ -63,7 +63,7 @@
             <div class="grid-x cell">
                 <nav id="menu" class="cell">
                     <ul class="cell">
-                        {{#if model.loggedIn}}
+                        {{#if loggedIn}}
                         <li>
                             <a href="/home">Home</a>
                         </li>
@@ -92,7 +92,7 @@
         <div class="grid-x">
             <div id="categories-content" class="cell">
                 <ul>
-                    {{#each model.categories}}
+                    {{#each categories}}
                     <li><a href="/category/{{id}}">{{category}}</a></li>
                     {{/each}}
                 </ul>

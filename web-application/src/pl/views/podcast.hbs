@@ -8,11 +8,11 @@
         
         <div class="grid-x">
             <div class="cell">
-                <a href="/podcast/{{model.collectionId}}/write-review" class="buttons">Write a review</a>
+                <a href="/podcast/{{collectionId}}/write-review" class="buttons">Write a review</a>
             </div>
         </div>
 
-        {{#if model.reviews}}
+        {{#if reviews}}
 
         <div class="grid-x">
             <div class="cell large-6 headers">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="grid-x">
-            {{#each model.reviews}}
+            {{#each reviews}}
             <div class="cell review">
                 {{>review}}
             </div>
@@ -30,7 +30,7 @@
 
         <div class="grid-x">
             <div class="cell large-12">
-                <a class="buttons" href="/podcast/{{model.collectionId}}/all-reviews">View more reviews</a>
+                <a class="buttons" href="/podcast/{{collectionId}}/all-reviews">View more reviews</a>
             </div>
         </div>
 
@@ -42,7 +42,7 @@
             </div>
             <section id="slideshow" class="cell small-12 center">
                 <ul id="podcast-section" class="slick">
-                    {{#each model.podcastsInSameCategory}}
+                    {{#each podcastsInSameCategory}}
                     <li>
                         {{>podcast-figure}}
                     </li>

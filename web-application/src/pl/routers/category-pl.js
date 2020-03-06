@@ -34,7 +34,7 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
             model.categoryLists = categoryLists
             model.subCategories = currentCategoryDetails.subCategories
 
-            response.render('category.hbs', { model })
+            response.render('category.hbs', model )
         } catch(error) {
             next(error)
         }

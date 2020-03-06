@@ -12,7 +12,6 @@
         <form action="" method="POST">
             <div id="information-holder">
 
-                {{#with model}}
                 {{#with information.[0]}}
                 <label for="podcastNameReview">
                     <h2>{{collectionName}}</h2>
@@ -25,7 +24,7 @@
                 {{/with}}
 
                 <ul>
-                    {{#each errors}}
+                    {{#each inputErrors}}
                     <li class="errorInput">{{this}}</li>
                     {{/each}}
                 </ul>
@@ -73,8 +72,6 @@
                     </div>
 
                 </div>
-
-                {{/with}}
 
             </div>
 

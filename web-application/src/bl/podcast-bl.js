@@ -2,7 +2,7 @@ const err = require('../errors/error')
 const axios = require("axios")
 const cheerio = require('cheerio')
 
-module.exports = function ({ podcastDAL, authBL }) {
+module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
 
     return {
         newPodcastReview: async function newPodcastReview(
@@ -17,48 +17,47 @@ module.exports = function ({ podcastDAL, authBL }) {
             reviewText,
             userLoginKey
         ) {
-
-            if (!authBL.isLoggedIn(userLoginKey)) {
-                console.log("error - newPodcastReview - podcast-bl.js")
-                throw err.err.AUTH_USER_ERROR
-            }
-
-            const errorMessages = reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality)
-            console.log(errorMessages)
-            if (errorMessages.length != 0) {
-                return errorMessages
-            }
-
-            let dramaRating = 0
-            let comedyRating = 0
-            if (toneRating === "comedy") {
-                comedyRating = 1
-            } else {
-                dramaRating = 1
-            }
-
             try {
 
-                return await podcastDAL.newPodcastReview(
-                    collectionId,
-                    reviewPoster,
-                    podCreators,
-                    collectionName,
-                    comedyRating,
-                    dramaRating,
-                    topicRelevence,
-                    productionQuality,
-                    overallRating,
-                    reviewText
-                )
+                if (authBL.isLoggedIn(userLoginKey)) {
+
+                    reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality)
+
+                    let dramaRating = 0
+                    let comedyRating = 0
+                    if (toneRating === "comedy") {
+                        comedyRating = 1
+                    } else {
+                        dramaRating = 1
+                    }
+
+                    return await podcastDAL.newPodcastReview(
+                        collectionId,
+                        reviewPoster,
+                        podCreators,
+                        collectionName,
+                        comedyRating,
+                        dramaRating,
+                        topicRelevence,
+                        productionQuality,
+                        overallRating,
+                        reviewText
+                    )
+                } else {
+                    console.log("error - newPodcastReview - podcast-bl.js")
+                    throw err.err.AUTH_USER_ERROR
+                }
 
             } catch (error) {
                 console.log(error)
-                throw err.err.INTERNAL_SERVER_ERROR
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
-        }, 
+        },
 
-        getReviewById : async function getReviewById(reviewId){
+        getReviewById: async function getReviewById(reviewId) {
 
             try {
                 const result = await podcastDAL.getReviewById(reviewId)
@@ -66,39 +65,61 @@ module.exports = function ({ podcastDAL, authBL }) {
 
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewbyid error")
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
 
         },
 
-        deleteReviewById: async function deleteReviewById(reviewId){
+        deleteReviewById: async function deleteReviewById(reviewId, userLoginKey) {
 
             try {
-                const result = await podcastDAL.getReviewById(reviewId)
-                
-                const collectionId = result[0].pod_id
-                const productionQuality = result[0].production_quality_rating
-                const topicRelevence = result[0].topic_relevence_rating
-                const comedyRating = result[0].comedy_rating
-                const dramaRating = result[0].drama_rating
-                const overallRating = result[0].overall_rating
 
-                return podcastDAL.deleteReviewById(reviewId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)                
+                if (authBL.isLoggedIn(userLoginKey)) {
+
+                    const result = await podcastDAL.getReviewById(reviewId)
+
+                    const collectionId = result[0].pod_id
+                    const productionQuality = result[0].production_quality_rating
+                    const topicRelevence = result[0].topic_relevence_rating
+                    const comedyRating = result[0].comedy_rating
+                    const dramaRating = result[0].drama_rating
+                    const overallRating = result[0].overall_rating
+
+                    return podcastDAL.deleteReviewById(
+                        reviewId, collectionId,
+                        productionQuality, topicRelevence,
+                        comedyRating, dramaRating, overallRating
+                    )
+                } else {
+                    throw err.err.AUTH_USER_ERROR
+                }
 
             } catch (error) {
                 console.log(error)
-                console.log("get all reviewsbypodcastid error")
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
-        updateReviewById: async function updateReviewById(reviewId, reviewText){
+        updateReviewById: async function updateReviewById(reviewId, reviewText, userLoginKey) {
 
             try {
-                return await podcastDAL.updateReviewById(reviewId, reviewText)
-
+                if (authBL.isLoggedIn(userLoginKey)) {
+                    return await podcastDAL.updateReviewById(reviewId, reviewText)
+                } else {
+                    throw err.err.AUTH_USER_ERROR
+                }
             } catch (error) {
-                console.log(error)
-                console.log("get all reviewsbypodcastid error")
+                onsole.log(error)
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
@@ -118,16 +139,23 @@ module.exports = function ({ podcastDAL, authBL }) {
             }
         },
 
-        getAllReviewsByUser: async function getAllReviewsByUser(userId) {
+        getAllReviewsByUser: async function getAllReviewsByUser(userLoginKey) {
 
             try {
-                if (await podcastDAL.userHasReviews(userId)) {
-                    return await podcastDAL.getAllReviewsByUser(userId)
+                if (authBL.isLoggedIn(userLoginKey)) {
+                    if (await podcastDAL.userHasReviews(userLoginKey.user)) {
+                        return await podcastDAL.getAllReviewsByUser(userLoginKey.user)
+                    }
+                    return []
+                } else {
+                    throw err.err.AUTH_USER_ERROR
                 }
-                return []
             } catch (error) {
                 console.log(error)
-                throw err.err.INTERNAL_SERVER_ERROR
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
@@ -151,13 +179,22 @@ module.exports = function ({ podcastDAL, authBL }) {
 
             const numberOfReviews = 3
             try {
-                if (await podcastDAL.userHasReviews(userLoginKey.user)) {
-                    return await podcastDAL.getNReviewsByUser(userLoginKey.user, numberOfReviews)
+                if (authBL.isLoggedIn(userLoginKey)) {
+                    if (await podcastDAL.userHasReviews(userLoginKey.user)) {
+                        let reviews = await podcastDAL.getNReviewsByUser(userLoginKey.user, numberOfReviews)
+                        reviews = await addPodcastInfoToReview(reviews)
+                        return reviews
+                    }
+                    return []
+                } else {
+                    throw err.err.AUTH_USER_ERROR
                 }
-                return []
             } catch (error) {
                 console.log(error)
-                throw err.err.INTERNAL_SERVER_ERROR
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
@@ -193,30 +230,41 @@ module.exports = function ({ podcastDAL, authBL }) {
             }
         },
 
-        getNReviewsByUser: async function getNReviewsByUser(user, value) {
+        getNReviewsByUser: async function getNReviewsByUser(userLoginKey, value) {
 
             const postPerPage = 3
             try {
-                if (value == "all") {
-                    if (await podcastDAL.userHasReviews(user)) {
-                        return { result: await podcastDAL.getAllReviewsByUser(user), amount: postPerPage }
-                    }
-                    return []
-                } else {
-                    if (value === undefined) {
-                        value = postPerPage
+                if (authBL.isLoggedIn(userLoginKey)) {
+                    if (value == "all") {
+                        if (await podcastDAL.userHasReviews(user)) {
+                            let reviews = await podcastDAL.getAllReviewsByUser(userLoginKey.user)
+                            reviews = await addPodcastInfoToReview(reviews)
+                            return { result: reviews, amount: postPerPage }
+                        }
+                        return []
                     } else {
-                        value = parseInt(value)
-                        value += postPerPage
+                        if (value === undefined) {
+                            value = postPerPage
+                        } else {
+                            value = parseInt(value)
+                            value += postPerPage
+                        }
+                        if (await podcastDAL.userHasReviews(user)) {
+                            let reviews = await podcastDAL.getNReviewsByUser(userLoginKey.user, value)
+                            reviews = await addPodcastInfoToReview(reviews)
+                            return { result: reviews, amount: value }
+                        }
+                        return []
                     }
-                    if (await podcastDAL.userHasReviews(user)) {
-                        return { result: await podcastDAL.getNReviewsByUser(user, value), amount: value }
-                    }
-                    return []
+                } else {
+                    throw err.err.AUTH_USER_ERROR
                 }
             } catch (error) {
                 console.log(error)
-                throw err.err.INTERNAL_SERVER_ERROR
+                if (err.errorNotExist(error)) {
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 
@@ -251,6 +299,21 @@ module.exports = function ({ podcastDAL, authBL }) {
             return fetchPodInfo(url)
         }
     }
+
+
+    async function addPodcastInfoToReview(review){
+        try{
+            const podInfo = await searchItunesBL.searchPodcast(review[0].pod_id)
+            console.log(JSON.stringify(podInfo))
+            review[0].posterUrl = podInfo.results[0].artworkUrl600
+            console.log("REVIEW ---- +" + JSON.stringify(review))
+            return review
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
     function addMyReviewsFlag(userLoginKey, reviews) {
 
         if (authBL.isLoggedIn(userLoginKey)) {
@@ -263,26 +326,29 @@ module.exports = function ({ podcastDAL, authBL }) {
         return reviews
     }
 
+
     function reviewInputUndefinedMessage(overallRating, topicRelevence, toneRating, productionQuality) {
-        errorMessages = []
+        const errorMessages = []
 
         if (overallRating <= 0 || overallRating > 5) {
-            errorMessages.push("invalid overall rating")
+            errorMessages.push(err.err.INVALID_OVERALL_RATING)
         }
 
         if (toneRating !== "comedy" && toneRating !== "drama") {
-            errorMessages.push("invalid tone rating")
+            errorMessages.push(err.err.INVALID_TONE_RATING)
         }
 
         if (topicRelevence <= 0 || topicRelevence > 5) {
-            errorMessages.push("invalid topic relevance rating")
+            errorMessages.push(err.err.INVALID_TOPIC_RATING)
         }
 
         if (productionQuality <= 0 || productionQuality > 5) {
-            errorMessages.push("invalid production quality rating")
+            errorMessages.push(err.err.INVALID_PRODUCTION_RATING)
         }
 
-        return errorMessages
+        if (errorMessages.length != 0) {
+            throw errorMessages
+        }
     }
 
     async function fetchPodInfo(url) {

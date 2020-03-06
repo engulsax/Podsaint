@@ -1,11 +1,14 @@
 <div class="grid-x content">
     <div class="cell small-10 large-8 medium-10 large-offset-2 medium-offset-1 small-offset-1">
+        {{>podcast-information}}
+    </div>
+    <div class="cell small-10 large-8 medium-10 large-offset-2 medium-offset-1 small-offset-1">
         <div class="cell">
-            <form action="/my-review/edit-review/{{model.review.[0].id}}" method="POST">
+            <form action="/my-review/edit-review/{{review.[0].id}}" method="POST">
                 <label>
                     Update Review
                     <textarea rows="5" cols="2" placeholder="Write your review here..."
-                        name="reviewText">{{model.review.[0].review_text}}</textarea>
+                        name="reviewText">{{review.[0].review_text}}</textarea>
                 </label>
                 <div>
                     <input type="submit" class="podsaint-button button" value="Submit">

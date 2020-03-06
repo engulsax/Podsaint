@@ -26,7 +26,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorExist(error)){
+                if(err.errorNotExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -47,7 +47,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorExist(error)){
+                if(err.errorNotExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -65,7 +65,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorExist(error)){
+                if(err.errorNotExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -81,7 +81,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorExist(error)){
+                if(err.errorNotExist(error)){
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error

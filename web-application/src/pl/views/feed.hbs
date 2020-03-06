@@ -15,8 +15,8 @@
             <div class="grid-x">
                 <div class="cell">
                     <h1>My Podcasts</h1>
-                    {{#if model.playlists}}
-                    {{#each model.playlists}}
+                    {{#if playlists}}
+                    {{#each playlists}}
                     <li>
                         <div class="grid-x">
                             <div class="cell small-11">
@@ -47,7 +47,7 @@
         <section id="your-reviews" class="cell">
             <h1>My Reviews</h1>
             <div class="grid-x">
-                {{#each model.reviews}}
+                {{#each reviews}}
                 <div class="cell review">
                     {{>my-review}}
                 </div>

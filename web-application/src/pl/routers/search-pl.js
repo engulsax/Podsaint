@@ -29,7 +29,8 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
                 id: ""
             }
 
-            response.render('search.hbs', { model })
+            response.render('search.hbs',  model )
+            
         })()
     })
 
@@ -51,7 +52,7 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
                     result: searchResponse.results
                 }
 
-            response.render('search.hbs', { model })
+            response.render('search.hbs', model )
         })()
     })
 
