@@ -2,13 +2,13 @@ const express = require('express')
 const err = require('../../errors/error')
 const router = express.Router()
 
-
 module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, podcastBL }) {
 
     router.use(async function (request, response, next) {
         response.model = {
             categories: await categoryBL.getCategoriesDetails(),
-            loggedIn: (request.session.key)
+            loggedIn: (request.session.key),
+            csrfToken: request.csrfToken()
         }
         next()
     })

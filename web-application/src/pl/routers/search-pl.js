@@ -6,7 +6,8 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
     router.use(async function (request, response, next) {
         response.model = {
             categories: await categoryBL.getCategoriesDetails(),
-            loggedIn: (request.session.key)
+            loggedIn: (request.session.key),
+            csrfToken: request.csrfToken()
         }
         next()
     })

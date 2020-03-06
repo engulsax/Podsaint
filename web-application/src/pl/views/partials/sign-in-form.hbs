@@ -1,4 +1,5 @@
 <form action="/signin" method="POST">
+   <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <label>
         Username
         <input id="signin-user" type="text" name="username">

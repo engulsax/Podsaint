@@ -3,6 +3,7 @@
         <div class="review-forms">
             <a class="edit-review" href="my-review/edit-review/{{id}}"><i class="fa fa-edit"></i></a>
             <form method="POST" class="delete" action="my-review/delete-review/{{id}}">
+               <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit"><i class="fa fa-remove"></i></button>
             </form>
         </div>

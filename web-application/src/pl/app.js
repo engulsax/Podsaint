@@ -1,29 +1,35 @@
+const cookieParser = require('cookie-parser')
+const csrf = require('csurf')
 const express = require('express')
 const bodyParser = require('body-parser')
 const expressHandlebars = require('express-handlebars')
-const svgstore = require('svgstore')
-const fs = require('fs');
+//const svgstore = require('svgstore')
+//const fs = require('fs');
 const redis = require('redis')
 const session = require('express-session')
 const container = require('../main.js')
 const err = require('../errors/error')
 
 const app = express()
+
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + "/public"))
+app.use(cookieParser())
+app.use(csrf({ cookie: true }))
 app.set("views", "src/pl/views")
 
 
 /*TODO REMOVE SVG FILES, USE PNG INSTEAD, WILL WORK THE SAME FOR ME*/
 /*LOADING SVG FILES*/
+/*
 const sprites = svgstore([{ cleanDefs: 'true' }, { cleanSymbols: 'true' }])
   .add('funny', fs.readFileSync(__dirname + '/public/sprites/funny.svg', 'utf8'))
   .add('serious', fs.readFileSync(__dirname + '/public/sprites/serious.svg', 'utf8'))
 
 fs.writeFileSync(__dirname + '/public/sprites/sprites.svg', sprites);
+*/
 
-
-//TODO put helper in own file
 app.engine('hbs', expressHandlebars({
   extname: ".hbs",
   defaultLayout: "layout",

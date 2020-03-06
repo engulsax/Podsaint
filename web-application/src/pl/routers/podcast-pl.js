@@ -8,7 +8,8 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
         response.model = {
             categories: await categoryBL.getCategoriesDetails(),
-            loggedIn: (request.session.key)
+            loggedIn: (request.session.key),
+            csrfToken: request.csrfToken()
         }
         next()
     })

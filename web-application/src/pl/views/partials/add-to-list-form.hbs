@@ -1,4 +1,5 @@
 <form action="/podcast/{{collectionId}}/add-to-playlist" method="POST">
+   <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <h2>Add to list</h2>
     <label for="list">Choose a playlist:</label>
     <select class= search id="podcast-lists" name="playlist">

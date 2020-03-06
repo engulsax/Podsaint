@@ -12,6 +12,7 @@
         <section class="content">
             <h2>Update your email address</h2>
             <form class="margin-top" action="/account-settings/update-email" method="POST">
+               <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <label>New email
                     <input class="search" id="new-email" type="email" name="newEmail">
                 </label>
@@ -26,6 +27,7 @@
         <section class="content">
             <h2>Update your password</h2>
             <form class="margin-top" action="/account-settings/update-passsword" method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <label>New password
                     <input class="search" id="new-password" type="password" name="newPassword">
                 </label>
@@ -41,6 +43,7 @@
             <h2>Delete Account</h2>
             <p>Warning! This action cant be undone.</p>
             <form class="margin-top" action="/account-settings/delete-account" method="POST">
+               <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <input id="delete-account-btn" class="button podsaint-button" type="submit" value="DELETE ACCOUNT">
             </form>
         </section>
