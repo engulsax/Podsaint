@@ -2013,9 +2013,6 @@ input.tone:checked ~ label.tone svg {
     filter: brightness(2.5) sepia(1.2) hue-rotate(7deg) saturate(5);
   }
 
-
-
-
   #delete-playlist-btn, #delete-account-btn{
     background-color: rgb(171, 24, 24);   
   }
