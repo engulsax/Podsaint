@@ -1,5 +1,6 @@
 
 const pgdb = require('./pgdb')
+const err = require('../errors/error')
 
 module.exports = function({}){
 	
@@ -16,8 +17,14 @@ module.exports = function({}){
                 })
 
             } catch (error) {
-                console.log("----ERRRRROOORRRR PLAYLIST NUMBAH ONE---- " + JSON.stringify(error))
-                throw error
+                
+                console.log(error)
+                if (error.errors[0].path == 'unique violation'){
+                    throw err.err.DUP_PODCAST_PLAYLIST_ERROR
+
+                } else{
+                    throw err.err.INTERNAL_SERVER_ERROR
+                }
             }
         },
 
@@ -32,8 +39,8 @@ module.exports = function({}){
                     })
 
             } catch (error) {
-                console.log("----ERRRRROOORRRR PLAYLIST NUMBAH TWO---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -53,8 +60,8 @@ module.exports = function({}){
                 return playlists
 
             } catch (error) {
-                console.log("----ERRRRROOORRRR PLAYLIST NUMBAH THREE---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -73,8 +80,8 @@ module.exports = function({}){
                 return playlists
 
             }catch(error){
-                console.log("----ERRRRROOORRRR PLAYLIST NUMBAH FOUR---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
     
@@ -89,8 +96,8 @@ module.exports = function({}){
                 })
             
             }catch(error){
-                console.log("----ERRRRROOORRRR PLAYLIST NUMBAH FIVE---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
@@ -106,8 +113,8 @@ module.exports = function({}){
                 })
          
             }catch(error){
-                console.log("----ERRRRROOORRRR PLAYLIST NUMBAH SIX---- " + JSON.stringify(error))
-                throw error
+                console.log(error)
+                throw err.err.INTERNAL_SERVER_ERROR
             }
         }
     }

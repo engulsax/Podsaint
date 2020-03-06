@@ -75,7 +75,9 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
 
             try {
                 if (authBL.isLoggedIn(userloginKey)) {
-                    return await playlistDAL.getAllPlaylistsByUser(userloginKey.user)
+
+                    const result = await playlistDAL.getAllPlaylistsByUser(userloginKey.user)
+                    return result
                 } else {
                     throw err.err.AUTH_USER_ERROR
                 }

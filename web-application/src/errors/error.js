@@ -19,9 +19,10 @@ const errors = {
     USERNAME_UNDEFINED_ERROR: "Please enter a username.",
     LOGIN_ERROR: "Username or password is not correct.",
     INVALID_OVERALL_RATING: "Invalid overall rating.",
-    INVALID_TONE_RATING: "Invalid tone rating",
-    INVALID_TOPIC_RATING: "Invalid topic rating",
-    INVALID_PRODUCTION_RATING: "Invalid production rating"
+    INVALID_TONE_RATING: "Invalid tone rating.",
+    INVALID_TOPIC_RATING: "Invalid topic rating.",
+    INVALID_PRODUCTION_RATING: "Invalid production rating.",
+    DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist."
 }
 
 function getErrorStatusCode(error) {

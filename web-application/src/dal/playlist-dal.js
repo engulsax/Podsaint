@@ -17,8 +17,13 @@ module.exports = function(){
                 return response
 
             } catch (error) {
-                console.log(error)
-                throw err.err.INTERNAL_SERVER_ERROR
+                
+                if (error.code === 'ER_DUP_ENTRY' && error.sqlMessage.includes('playlist_dup')){
+                    throw err.err.DUP_PODCAST_PLAYLIST_ERROR
+
+                } else {
+                    throw err.err.INTERNAL_SERVER_ERROR
+                }
             }
         },
 
@@ -44,8 +49,7 @@ module.exports = function(){
            
             try {
                 const result = await db(query, values)
-                console.log("RESULT FROM GET ALL PLAYLISTS BY USER")
-                console.log(result)
+                return result
 
             } catch (error) {
                 console.log(error)

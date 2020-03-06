@@ -122,7 +122,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
             await accountBL.updateEmail(model.loggedIn.user, newEmail, confirmedEmail)
             response.redirect('/home')
 
-        } catch (errors) {
+        } catch (error) {
             console.log(error)
             if (err.errorNotExist(error)) {
                 error = err.err.INTERNAL_SERVER_ERROR

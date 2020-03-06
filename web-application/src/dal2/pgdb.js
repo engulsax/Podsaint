@@ -8,19 +8,22 @@ const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
   exports.users = sequelize.define('users', {
     username:{
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false,
         primaryKey: true,
-        autoIncrement:false
+        autoIncrement: false
     },
     email:{
-        type:Sequelize.STRING,
-        allowNull:false,
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
         primaryKey: false
     },
     id:{
         allowNull: false,
         type: Sequelize.INTEGER,
         primaryKey: false,
+        unique: true,
         autoIncrement: true
     },
     password:{
