@@ -22,7 +22,7 @@ module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }
             model.reviews = reviews.result
             model.amount = reviews.amount
 
-            response.render("all-reviews.hbs", model )
+            response.render("all-my-reviews.hbs", model )
         } catch (error) {
             console.log(error)
             next(error)

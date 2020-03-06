@@ -1,0 +1,41 @@
+<h1>My Reviews</h1>
+<div class="grid-x">
+    {{#each reviews}}
+    <div class="cell review">
+        <div class="reviews">
+            <div class="grid-x cell">
+                <div class="review-forms">
+                    <a class="edit-review" href="my-review/edit-review/{{id}}"><i class="fa fa-edit"></i></a>
+                    <form method="POST" class="delete" action="my-review/delete-review/{{id}}">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <button type="submit"><i class="fa fa-remove"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="block">
+                <p id="name-text" class="inline">{{review_poster}}</p>
+                <p class="datetime right no-margin inline">{{post_date}}</p>
+            </div>
+
+            <div class="grid-x fluid">
+
+                <div class="grid-y">
+                    <figure id="podcast-holder">
+                        <a href="../../podcast/{{pod_id}}"><img id="podcast-image" class="podcast-size-210"
+                                src="{{posterUrl}}"></a>
+                    </figure>
+                </div>
+
+                <div class="cell small-12 large-auto">
+                    {{>review-box}}
+                </div>
+            </div>
+            <section class="review-box">
+                <p>{{review_text}}</p>
+            </section>
+        </div>
+    </div>
+    {{/each}}
+
+
+</div>

@@ -236,7 +236,7 @@ module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
             try {
                 if (authBL.isLoggedIn(userLoginKey)) {
                     if (value == "all") {
-                        if (await podcastDAL.userHasReviews(user)) {
+                        if (await podcastDAL.userHasReviews(userLoginKey.user)) {
                             let reviews = await podcastDAL.getAllReviewsByUser(userLoginKey.user)
                             reviews = await addPodcastInfoToReview(reviews)
                             return { result: reviews, amount: postPerPage }
@@ -249,7 +249,7 @@ module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
                             value = parseInt(value)
                             value += postPerPage
                         }
-                        if (await podcastDAL.userHasReviews(user)) {
+                        if (await podcastDAL.userHasReviews(userLoginKey.user)) {
                             let reviews = await podcastDAL.getNReviewsByUser(userLoginKey.user, value)
                             reviews = await addPodcastInfoToReview(reviews)
                             return { result: reviews, amount: value }

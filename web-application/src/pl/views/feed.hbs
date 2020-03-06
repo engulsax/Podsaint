@@ -45,20 +45,11 @@
         </section>
 
         <section id="your-reviews" class="cell">
-            <h1>My Reviews</h1>
+            {{>my-reviews}}
             <div class="grid-x">
-                {{#each reviews}}
-                <div class="cell review">
-                    {{>my-review}}
+                <div class="cell large-12">
+                    <a class="buttons" href="my-review/all">View more reviews</a>
                 </div>
-                {{/each}}
-
-                <div class="grid-x">
-                    <div class="cell large-12">
-                        <a class="buttons" href="my-review/all">View more reviews</a>
-                    </div>
-                </div>
-
             </div>
         </section>
 
