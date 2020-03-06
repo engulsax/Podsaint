@@ -40,6 +40,7 @@ CREATE TABLE podcastlists (
     name VARCHAR(30) NOT NULL,
     pod_id VARCHAR(50),
     CONSTRAINT fk_list_owner FOREIGN KEY (list_owner) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_podcastid FOREIGN KEY (pod_id) REFERENCES podcasts(pod_id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_podcastid FOREIGN KEY (pod_id) REFERENCES podcasts(pod_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE KEY playlist_dup (list_owner, pod_id, name)
 );
 

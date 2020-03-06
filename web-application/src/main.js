@@ -18,7 +18,6 @@ const playlistBLFun = require('../src/bl/playlist-bl')
 /*Postgres-dal with sequelize*/
 /*
 const playlistDALFun = require('../src/dal2/playlist-dal2') 
-const searchPodsaintDALFun = require('../src/dal2/search-podsaint-dal2')
 const podcastDALFun = require('../src/dal2/podcast-dal2')
 const accountDALFun = require('../src/dal2/account-dal2')
 */

@@ -17,7 +17,8 @@ const errors = {
     EMAIL_MATCH_ERROR: "The emails doesn't match.",
     USERNAME_LENGTH_ERROR: "Username is too long.",
     USERNAME_UNDEFINED_ERROR: "Please enter a username.",
-    LOGIN_ERROR: "Username or password is not correct."
+    LOGIN_ERROR: "Username or password is not correct.",
+    DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist"
 }
 
 function getErrorStatusCode(error) {

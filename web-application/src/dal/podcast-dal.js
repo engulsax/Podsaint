@@ -92,10 +92,10 @@ module.exports = function () {
 
 			try {
 				return await db(query, values)
-
+		
 			} catch (error) {
-				console.log("error in getreviewsbyid")
 				console.log(error)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -109,10 +109,9 @@ module.exports = function () {
 				return await db(query, values)
 
 			} catch (error) {
-				console.log("error in getreviewsbyid")
 				console.log(error)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
-
 		},
 
 		deleteReviewById: async function deleteReviewById(reviewId, collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
@@ -126,7 +125,8 @@ module.exports = function () {
 				return await db(query, values)
 
 			} catch (error) {
-
+				console.log(error)
+				throw err.err.INTERNAL_SERVER_ERROR
 			}
 		},
 
@@ -244,7 +244,6 @@ module.exports = function () {
 				console.log(error)
 				throw err.err.INTERNAL_SERVER_ERROR
 			}
-
 		},
 
 		podcastHasReviews: async function podcastHasReviews(collectionId) {
@@ -304,7 +303,6 @@ module.exports = function () {
 			console.log(error)
 			throw err.err.INTERNAL_SERVER_ERROR
 		}
-
 	}
 	async function removeRatingFromPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating) {
 
@@ -327,7 +325,6 @@ module.exports = function () {
 			console.log(error)
 			throw err.err.INTERNAL_SERVER_ERROR
 		}
-
 	}
 
 	async function getNumberOfReviewsById(collectionId) {
