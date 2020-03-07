@@ -5,12 +5,7 @@ const router = express.Router()
 module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }) {
 
     router.use(async function (request, response, next) {
-
-        response.model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            loggedIn: (request.session.key),
-            csrfToken: request.csrfToken()
-        }
+        response.model.categories = await categoryBL.getCategoriesDetails()
         next()
     })
 
@@ -111,7 +106,6 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
 
     })
 
-    //THIS NEED FIXING, ERROR HANDLING IS HORRENDOUS
     router.post('/:id/write-review', async function (request, response, next) {
 
         const model = response.model
@@ -127,7 +121,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
         const reviewPoster = request.session.key.user
 
         try {
-            const err = await podcastBL.newPodcastReview(
+            await podcastBL.newPodcastReview(
                 collectionId, reviewPoster, podCreator, collectionName,
                 toneRating, topicRelevenceRating, productionQualty,
                 overallRating, reviewText, request.session.key

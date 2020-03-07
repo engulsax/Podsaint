@@ -3,6 +3,7 @@
         <ul>
             {{#each playlist}}
             <form action="/{{playlistName}}/remove-podcasts" method="POST">
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                 <li>
                     <h2 class="sub-text">{{playlistName}}</h2>
                     <section id="" class="cell small-8 center">´
@@ -20,7 +21,7 @@
                     </section>
                 </li>
                 <div class="center">
-                    <input class="button podsaint-button margin-top"type="submit" value="Remove selected podcasts">
+                    <input class="button podsaint-button margin-top" type="submit" value="Remove selected podcasts">
                 </div>
             </form>
             {{/each}}
@@ -30,8 +31,9 @@
 <div class="grid-x content">
     <div class="cell medium-8 medium-offset-2 center">
         <p>Remove Playlist. Warning this action cant be undone.</p>
-        {{#each playlist}}               
+        {{#each playlist}}
         <form action="/{{playlistName}}/remove-playlist" method="POST">
+            <input type="hidden" name="_csrf" value="{{../csrfToken}}">
             <input id="delete-playlist-btn" class="button podsaint-button" type="submit" value="Remove playlist">
         </form>
         {{/each}}

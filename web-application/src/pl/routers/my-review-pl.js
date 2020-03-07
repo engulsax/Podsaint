@@ -5,11 +5,7 @@ const router = express.Router()
 module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }) {
 
     router.use(async function (request, response, next) {
-        response.model = {
-            categories: await categoryBL.getCategoriesDetails(),
-            loggedIn: (request.session.key),
-            csrfToken: request.csrfToken()
-        }
+        response.model.categories = await categoryBL.getCategoriesDetails()
         next()
     })
 
@@ -22,7 +18,7 @@ module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }
             model.reviews = reviews.result
             model.amount = reviews.amount
 
-            response.render("all-my-reviews.hbs", model )
+            response.render("all-my-reviews.hbs", model)
         } catch (error) {
             console.log(error)
             next(error)
@@ -49,7 +45,7 @@ module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }
             model.information = information
             model.description = await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
 
-            response.render("editreview.hbs", model )
+            response.render("editreview.hbs", model)
 
         } catch (error) {
             console.log(error)
@@ -69,7 +65,6 @@ module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }
             console.log(error)
             next(error)
         }
-
     })
 
     router.post('/delete-review/:id', async function (request, response, next) {
@@ -83,7 +78,6 @@ module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }
             next(error)
         }
     })
-
     return router
 
 }

@@ -12,11 +12,30 @@ const err = require('../errors/error')
 
 const app = express()
 
+const redisClient = redis.createClient(6379, 'podsaint_redis_1')
+const RedisStore = require('connect-redis')(session)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + "/public"))
 app.use(cookieParser())
 app.use(csrf({ cookie: true }))
+
+app.use(session({
+  secret: "ldasdgewbodkodkfkrsldfsbgtdhhtyu",
+  store: new RedisStore({ client: redisClient }),
+  saveUninitialized: false,
+  resave: false
+}))
+
+app.use(async function (request, response, next) {
+  response.model = {
+      loggedIn: (request.session.key),
+      csrfToken: request.csrfToken()
+  }
+  next()
+})
+
+
 app.set("views", "src/pl/views")
 
 
@@ -50,15 +69,8 @@ app.engine('hbs', expressHandlebars({
   }
 }))
 
-let redisClient = redis.createClient(6379, 'podsaint_redis_1')
-let RedisStore = require('connect-redis')(session)
 
-app.use(session({
-  secret: "ldasdgewbodkodkfkrsldfsbgtdhhtyu",
-  store: new RedisStore({ client: redisClient }),
-  saveUninitialized: false,
-  resave: false
-}))
+
 
 /*
 app.use(function(request, response, next){
@@ -77,13 +89,6 @@ app.use("/podcast", container.resolve('podcastPL'))
 app.use("/my-review", container.resolve('myReviewPL'))
 
 /*YOU DO NOT GET THE CATEGORIES HERE :( */
-app.use(async function (request, response, next) {
-  response.model = {
-    //categories: await categoryBL.getCategoriesDetails(),
-    loggedIn: (request.session.key)
-  }
-  next()
-})
 
 //ERROR HANDLING
 app.use(function (request, response, next) {
