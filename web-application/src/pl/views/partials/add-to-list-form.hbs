@@ -4,10 +4,8 @@
     <label for="list">Choose a playlist:</label>
     <select class= search id="podcast-lists" name="playlist">
         {{#each userPlaylists}}
-            <option value="{{name}}">{{name}}</option>
+            <option value="{{id}}">{{playlist_name}}</option>
         {{/each}}
     </select>
-    <input class="button podsaint-button" type="submit" value="ADD">
+    <input id="add-to-list-btn" class="button podsaint-button" type="submit" value="ADD">
 </form>
-<a id="create-new-list-link">Or create a new list</a>
-{{>create-new-list-form}}

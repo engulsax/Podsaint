@@ -26,6 +26,7 @@
                                 <a class="no-margin right" href="/{{playlistName}}/edit"><i class="fa fa-edit"></i></a>
                             </div>
                         </div>
+                        {{#if podcastInfo.[0]}}
                         <section id="slideshow" class="cell small-8 center">
                             <ul id="podcast-section" class="slick">
                                 {{#each podcastInfo}}
@@ -35,6 +36,9 @@
                                 {{/each}}
                             </ul>
                         </section>
+                        {{else}}
+                        <p>Empty playlist</p>
+                        {{/if}}
                     </li>
                     {{/each}}
                     {{else}}

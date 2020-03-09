@@ -1819,7 +1819,7 @@ legend{
     width: 50%;
 }
 #create-new-list{
-    display: none;
+    display: block;
 }
 
 .list-pop-up-button{

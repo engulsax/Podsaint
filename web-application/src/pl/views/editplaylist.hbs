@@ -1,14 +1,23 @@
 <div class="grid-x">
     <div class="cell medium-8 medium-offset-2">
+
+        {{#each inputErrors}}
+        <li class="errorInput">{{this}}</li>
+        {{/each}}
+
+        <h2 class="sub-text">{{playlist.[0].playlistName}}</h2>
+
+        {{#if playlist.[0].podcastInfo}}
         <ul>
-            {{#each playlist}}
-            <form action="/{{playlistName}}/remove-podcasts" method="POST">
-                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+            <form action="/{{playlist.[0].playlistName}}/remove-podcasts" method="POST">
+                <!--<input type="hidden" name="_csrf" value="{{../csrfToken}}">-->
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                
                 <li>
-                    <h2 class="sub-text">{{playlistName}}</h2>
+                    <h2 class="sub-text">{{playlist.[0].playlistName}}</h2>
                     <section id="" class="cell small-8 center">´
                         <ul id="podcast-section" class="slick">
-                            {{#each podcastInfo}}
+                            {{#each playlist.[0].podcastInfo}}
                             <li>
                                 <figure id="podcast-holder">
                                     <a href="../../podcast/{{this.collectionId}}"><img id="podcast-image"
@@ -17,6 +26,7 @@
                                 <input class="" type="checkbox" name="pod_id" value="{{this.collectionId}}">
                             </li>
                             {{/each}}
+
                         </ul>
                     </section>
                 </li>
@@ -24,18 +34,22 @@
                     <input class="button podsaint-button margin-top" type="submit" value="Remove selected podcasts">
                 </div>
             </form>
-            {{/each}}
         </ul>
+        {{else}}
+        <h2>Empty Playlist</h2>
+        {{/if}}
     </div>
 </div>
 <div class="grid-x content">
     <div class="cell medium-8 medium-offset-2 center">
         <p>Remove Playlist. Warning this action cant be undone.</p>
-        {{#each playlist}}
-        <form action="/{{playlistName}}/remove-playlist" method="POST">
-            <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+        <p>/{{playlist.[0].playlistName}}/remove-playlist</p>
+        <p>{{playlist.[0].playlistName}}</p>
+        <p>csurf {{csrfToken}}</p>
+        <form action="/{{playlist.[0].playlistName}}/remove-playlist" method="POST">
+            <!--<input type="hidden" name="_csrf" value="{{../csrfToken}}">-->
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <input id="delete-playlist-btn" class="button podsaint-button" type="submit" value="Remove playlist">
         </form>
-        {{/each}}
     </div>
 </div>
