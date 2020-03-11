@@ -165,8 +165,6 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
 
     router.get('/signin', function (request, response) {
         const model = response.model
-        console.log(">>>>>>>>><<<<<>>>>>><<<<>>><<>><><><><><><><")
-        console.log(model)
         response.render("signin.hbs",  model )
     })
 

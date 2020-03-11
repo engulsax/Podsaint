@@ -150,22 +150,34 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
     })
 
     router.post('/:id/create-list', async function (request, response, next) {
-
+        
+        const model = response.model
         const playlistName = request.body.playlistName
-        const model = response.model.information[0]
+        const pod = response.model.information[0]
         const collectionId = request.params.id
 
         try {
+            const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
+            model.userPlaylists = userPlaylists
+
             await playlistBL.createPlaylist(playlistName,
                 request.session.key.user, request.session.key,
-                collectionId, model.collectionName, model.artistName)
+                collectionId, pod.collectionName, pod.artistName)
 
             response.redirect("/podcast/" + collectionId)
+
         } catch (error) {
+
+            if( error == err.err.DUP_PLAYLIST_ERROR){
+            
+                inputErrors = []
+                model.inputErrors = inputErrors.concat(error)
+                response.render("add-to-playlist.hbs",  model )
+                return
+            }
             console.log(error)
             next(error)
         }
-
     })
 
     router.post('/:id/add-to-playlist', async function (request, response) {
@@ -189,13 +201,11 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
         } catch (error) {
             
             if(error == err.err.DUP_PODCAST_PLAYLIST_ERROR){
-                console.log("KOMMIT MITMITMIMTIMTIMTIMITMTIIMT")
                 inputErrors = []
                 model.inputErrors = inputErrors.concat(error)
-                console.log(model)
                 response.render("add-to-playlist.hbs",  model )
+                return
             }
-
             console.log(error)
             next(error)
         }
@@ -206,6 +216,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
         const model = response.model
 
         try {
+            
             const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn)
             model.userPlaylists = userPlaylists
             console.log(model.userPlaylists)

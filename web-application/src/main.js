@@ -16,17 +16,17 @@ const podcastBLFun = require('../src/bl/podcast-bl')
 const playlistBLFun = require('../src/bl/playlist-bl')
 
 /*Postgres-dal with sequelize*/
-/*
+
 const playlistDALFun = require('../src/dal2/playlist-dal2') 
 const podcastDALFun = require('../src/dal2/podcast-dal2')
 const accountDALFun = require('../src/dal2/account-dal2')
-*/
-/*Mysql-dal*/
 
+/*Mysql-dal*/
+/*
 const accountDALFun = require('../src/dal/account-dal')
 const playlistDALFun = require('../src/dal/playlist-dal') 
 const podcastDALFun = require('../src/dal/podcast-dal')
-
+*/
 const container = awilix.createContainer()
 
 //container.register('err', awilix.asFunction(errors))

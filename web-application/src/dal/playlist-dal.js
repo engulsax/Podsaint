@@ -7,24 +7,6 @@ module.exports = function(){
 	
     return{
 
-        
-            /*CREATE TABLE playlists(
-                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                playlist_name VARCHAR(50) NOT NULL,
-                list_owner VARCHAR(50),
-                CONSTRAINT fk_list_owner FOREIGN KEY (list_owner) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE
-            );
-            
-            
-            CREATE TABLE podinlist(
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    pod_id VARCHAR(50) NOT NULL,
-    playlist_id INT UNSIGNED NOT NULL,
-    CONSTRAINT fk_pod FOREIGN KEY (pod_id) REFERENCES podcasts(pod_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_play FOREIGN KEY (playlist_id) REFERENCES playlists(id) ON DELETE CASCADE ON UPDATE CASCADE
-);*/
-
-
         createPlaylist: async function(playlistName,user){
 
             const query = "INSERT INTO playlists(playlist_name, list_owner) VALUES(?, ?)" 
@@ -35,9 +17,9 @@ module.exports = function(){
                 return response.insertId
 
             } catch (error){
-                
-                if(error.code == 'ER_DUP_ENTRY' && error.sqlMessage.includes('playlist_name_dup') ){
-                   // throw err.err.DUP_PLAYLIST_ERROR
+                console.log(error)
+                if(error.code == 'ER_DUP_ENTRY' && error.sqlMessage.includes('playlist_name') ){
+                    throw err.err.DUP_PLAYLIST_ERROR
                 }
                 throw err.err.INTERNAL_SERVER_ERROR
             }
@@ -100,7 +82,7 @@ module.exports = function(){
 
             try{
                 const result = await db(query, values)
-              
+                console.log(result)
                 return result
 
             }catch(error){

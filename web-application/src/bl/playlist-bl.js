@@ -18,8 +18,11 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
                 }
 
             } catch (error){
-                console.log(">>>>>>>>>>>>>>>errrrr>>>>>>>>>>")
                 console.log(error)
+                if(err.errorNotExist(error)){
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
             }
         },
 

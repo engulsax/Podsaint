@@ -36,7 +36,7 @@ CREATE TABLE reviews (
 
 CREATE TABLE playlists(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    playlist_name VARCHAR(50) NOT NULL,
+    playlist_name VARCHAR(50) UNIQUE NOT NULL,
     list_owner VARCHAR(50),
     CONSTRAINT fk_list_owner FOREIGN KEY (list_owner) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE
 );

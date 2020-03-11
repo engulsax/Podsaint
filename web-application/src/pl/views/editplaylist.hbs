@@ -14,7 +14,7 @@
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 
                 <li>
-                    <h2 class="sub-text">{{playlist.[0].playlistName}}</h2>
+                    <!--<h2 class="sub-text">{{playlist.[0].playlistName}}</h2>-->
                     <section id="" class="cell small-8 center">´
                         <ul id="podcast-section" class="slick">
                             {{#each playlist.[0].podcastInfo}}
@@ -43,9 +43,6 @@
 <div class="grid-x content">
     <div class="cell medium-8 medium-offset-2 center">
         <p>Remove Playlist. Warning this action cant be undone.</p>
-        <p>/{{playlist.[0].playlistName}}/remove-playlist</p>
-        <p>{{playlist.[0].playlistName}}</p>
-        <p>csurf {{csrfToken}}</p>
         <form action="/{{playlist.[0].playlistName}}/remove-playlist" method="POST">
             <!--<input type="hidden" name="_csrf" value="{{../csrfToken}}">-->
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
