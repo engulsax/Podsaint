@@ -1,8 +1,14 @@
 const Sequelize = require('sequelize')
-const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
+/*const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
     dialect: 'postgres',
     port: '5432',
     host: 'host.docker.internal'
+})*/
+
+const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
+    dialect: 'postgres',
+    port: '5432',
+    host: '192.168.99.100'  // on mac use 'host.docker.internal'
 })
 
 exports.users = sequelize.define('users', {
@@ -43,6 +49,7 @@ exports.playlists = sequelize.define('playlists', {
     playlist_name: {
         type: Sequelize.TEXT,
         unique: true,
+        notEmpty: true,
         allowNull: false
     },
     list_owner: {
@@ -83,7 +90,7 @@ exports.podinlist = sequelize.define('podinlist', {
         }*/
     }
 }, { timestamps: false },
-    { uniqueKeys: { fields: ['list_owner', 'name', 'pod_id'] } })
+    { uniqueKeys: { fields: ['pod_id', 'playlist_id'] } })
 
 exports.podcasts = sequelize.define('podcasts', {
 

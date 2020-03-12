@@ -7,23 +7,28 @@ module.exports = function({}){
 
     return{
 
-        createPlaylist: async function(playlistName, user){
+        createPlaylist: async function(playlistName, username){
 
             try{
+
+                if(playlistName == ""){
+                    throw err.err.PLAYLIST_NAME_ERROR
+                }
              
                 const result = await pgdb.playlists.create({
                     playlist_name: playlistName,
-                    list_owner: user
+                    list_owner: username
                 })
-                console.log("---------------------------result from createplaylistdal>>>>>>")
-                console.log(result.dataValues.id)
-                console.log("---------------------------result from createplaylistdal>>>>>>")
+            
                 return result.dataValues.id
                 
-
             } catch (error){
-                console.log("createplaylistdal>>>>>>error")
                 console.log(error)
+
+                if(error == err.err.PLAYLIST_NAME_ERROR){
+                    throw err.err.PLAYLIST_NAME_ERROR
+                }
+
                 if(error.errors[0].path == 'unique violation'){
                     throw err.err.DUP_PLAYLIST_ERROR
                 }
@@ -40,8 +45,13 @@ module.exports = function({}){
                 })
 
             } catch (error) {
-                console.log("addpodcasttoplaylistdal>>>>>>error")
                 console.log(error)
+                console.log(error.errors[0].type == 'notNull Violation')
+
+                if(error.errors[0].type == 'notNull Violation'){
+                    throw err.err.PLAYLIST_ADD_ERROR
+                }
+
                 if (error.errors[0].path == 'unique violation'){
                     throw err.err.DUP_PODCAST_PLAYLIST_ERROR
 
@@ -51,7 +61,7 @@ module.exports = function({}){
                 }
             }
         },
-        //kommit hit
+   
         removePodcastFromPlaylist: async function(collectionId, playlistId){  
             
             try {
@@ -67,12 +77,13 @@ module.exports = function({}){
             }
         },
 
-        getAllPlaylistsByUser: async function(user){
+        getAllPlaylistsByUser: async function(username){
             
             try {
+
                 const result =  await pgdb.playlists.findAll({
                     attributes: ['playlist_name', 'id'], 
-                    where: {list_owner: user}
+                    where: {list_owner: username}
                 })
                 console.log("result from getallplaylistsfromuser")
                 console.log(result)
@@ -92,33 +103,24 @@ module.exports = function({}){
         getAllPlaylistsAndPodcastsByUser: async function(username){
 
             try{
-                /*
-                const result = await pgdb.podinlist.findAll({
-                    attributes:['pod_id'],
-                    include:[
-                        {model:pgdb.playlists,
-                        attributes:['playlist_name'],
-                        required:false
-                    }]
-                })
-                */
+               
 
                 const result = await pgdb.playlists.findAll({
                     attributes:['playlist_name'],
+                    where:{ list_owner: username},
                     include:[{
                         model: pgdb.podinlist,
                         attributes:['pod_id'],
                         required:false
                     }]
                 })
-                console.log(result)
-                //console.log(result[0].podinlists)
+    
                 const data = []
                 for(let i = 0; i <result.length;i++){
                     if(result[i].dataValues.podinlists[0]){
-                        console.log(result[i].dataValues.podinlists.length)
+            
                         for(let j = 0;j < result[i].dataValues.podinlists.length; j++){
-                            console.log(j)
+                          
                             data.push({
                                 playlist_name: result[i].dataValues.playlist_name,
                                 pod_id: result[i].dataValues.podinlists[j].pod_id
@@ -131,7 +133,7 @@ module.exports = function({}){
                         })
                     }
                 }
-                console.log(data)
+           
                 return data
 
             }catch(error){
@@ -140,13 +142,13 @@ module.exports = function({}){
             }
         },
     
-        removePlaylist: async function (playlistId, user){
+        removePlaylist: async function (playlistId, username){
            
             try{
                 return await pgdb.playlists.destroy({
                     where: {
                         id: playlistId,
-                        list_owner: user
+                        list_owner: username
                     }
                 })
             
@@ -177,7 +179,7 @@ module.exports = function({}){
             }
         },
         
-        getPlaylistIdFromPlaylistName: async function(playlistName, user){
+        getPlaylistIdFromPlaylistName: async function(playlistName, username){
         
             try{
                 
@@ -185,7 +187,7 @@ module.exports = function({}){
                     attributes: ['id'],
                     where:{
                         playlist_name: playlistName,
-                        list_owner: user
+                        list_owner: username
                     }
                 })
 

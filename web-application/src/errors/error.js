@@ -24,7 +24,9 @@ const errors = {
     INVALID_PRODUCTION_RATING: "Invalid production rating.",
     DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist.",
     REMOVE_PODCAST_PLAYLIST_ERROR: "Please select podcasts to remove them",
-    DUP_PLAYLIST_ERROR: "A playlist already exists with that name"
+    DUP_PLAYLIST_ERROR: "A playlist already exists with that name",
+    PLAYLIST_NAME_ERROR: "Enter a playlist name",
+    PLAYLIST_ADD_ERROR: "Choose a playlist or create a new"
 
 }
 

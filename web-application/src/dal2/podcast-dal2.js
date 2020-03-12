@@ -17,15 +17,12 @@ module.exports = function () {
 
 
 			try {
-				console.log("sadfasfdasdfasdfasdfasdfasfdasdfasfdasdfasfsfd")
+				
 				if (!await this.podcastExist(collectionId)) {
-					console.log("finns inte")
-					console.log(collectionId)
-					console.log(collectionName)
-					console.log(podCreators)
+				
 					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
-				console.log(">>>>>><<<<<<<<>>>>>>><<<<<<")
+				
 				await addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
 				await pgdb.reviews.create({
 					review_poster: reviewPoster,
@@ -64,7 +61,7 @@ module.exports = function () {
 		addPodcast: async function addPodcast(collectionId, collectionName, podCreators) {
 			
 			try {
-				console.log("KOMMIIMITMITMITMITMITMTIMTIMTIMTIMTIMTIMTIMTIMT")
+				
 				return await pgdb.podcasts.create({
 					pod_id: collectionId,
 					pod_name: collectionName,
@@ -201,7 +198,7 @@ module.exports = function () {
 
 		getAverageRatingsByPodcastId: async function getAverageRatingsByPodcastId(collectionId) {
 
-			/*Unnecessary awaits ?*/
+		
 
 			try {
 				const ratings = await getRatingsFromPodcast(collectionId)
@@ -286,7 +283,7 @@ module.exports = function () {
 
 		podcastExist: async function podcastExist(collectionId) {
 			try {
-				console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+				
 				const response = await pgdb.podcasts.count({
 					where: { pod_id: collectionId }
 				})
@@ -305,12 +302,7 @@ module.exports = function () {
 
 		try {
 			const ratings = await getRatingsFromPodcast(collectionId)
-			console.log("addnewinfo------------------------------------------------")
-			console.log(ratings)
-			console.log("addnewinfo------------------------------------------------")
-
-
-
+			
 			ratings.overall += overallRating
 			ratings.quality += productionQuality
 			ratings.topic += topicRelevence

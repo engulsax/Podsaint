@@ -11,8 +11,12 @@ module.exports = function(){
 
             const query = "INSERT INTO playlists(playlist_name, list_owner) VALUES(?, ?)" 
             const values = [playlistName, user]
-
+            
+            console.log("<<<<<<<<<<<>>>>>>>>>>>createplaylist")
             try{
+                if(playlistName == ""){
+                    throw err.err.PLAYLIST_NAME_ERROR
+                }
                 const response = await db(query,values)
                 return response.insertId
 
@@ -20,6 +24,9 @@ module.exports = function(){
                 console.log(error)
                 if(error.code == 'ER_DUP_ENTRY' && error.sqlMessage.includes('playlist_name') ){
                     throw err.err.DUP_PLAYLIST_ERROR
+                }
+                if(error == err.err.PLAYLIST_NAME_ERROR){
+                    throw err.err.PLAYLIST_NAME_ERROR
                 }
                 throw err.err.INTERNAL_SERVER_ERROR
             }
