@@ -3,11 +3,6 @@ const router = express.Router()
 
 module.exports = function ({ categoryBL, searchItunesBL }) {
 
-    router.use(async function (request, response, next) {
-        response.model.categories = await categoryBL.getCategoriesDetails()
-        next()
-    })
-
     router.get('/', function (request, response) {
         response.redirect('/search/itunes')
     })

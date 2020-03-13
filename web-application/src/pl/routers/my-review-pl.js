@@ -4,11 +4,6 @@ const router = express.Router()
 
 module.exports = function ({ categoryBL, podcastBL, searchItunesBL, playlistBL }) {
 
-    router.use(async function (request, response, next) {
-        response.model.categories = await categoryBL.getCategoriesDetails()
-        next()
-    })
-
     router.get('/all', async function (request, response, next) {
 
         const value = request.query.amount

@@ -3,11 +3,6 @@ const router = express.Router()
 
 module.exports = function ({ categoryBL, searchItunesBL }) {
 
-    router.use(async function (request, response, next) {
-        response.model.categories = await categoryBL.getCategoriesDetails()
-        next()
-    })
-
     router.get('/:id', async function (request, response, next) {
         try{
             const mainCategoryId = request.params.id

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!--jQuery and slick-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript" src="/js/slick.js"></script>
+
+
+    <!-- Compressed CSS FOUNDATION -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/css/foundation.min.css"
+        integrity="sha256-GSio8qamaXapM8Fq9JYdGNTvk/dgs+cMLgPeevOYEx0= sha384-wAweiGTn38CY2DSwAaEffed6iMeflc0FMiuptanbN4J+ib+342gKGpvYRWubPd/+ sha512-QHEb6jOC8SaGTmYmGU19u2FhIfeG+t/hSacIWPpDzOp5yygnthL3JwnilM7LM1dOAbJv62R+/FICfsrKUqv4Gg=="
+        crossorigin="anonymous">
+
+    <!-- Compressed JavaScript FOUNDATION -->
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/js/foundation.min.js"
+        integrity="sha256-mRYlCu5EG+ouD07WxLF8v4ZAZYCA6WrmdIXyn1Bv9Vk= sha384-KzKofw4qqetd3kvuQ5AdapWPqV1ZI+CnfyfEwZQgPk8poOLWaabfgJOfmW7uI+AV sha512-0gHfaMkY+Do568TgjJC2iMAV0dQlY4NqbeZ4pr9lVUTXQzKu8qceyd6wg/3Uql9qA2+3X5NHv3IMb05wb387rA=="
+        crossorigin="anonymous"></script>
+
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--Styling  CSS -->
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+
+    <!-- Podsaint Clientside JavaScript -->
+    <script src="js/navigation-handler.js" type="module"></script>
+    <script src="js/sign-up-pop-up.js"></script>
+    <script src="js/sign-in-pop-up.js"></script>
+    <script src="js/add-to-list-pop-up.js"></script>
+    <script src="js/search-podcasts.js" type="module"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podsaint</title>
+</head>
+
+<body class="signed-out">
+
+    <header id="header">
+
+        <div class="grid-x cell">
+
+            <div id="logo">
+                <a href="/home"><img id="logo-icon" src="images/Podsaint_logo.png"></a>
+                <div id="logo-text">Podsaint</div>
+            </div>
+
+            <div class="grid-x cell">
+
+                <nav id="menu" class="cell">
+
+                    <ul>
+                        <li class="show-if-signed-out">
+                            <a href="/home">Home</a>
+                        </li>
+                        <li class="show-if-signed-in">
+                            <a href="/account/2">Account</a>
+                        </li>
+                        <li>
+                            <a href="/search">Search Podcasts</a>
+                        </li>
+                        <li class="show-if-signed-in">
+                            <a href="/settings">Settings</a>
+                        </li>
+                        <li class="show-if-signed-in">
+                            <form action="/signout" method="POST">
+                                <input class="logout-button nothing" type="submit" value="Sign Out" />
+                            </form>
+                        </li>
+                        <li class="show-if-signed-out">
+                            <a id="sign-in" href="/signin">Sign In</a>
+                        </li>
+                    </ul>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <div id="loader"></div>
+
+        <section id="home-page" class="current-page">
+
+            <div class="grid-x">
+
+                <div class="cell">
+                    <h1 class="head-text">Keep track of your listens.</h1>
+                    <h1 class="head-text">Find your new favorite podcast.</h1>
+                    <h1 class="head-text">Rate and review.</h1>
+                </div>
+
+                <div class="cell center top-margin">
+                    <a href="/signup" id="sign-up" class="button podsaint-button">Sign Up - It's free</a>
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <section id="account-page">
+
+            <div class="grid-x">
+
+                    <h1 class="head-text">My Podcasts</h1>
+            </div>
+
+        </section>
+
+        <section id="search-page">
+
+            <div class="grid-x">
+
+                <div class="cell small-10 medium-8 small-offset-1 medium-offset-2">
+
+                    <h1 class="head-text">Search For Podcasts</h1>
+                    <form id="search-form" class="search-menu" method="GET" action="/search/">
+                        <input id="search-term" class="search" type="text" placeholder="Search...">
+                    </form>
+                        
+                </div>
+
+                <div class="cell small-10 medium-8 small-offset-1 medium-offset-2">
+
+                    <ul id="podcast-section">
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="podcast-page">
+
+            <div class="grid-x">
+
+                <div id="information-holder" class="cell small-12 medium-10 medium-offset-1">
+
+                    <div class="cell">
+            
+                        <div class="grid-x">
+
+                            <div id="image" class="center cell small-12">
+                               
+                            </div>
+
+                            <div id="title" class="cell">
+
+                            </div>
+
+                            <div id="creator" class="cell">
+
+                            </div>
+
+                        </div>
+            
+                        <div id="description" class="cell text-left center">
+
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+
+        </section>
+
+        <section id="signin" class="show">
+
+            <div id="sign-in-pop-up" class="grid-x">
+                <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
+                    <div class="pop-up-content">
+                        <span id="close-btn-sign-in">&times;</span>
+
+                        <form action="/signin" method="POST">
+                            <label>
+                                Username
+                                <input id="signin-user" type="text" name="username">
+                            </label>
+                            <label>
+                                Password
+                                <input id="signin-password" type="password" name="password">
+                            </label>
+                            <input id="sign-in-btn" class="button pop-up-button" type="submit" value="SIGN IN">
+                        </form>
+                        <label class="center alternative-sign-up">
+                            Or sign in using
+                            <ul class="social-media-list">
+                                <li><a href="#" class="fa fa-facebook"></a></li>
+                                <li><a href="#" class="fa fa-twitter"></a></li>
+                                <li><a href="#" class="fa fa-google"></a></li>
+                            </ul>
+                        </label>
+
+                        <div class="sign-in-link sign-text">
+                            Don't have an account?
+                            <a  href="/signup"  id="sign-up-alternative">Sign up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="signup" class="show">
+
+            <div id="sign-up-pop-up" class="grid-x">
+                <div class="cell small-10 medium-8 large-4 small-offset-1 medium-offset-2 large-offset-4">
+                    <div class="pop-up-content">
+                        <span id="close-btn-sign-up">&times;</span>
+
+                        <form id="sign-up-form" action="/signup" method="POST">
+                            <label>
+                                Username
+                                <input id="input-username" type="text" name="username">
+                            </label>
+                            <label>
+                                Email
+                                <input id="input-email" type="email" name="email">
+                            </label>
+                            <label>
+                                Password
+                                <input id="input-password" type="password" name="password">
+                                <p class="help-text" id="passwordHelpText">Your password must have at least 8 characters
+                                </p>
+                            </label>
+                            <input id="sign-up-btn" class="button pop-up-button" type="submit" value="SIGN UP">
+                        </form>
+                        <div class="center alternative-sign-up">
+                            <div class="sign-text">Or sign up using</div>
+                            <ul class="social-media-list">
+                                <li><a href="#" class="fa fa-facebook"></a></li>
+                                <li><a href="#" class="fa fa-twitter"></a></li>
+                                <li><a href="#" class="fa fa-google"></a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sign-in-link sign-text">
+                            Already have an account?
+                            <a href="/signin" id="sign-in-alternative">Sign in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer id="footer">
+
+    </footer>
+</body>
+
+</html>

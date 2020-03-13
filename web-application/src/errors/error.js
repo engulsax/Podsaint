@@ -22,14 +22,19 @@ const errors = {
     INVALID_TONE_RATING: "Invalid tone rating.",
     INVALID_TOPIC_RATING: "Invalid topic rating.",
     INVALID_PRODUCTION_RATING: "Invalid production rating.",
-    DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist."
+    BAD_REQUEST: "Request was bad dude!",
+    DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist.",
+    UNSUPPORTED_GRANT_TYPE: "Unsupported grant type."
 }
 
 function getErrorStatusCode(error) {
     switch (error) {
         case errors['INTERNAL_SERVER_ERROR']:
             return 500
-        case errors['LOGIN_ERROR']: 
+        case errors['UNSUPPORTED_GRANT_TYPE']:
+        case errors['BAD_REQUEST']:
+            return 400
+        case errors['LOGIN_ERROR']:
         case errors['AUTH_USER_ERROR']:
             return 401
         case errors['NOT_FOUND_ERROR']:
@@ -41,15 +46,15 @@ function getErrorStatusCode(error) {
     }
 }
 
-function errorNotExist(errs){
-    if(Array.isArray(errs)){
-        for(err of errs){
-            if(Object.values(errors).includes(err)){
+function errorNotExist(errs) {
+    if (Array.isArray(errs)) {
+        for (err of errs) {
+            if (Object.values(errors).includes(err)) {
                 return false
             }
         }
     } else {
-        if(Object.values(errors).includes(errs)){
+        if (Object.values(errors).includes(errs)) {
             return false
         }
     }

@@ -4,11 +4,6 @@ const router = express.Router()
 
 module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }) {
 
-    router.use(async function (request, response, next) {
-        response.model.categories = await categoryBL.getCategoriesDetails()
-        next()
-    })
-
     router.use('/:id', async function (request, response, next) {
 
         const collectionId = request.params.id

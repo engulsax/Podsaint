@@ -1,7 +1,5 @@
 const awilix = require('awilix')
 
-//const errors = require('./errors/error')
-
 const categoryPLRouter = require('./pl/routers/category-pl')
 const searchPLRouter = require('./pl/routers/search-pl')
 const homePLRouter = require('./pl/routers/home-pl')

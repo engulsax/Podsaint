@@ -104,8 +104,11 @@ module.exports = function ({ accountDAL }) {
         if (!password || !confirmedPassword) {
             passwordErrors.push(err.err.PASSWORD_UNDEFINED_ERROR)
         }
-        if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
-            passwordErrors.push(err.err.PASSWORD_LENGTH_ERROR)
+        if (password.length < PASSWORD_MIN_LENGTH) {
+            passwordErrors.push(err.err.PASSWORD_LENGTH_SHORT_ERROR)
+        }
+        if(password.length > PASSWORD_MAX_LENGTH){
+            passwordErrors.push(err.err.PASSWORD_LENGTH_LONG_ERROR)
         }
         if (password != confirmedPassword) {
             passwordErrors.push(err.err.PASSWORD_MATCH_ERROR)

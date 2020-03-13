@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/pl/app.js -L"
+    "start": "nodemon src/index.js -L"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "express-handlebars": "^3.1.0",
     "express-session": "^1.17.0",
     "grunt-svgstore": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
     "load-svg-file": "^1.0.8",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",

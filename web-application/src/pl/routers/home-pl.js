@@ -4,11 +4,6 @@ const router = express.Router()
 
 module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, podcastBL }) {
 
-    router.use(async function (request, response, next) {
-        response.model.categories = await categoryBL.getCategoriesDetails()
-        next()
-    })
-
     router.get('/', function (request, response) {
         response.redirect('/home')
     })
@@ -90,7 +85,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         try {
             await accountBL.updatePassword(model.loggedIn.user, newPassword, confirmedPassword)
             response.redirect('/home')
-        } catch (errors) {
+        } catch (error) {
             console.log(error)
             if (err.errorNotExist(error)) {
                 error = err.err.INTERNAL_SERVER_ERROR

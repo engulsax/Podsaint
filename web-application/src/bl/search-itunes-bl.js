@@ -41,7 +41,7 @@ module.exports = function () {
                 return await getPodcast(term)
             } catch (error) {
                 console.log(error)
-                throw err.err.PODCAST_FETCH_ERROR
+                throw error
             }
         }
     }
@@ -53,6 +53,7 @@ module.exports = function () {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
+            console.log("error - search-itunes-bl - getPodcasts")
             throw err.err.PODCAST_FETCH_ERROR
         }
         return responseJSON
@@ -65,7 +66,11 @@ module.exports = function () {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
+            console.log("error - search-itunes-bl - getPodcast")
             throw err.err.PODCAST_FETCH_ERROR
+        } else if (responseJSON.resultCount > 1 || responseJSON.results[0].collectionId != term){
+            console.log("error - search-itunes-bl - getPodcast")
+            throw err.err.BAD_REQUEST
         }
         return await responseJSON
 
@@ -78,6 +83,7 @@ module.exports = function () {
         const response = await fetch(https)
         const responseJSON = await response.json()
         if (responseJSON.resultCount == 0) {
+            console.log("error - search-itunes-bl - searchPodcastsWithIdAndTerm")
             throw err.err.PODCAST_FETCH_ERROR
         }
         return responseJSON

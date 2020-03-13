@@ -21,14 +21,6 @@ body::-webkit-scrollbar-thumb{
 }
 
 
-h1 {
-  font-family: 'Open Sans', sans-serif;
-  color: whitesmoke;
-  font-size: 2rem;
-  font-weight: bolder;
-  margin: 10px 10px 10px 10px;
-}
-
 .input-submit{
     border: 0;
     outline: none;
@@ -69,6 +61,14 @@ li:focus{
     outline: none;
     opacity: 0.8;
 }
+
+h1 {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 2rem;
+    font-weight: bolder;
+    margin: 10px 10px 10px 10px;
+  }
 
 h2 {
     font-family: 'Open Sans', sans-serif;
@@ -1745,7 +1745,7 @@ textarea{
   }
 /*-------------------- SIGN UP/SIGN IN/ LIST POP UP --------------------*/
 
-  #sign-in-pop-up, #sign-up-pop-up, #list-pop-up{
+#sign-in-pop-up, #sign-up-pop-up, #list-pop-up{
     display: none;
     position: fixed;
     z-index: 1;
@@ -1816,7 +1816,7 @@ legend{
 }
 #podcast-lists{
     display: inline;
-    width: 50%;
+
 }
 #create-new-list{
     display: none;
@@ -1824,7 +1824,6 @@ legend{
 
 .list-pop-up-button{
     display: inline;
-    width: 25%;
     background-color: rgb(152,189,139);
     color: white;
     text-transform: uppercase;

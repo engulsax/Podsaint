@@ -1,0 +1,583 @@
+
+/*-------------------- HIDE/SHOW CONTENT --------------------*/
+
+main > section{
+	display: none;
+}
+
+main > section.current-page{
+	display: block;
+}
+
+body.signed-out .show-if-signed-in{
+	display: none;
+}
+
+body.signed-in .show-if-signed-out{
+	display: none;
+}
+
+body.signed-out #menu ul>li.show-if-signed-in{
+	display: none;
+}
+
+body.signed-in #menu ul>li.show-if-signed-out{
+	display: none;
+}
+
+.show{
+    display: block;
+}
+
+/*-------------------- UNIVERSAL --------------------*/
+body{
+    height: 100%;
+    background: rgb(255, 254, 216);
+    background: linear-gradient(0deg, rgba(209, 178, 109, 0.897) 0%, rgb(199, 137, 163) 60%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body::-webkit-scrollbar{
+    width: 5px;
+}
+
+body::-webkit-scrollbar-track{
+    background: white;
+}
+
+body::-webkit-scrollbar-thumb{
+    background: rgba(209, 178, 109, 0.897);
+}
+
+header{
+    background-color: white;
+    min-height: 4rem;
+    margin: 0;
+}
+
+footer{
+    margin-top: 5rem;
+}
+
+h1 {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 2rem;
+    font-weight: bolder;
+    margin: 10px 10px 10px 10px;
+  }
+
+h2 {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin: 10px 10px 10px 10px;
+}
+
+h3 {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-weight: lighter;
+    font-size: 1.2rem;
+    margin: 10px 10px 10px 10px;
+}
+
+a {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1rem;
+}
+
+a:hover, a:focus{
+    color: rgba(245, 245, 245, 0.712);
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
+    color: whitesmoke;
+    font-size: 1rem;;
+    margin: 10px 10px 10px 10px;
+}
+
+.help-text{
+    color: white;
+}
+
+ul,li {
+    list-style: none;
+}
+
+/*-------------------- UNIVERSAL STYLING --------------------*/
+
+.top-margin{
+    margin-top: 100px;
+}
+
+
+.center{
+    text-align: center;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+}
+
+
+.head-text{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: xx-large;
+    font-family: 'Open Sans', sans-serif;
+    display: block;
+    margin: 2%;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+}
+
+@media screen and (min-width: 64em) {
+    .head-text{
+        font-size: 280%;
+    }
+}
+
+.sub-text{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: x-large;
+    font-family: 'Open Sans', sans-serif;
+    display: block;
+    margin-top: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+}
+
+.podsaint-button{
+    text-transform: uppercase;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+    border-radius: 20px;
+    background-color: rgb(152,189,139);
+}
+
+.podsaint-button:hover, .podsaint-button:focus{
+    background-color: rgb(123, 158, 108);
+}
+
+/*-------------------- MENU --------------------*/
+
+#menu{
+    list-style: none;
+}
+
+#menu a{
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#menu form, #menu form input{
+    background-color: white;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+}
+
+#menu form input:hover{
+    cursor: pointer;
+}
+
+#menu ul{
+    margin: 0;
+    text-align: right;
+}
+
+#menu li{
+    display:inline-block;
+    margin-right: 2vh;
+    margin-top: 2vh;
+    color: rgb(107,107,107);
+    font-family: 'Open Sans', sans-serif;
+}
+
+#logo{
+    margin: 2vh;
+    float: left;
+}
+
+#logo-icon{
+    float: left;
+    display: block;
+    width: 40px;
+}
+
+#logo-text{
+    float: left;
+    display: block;
+    color: rgb(107,107,107);
+    font-size: large;
+    margin-left: 1vh;
+    font-weight: 250;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#search-form input{
+    border-radius: 20px;
+    height: 50px;
+    margin-top: 20px;
+}
+
+/*-------------------- PODCAST HOLDER --------------------*/
+
+.no-result{
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+    text-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+    font-size: x-large;
+    text-align: center;
+    margin-top: 5%;
+}
+
+
+#podcast-section{
+    margin: auto auto;
+    background-color: rgba(255,255,255,0.2);
+    padding: 2px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+#podcast-section ul{
+    margin: 10px auto 0;
+    list-style: none;
+}
+
+#podcast-section li{
+    margin: 2px 2px 0px 2px;
+    list-style: none;
+    display: inline-block;
+}
+
+#podcast-holder{
+    position: relative;
+    display: inline-block;
+    margin: 30px 10px;
+    vertical-align: top;
+    text-align: center;
+    width: 210px;
+    height: auto;
+    display: inline-block;
+}
+
+#podcast-image{
+   margin: auto auto;
+   float:center;
+   box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+   width: 210px;
+   height: 210px;
+}
+
+#podcast-image:hover{
+    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.8);
+ }
+
+#podcast-image-2{
+    margin: auto auto;
+    float:center;
+    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.4);
+    max-width: 60%;
+    height: auto;
+ }
+
+ @media screen and (min-width: 64em) {
+    #podcast-image-2{
+        max-width: 30%;
+        float:center;
+    }
+}
+
+.podcast-size-210{
+    width: 210px;
+    height: 210px;
+}
+
+/*-------------------- INFROMATION HOLDER --------------------*/
+
+#information-holder{
+    margin-top: 10px;
+    background-color: rgba(249, 244, 246, 0.2);
+    padding: 20px 20px;
+    border-radius: 10px;
+    min-height: 260px;
+    text-align: center;
+}
+
+
+#information-holder .float-responsive{
+   float: center;
+}
+
+/*-------------------- LINK TO SWITCH BETWEEN LISTS --------------------*/
+
+#pod-links{
+    margin: 20px 10px 10px 30px;
+}
+#pod-links a{
+    font-size: x-large;
+    text-transform: uppercase;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    letter-spacing: 3px;
+}
+
+#pod-links a:hover,#pod-links a:focus {
+    color: rgba(255,255,255,0.5)
+}
+
+/*-------------------- SIGN UP/SIGN IN/ LIST POP UP --------------------*/
+
+#sign-in-pop-up, #sign-up-pop-up, #list-pop-up{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color:rgba(0,0,0,0.5)
+}
+
+.pop-up-content{
+    background: rgb(255, 254, 216);
+    background: linear-gradient(0deg, rgba(209, 178, 109, 1) 0%, rgb(199, 137, 163) 60%);
+    background-repeat: no-repeat;
+    margin: 15% auto;
+    padding: 25px;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
+
+#close-btn-sign-in, #close-btn-sign-up, #close-btn-add-to-list{
+    float: right;
+    color:white;
+    font-size: 40px;
+    position: relative;
+    top: -30px;
+    right: -10px;
+}
+
+#close-btn-sign-in:hover, #close-btn-sign-up:hover,#close-btn-sign-in:focus, #close-btn-sign-up:focus,
+#close-btn-add-to-list:hover,#close-btn-add-to-list:focus{
+    color: rgb(220,220,220);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+form{
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
+#sign-in-pop-up input, #sign-up-pop-up input{
+    border-radius: 20px;
+    display: block;
+}
+
+label, legend{
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+    margin: 5px 0;
+    margin-top: 10px;
+}
+
+legend{
+    text-shadow: 2px 0px 10px rgba(0,0,0,0.6);
+    font-size: x-large;
+}
+
+.sign-text{
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    font-family: 'Open Sans', sans-serif;
+    display: inline;
+    text-align: right;
+}
+
+#podcast-lists{
+    display: inline;
+
+}
+
+#create-new-list{
+    display: none;
+}
+
+.list-pop-up-button{
+    display: inline;
+    background-color: rgb(152,189,139);
+    color: white;
+    text-transform: uppercase;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
+.pop-up-button{
+    display: block;
+    margin: 40px auto 0;
+    width: 50%;
+    background-color: rgb(152,189,139);
+    color: white;
+    text-transform: uppercase;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 107%;
+    font-weight: 600;
+}
+
+.pop-up-button:hover, .pop-up-button:focus, .list-pop-up-button:hover, .list-pop-up-button:focus{
+    background-color: rgb(123, 158, 108);
+    outline:none;
+}
+
+ul.social-media-list{
+    text-align: center;
+}
+
+ul.social-media-list li{
+    display:inline-block;
+    margin-right: 2vh;
+    margin-top: 2vh;
+    font-family: 'Open Sans', sans-serif;
+    list-style: none;
+}
+
+.sign-in-link{
+    color: black;
+    font-size: small;
+    text-align: right;
+    display: inline;
+}
+
+
+.fa {
+    padding-top: 10px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+  }
+
+  /* Facebook */
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+  }
+
+  .fa-facebook:hover {
+    background: #3B5998;
+    color: white;
+  }
+  
+  /* Twitter */
+  .fa-twitter {
+    background: #55ACEE;
+    color: white;
+  }
+
+  .fa-twitter:hover {
+    background: #55ACEE;
+    color: white;
+  }
+   
+  /* Google */
+   
+  .fa-google {
+    background: rgb(202, 66, 12);
+    color: white;
+  }    
+
+
+  .fa-google:hover {
+    background: rgb(202, 66, 12);
+    color: white;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.alternative-sign-up{
+    margin-top: 20px;
+}
+
+/*-------------------- SLICK CAROUSEL --------------------*/
+.nextArrowBtn{
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    right: 0;
+    color: rgba(0, 0, 0, 0.637);
+    font-size: 150%;
+    
+}
+.prevArrowBtn{
+    position: absolute;
+    z-index: 1;
+    top: 30%;
+    left: 0;
+    color: rgba(0, 0, 0, 0.637);
+    font-size: 50px;
+}
+
+
+/*-------------------- LOADER --------------------*/
+
+.lds-hourglass {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-hourglass:after {
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 8px;
+    box-sizing: border-box;
+    border: 32px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-hourglass 1.2s infinite;
+  }
+  @keyframes lds-hourglass {
+    0% {
+      transform: rotate(0);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    50% {
+      transform: rotate(900deg);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    100% {
+      transform: rotate(1800deg);
+    }
+  }
+  
