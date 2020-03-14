@@ -16,31 +16,33 @@
                 <div class="cell">
                     <h1>My Podcasts</h1>
                     {{#if playlists}}
-                    {{#each playlists}}
-                    <li>
-                        <div class="grid-x">
-                            <div class="cell small-11">
-                                <h2 class="sub-text no-margin left">{{playlistName}}</h2>
+                    <ul>
+                        {{#each playlists}}
+                        <li>
+                            <div class="grid-x">
+                                <div class="cell small-11">
+                                    <h2 class="sub-text no-margin left">{{playlistName}}</h2>
+                                </div>
+                                <div class="cell small-1">
+                                    <a class="no-margin right" href="/{{playlistName}}/edit"><i class="fa fa-edit"></i></a>
+                                </div>
                             </div>
-                            <div class="cell small-1">
-                                <a class="no-margin right" href="/{{playlistName}}/edit"><i class="fa fa-edit"></i></a>
-                            </div>
-                        </div>
-                        {{#if podcastInfo.[0]}}
-                        <section id="slideshow" class="cell small-8 center">
-                            <ul id="podcast-section" class="slick">
-                                {{#each podcastInfo}}
-                                <li>
-                                    {{>podcast-figure}}
-                                </li>
-                                {{/each}}
-                            </ul>
-                        </section>
-                        {{else}}
-                        <p>Empty playlist</p>
-                        {{/if}}
-                    </li>
-                    {{/each}}
+                            {{#if podcastInfo.[0]}}
+                            <section id="slideshow" class="cell small-8 center">
+                                <ul id="podcast-section" class="slick">
+                                    {{#each podcastInfo}}
+                                    <li>
+                                        {{>podcast-figure}}
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                            </section>
+                            {{else}}
+                            <p>Empty playlist</p>
+                            {{/if}}
+                        </li>
+                        {{/each}}
+                    </ul>
                     {{else}}
                     <h1>You don't have any playlists</h1>
                     {{/if}}

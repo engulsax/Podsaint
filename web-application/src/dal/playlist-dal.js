@@ -7,12 +7,11 @@ module.exports = function(){
 	
     return{
 
-        createPlaylist: async function(playlistName,user){
+        createPlaylist: async function(playlistName, user){
 
             const query = "INSERT INTO playlists(playlist_name, list_owner) VALUES(?, ?)" 
             const values = [playlistName, user]
             
-            console.log("<<<<<<<<<<<>>>>>>>>>>>createplaylist")
             try{
                 if(playlistName == ""){
                     throw err.err.PLAYLIST_NAME_ERROR

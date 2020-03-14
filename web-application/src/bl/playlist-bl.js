@@ -5,11 +5,11 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
 
     return {
        
-        createPlaylist: async function(playlistName, user, userloginKey,collectionId, collectionName, artistName){
+        createPlaylist: async function(playlistName, user, userloginKey, collectionId, collectionName, artistName){
             try{
                 if (authBL.isLoggedIn(userloginKey)) {
 
-                    const playlistId = await playlistDAL.createPlaylist(playlistName,user)
+                    const playlistId = await playlistDAL.createPlaylist(playlistName, user)
                     const result = await this.addPodcastToPlaylist(playlistId, collectionId, collectionName, artistName, userloginKey)
                     return result
 
