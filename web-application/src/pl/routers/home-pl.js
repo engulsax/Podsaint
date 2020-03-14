@@ -13,7 +13,6 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         try {
             const playlists = await playlistBL.getAllPlaylistsAndPodcastsByUser(request.session.key)
             const reviews = await podcastBL.getThreeReviewsByUser(request.session.key)
-
             model.reviews = reviews
             model.playlists = playlists
 
@@ -51,18 +50,25 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         }
     })
 
-    router.post('/:id/remove-podcasts', function (request, response, next) {
-
+    router.post('/:id/remove-podcasts', async function (request, response, next) {
+        
         const playlistId = request.params.id
+        console.log("PLAYLISTNAME->   ")
         const model = response.model
         const podcastsToRemove = request.body.pod_id
 
-        try {
-            (async function () {
-                await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, request.session.key.user, request.session.key)
-                response.redirect(`/:${playlistId}/edit`)
-            })()
+        try {          
+            await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, request.session.key.user, request.session.key)
+            response.redirect(`/${playlistId}/edit`)        
+
         } catch (error) {
+            /*
+            if(error === err.err.REMOVE_PODCAST_PLAYLIST_ERROR){
+                inputErrors = []
+                model.inputErrors = inputErrors.concat(error)
+                response.render("editplaylist.hbs",  model )
+            }*/
+            console.log(error)
             next(error)
         }
     })

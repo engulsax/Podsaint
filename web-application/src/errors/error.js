@@ -24,7 +24,13 @@ const errors = {
     INVALID_PRODUCTION_RATING: "Invalid production rating.",
     BAD_REQUEST: "Request was bad dude!",
     DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist.",
-    UNSUPPORTED_GRANT_TYPE: "Unsupported grant type."
+    UNSUPPORTED_GRANT_TYPE: "Unsupported grant type.",
+    DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist.",
+    REMOVE_PODCAST_PLAYLIST_ERROR: "Please select podcasts to remove them",
+    DUP_PLAYLIST_ERROR: "A playlist already exists with that name",
+    PLAYLIST_NAME_ERROR: "Enter a playlist name",
+    PLAYLIST_ADD_ERROR: "Choose a playlist or create a new"
+
 }
 
 function getErrorStatusCode(error) {
@@ -60,6 +66,8 @@ function errorNotExist(errs) {
     }
     return true
 }
+
+
 
 module.exports.errorNotExist = errorNotExist
 module.exports.err = errors

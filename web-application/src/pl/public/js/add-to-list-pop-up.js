@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //var createNewListLink = document.getElementById("create-new-list-link")
     var modalCreateList = document.getElementById("create-new-list")
     //var createNewListBtn = document.getElementById("create-new-list-btn")
- 
+    var selectedPlaylist = document.getElementById("podcast-lists")
+    var addButton = document.getElementById("add-to-list-btn")
+    //modalCreateList.style.display ="none"
     modalBtnAddToList.addEventListener("click", function (event) {
         event.preventDefault()
         modalAddToList.style.display = "block"
@@ -17,6 +19,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (event.target === modalAddToList) {
             modalAddToList.style.display = "none"
         }
+    })
+
+    document.getElementById("add-to-list-btn").addEventListener("click" , function(event){
+        console.log("klickat")
+        /*console.log(selectedPlaylist.option)
+        if(!selectedPlaylist.option){
+            event.preventDefault()
+        }*/
     })
 
     document.getElementById("close-btn-add-to-list").addEventListener("click", function (event) {

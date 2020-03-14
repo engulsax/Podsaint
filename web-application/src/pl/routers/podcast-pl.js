@@ -5,16 +5,29 @@ const router = express.Router()
 module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }) {
 
     router.use('/:id', async function (request, response, next) {
-
+                
         const collectionId = request.params.id
-        try {
 
+        try {
             const informationRespons = await searchItunesBL.searchPodcast(collectionId)
             const information = informationRespons.results
+            
+            if(request.query.status == "podcast-added"){
+                response.model.successMessage = "Podcast added to playlist"
+            }
+            if(request.query.status == "playlist-created"){
+                response.model.successMessage = "New playlist created"
+            }
+            if(request.query.status == "review-edited"){
+                response.model.successMessage = "Review is updated"
+            }
+            if(request.query.status == "review-deleted"){
+                response.model.successMessage = "Review is deleted"
+            }
+            
             response.model.collectionId = collectionId
             response.model.information = information
             response.model.description = await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
-
             next()
 
         } catch (error) {
@@ -26,7 +39,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
     router.get('/:id', async function (request, response, next) {
 
         try {
-
+        
             const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
             response.model.userPlaylists = userPlaylists
             next()
@@ -43,10 +56,9 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
                 next(error)
             }
         }
-
     })
 
-    router.get('/:id', async function (request, response, next) {
+    router.get('/:id/', async function (request, response, next) {
 
         try {
             const mainCategoryId = response.model.information[0].genreIds[0]
@@ -59,9 +71,9 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             model.average = ratingInformation.average
             model.reviews = reviews
             model.podcastsInSameCategory = podcastsInSameCategory.results
-
             response.render("podcast.hbs", model )
         } catch (error) {
+            console.log("KASTAT HIT")
             console.log(error)
             next(error)
         }
@@ -143,38 +155,63 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
     })
 
     router.post('/:id/create-list', async function (request, response, next) {
-
+        
+        const model = response.model
         const playlistName = request.body.playlistName
-        const model = response.model.information[0]
+        const pod = response.model.information[0]
         const collectionId = request.params.id
 
         try {
-            await playlistBL.addPodcastToPlaylist(
-                collectionId, playlistName,
-                request.session.key.user, model.collectionName,
-                model.artistName, request.session.key)
+            const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
+            model.userPlaylists = userPlaylists
 
-            response.redirect("/podcast/" + collectionId)
+            await playlistBL.createPlaylist(playlistName,
+                request.session.key.user, request.session.key,
+                collectionId, pod.collectionName, pod.artistName)
+
+            response.redirect("/podcast/" + collectionId + "?status=playlist-created")
+
         } catch (error) {
+
+            if( error == err.err.DUP_PLAYLIST_ERROR || error == err.err.PLAYLIST_NAME_ERROR){
+            
+                inputErrors = []
+                model.inputErrors = inputErrors.concat(error)
+                response.render("add-to-playlist.hbs",  model )
+                return
+            }
             console.log(error)
             next(error)
         }
-
     })
 
     router.post('/:id/add-to-playlist', async function (request, response) {
-
+    
+        const model = response.model
+       
         try {
-            const model = response.model
             const podcastInfo = model.information[0]
             const collectionId = request.params.id
-            const playlist = request.body.playlist
+            const playlistId = request.body.playlist
+
+            const userPlaylists = await playlistBL.getAllPlaylistsByUser(request.session.key)
+            response.model.userPlaylists = userPlaylists
+            
             await playlistBL.addPodcastToPlaylist(
-                collectionId, playlist,
-                request.session.key.user, podcastInfo.collectionName,
+                playlistId, collectionId,
+                podcastInfo.collectionName,
                 podcastInfo.artistName, request.session.key)
-            response.redirect("/podcast/" + collectionId)
+
+            response.redirect("/podcast/" + collectionId + "?status=podcast-added")
+
         } catch (error) {
+            
+            if(error == err.err.DUP_PODCAST_PLAYLIST_ERROR || error == err.err.PLAYLIST_ADD_ERROR){
+                inputErrors = []
+                model.inputErrors = inputErrors.concat(error)
+                response.render("add-to-playlist.hbs",  model )
+                return
+            }
             console.log(error)
             next(error)
         }
@@ -185,18 +222,11 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
         const model = response.model
 
         try {
-
-            const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn.user)
+            
+            const userPlaylists = await playlistBL.getAllPlaylistsByUser(response.model.loggedIn)
             model.userPlaylists = userPlaylists
+            console.log(model.userPlaylists)
             response.render("add-to-playlist.hbs",  model )
-
-            /*(async function(){
-                const model = response.model.information[0]
-                const collectionId = request.params.id
-                const playlist = request.body.playlist
-                await playlistBL.addPodcastToPlaylist(collectionId, playlist, response.model.loggedIn.user, model.collectionName, model.artistName)
-                response.redirect("/podcast/" + collectionId)
-            })()*/
 
         } catch (error) {
             console.log(error)

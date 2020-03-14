@@ -40,7 +40,7 @@ app.use(async function (request, response, next) {
   response.model = {}
 
   response.setHeader(
-    "Access-Control-Allow-Origin", 
+    "Access-Control-Allow-Origin",
     "*"
   )
 
@@ -57,7 +57,7 @@ app.post('/signup', async function (request, response, next) {
 
   try {
     await accountBL.userRegistration(username, password, email)
-    response.code(201).end()
+    response.status(201).end()
   } catch (error) {
     console.log(error)
     next(error)
@@ -67,17 +67,14 @@ app.post('/signup', async function (request, response, next) {
 app.post('/signin', async function (request, response, next) {
 
   const model = response.model
-  //const grantType = request.body.grant_type
-  //const username = request.body.username
-  //const password = request.body.password
-  const username = 'engulsax'
-  const password = '123123123'
+  const grantType = request.body.grant_type
+  const username = request.body.username
+  const password = request.body.password
 
-
-  /*if (grantType != "password") {
+  if (grantType != "password") {
     next(err.err.UNSUPPORTED_GRANT_TYPE)
     return
-  }*/
+  }
 
   try {
 
@@ -90,6 +87,34 @@ app.post('/signin', async function (request, response, next) {
 
   } catch (error) {
     console.log(error)
+
+    if (
+      error == "invalid_request" ||
+      error == "invalid_scope"
+    ) {
+      
+      error = err.err.BAD_REQUEST
+      next(error)
+      return
+
+    }
+
+    else if (
+      error == "unauthorized_client" ||
+      error == "invalid_client" ||
+      error == "invalid_grant"
+     
+    ) {
+      error = err.err.AUTH_USER_ERROR
+      next(error)
+      return
+    } 
+    else if (error == err.err.LOGIN_ERROR) {
+      next(error)
+      return
+    }
+
+    error = err.err.INTERNAL_SERVER_ERROR
     next(error)
   }
 
@@ -114,7 +139,7 @@ app.get('/podcast/:id', async function (request, response, next) {
   try {
 
     model = {}
-    
+
     const res = await searchItunesBL.searchPodcast(collectionId)
     const information = res.results
     model.posterUrl = information[0].artworkUrl600
@@ -140,7 +165,7 @@ app.get('/search', async function (request, response, next) {
   const searchTerm = request.query.term
 
   try {
-   
+
     const res = await searchItunesBL.searchPodcasts(searchTerm)
     const podcasts = res.results
 
@@ -167,41 +192,22 @@ app.get('/search', async function (request, response, next) {
 
 app.use(function (request, response, next) {
 
-  const model = {}
+  const error = err.err.NOT_FOUND_ERROR
+  response.status(404).json(error)
 
-  response.status(404)
-  model.error = "Page Not Found"
-  model.code = "404"
-  response.render('error.hbs', model)
 })
 
 app.use(function (error, request, response, next) {
 
+  console.log(error)
+
+  if (err.errorNotExist(error)) {
+    error = err.err.INTERNAL_SERVER_ERROR
+  }
 
   const code = err.getErrCode(error)
+
   response.status(code).json(error)
-  /*
-    const model = {}
-  
-    console.log(error)
-    if (err.errorNotExist(error)) {
-      error = err.err.INTERNAL_SERVER_ERROR
-    }
-  
-  
-  
-    response.status(code)
-  
-  
-    if (code === 401) {
-      
-      
-  
-    } else {
-      model.code = code
-      model.error = error
-      
-    }*/
 
 })
 

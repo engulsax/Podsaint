@@ -7,10 +7,35 @@ module.exports = function(){
 	
     return{
 
-        addPodcastToPlaylist: async function(collectionId, playlistName, user){
+        createPlaylist: async function(playlistName,user){
 
-            const query = "INSERT INTO podcastlists(list_owner, name, pod_id) VALUES(?, ?, ?)" 
-            const values = [user, playlistName, collectionId]
+            const query = "INSERT INTO playlists(playlist_name, list_owner) VALUES(?, ?)" 
+            const values = [playlistName, user]
+            
+            console.log("<<<<<<<<<<<>>>>>>>>>>>createplaylist")
+            try{
+                if(playlistName == ""){
+                    throw err.err.PLAYLIST_NAME_ERROR
+                }
+                const response = await db(query,values)
+                return response.insertId
+
+            } catch (error){
+                console.log(error)
+                if(error.code == 'ER_DUP_ENTRY' && error.sqlMessage.includes('playlist_name') ){
+                    throw err.err.DUP_PLAYLIST_ERROR
+                }
+                if(error == err.err.PLAYLIST_NAME_ERROR){
+                    throw err.err.PLAYLIST_NAME_ERROR
+                }
+                throw err.err.INTERNAL_SERVER_ERROR
+            }
+        },
+
+        addPodcastToPlaylist: async function(collectionId, playlistId){
+
+            const query = "INSERT INTO podinlist(pod_id, playlist_id) VALUES(?, ?)" 
+            const values = [collectionId, playlistId]
            
             try {
                 const response = await db(query, values)
@@ -27,10 +52,10 @@ module.exports = function(){
             }
         },
 
-        removePodcastFromPlaylist: async function(collectionId, playlistName, user){
+        removePodcastFromPlaylist: async function(collectionId, playlistId){
             
-            const query = "DELETE FROM podcastlists WHERE list_owner = ? AND name = ? AND pod_id = ?"
-            const values = [user, playlistName, collectionId]
+            const query = "DELETE FROM podinlist WHERE playlist_id = ? AND pod_id = ?"
+            const values = [playlistId, collectionId]
             
             try {
                 const response = await db(query, values)
@@ -44,7 +69,7 @@ module.exports = function(){
 
         getAllPlaylistsByUser: async function(user){
             
-            const query = "SELECT name FROM podcastlists WHERE list_owner = ? GROUP BY name" 
+            const query = "SELECT playlist_name, id FROM playlists WHERE list_owner = ?" 
             const values = [user]
            
             try {
@@ -56,14 +81,15 @@ module.exports = function(){
                 throw err.err.INTERNAL_SERVER_ERROR
             }
         },
-
+        
         getAllPlaylistsAndPodcastsByUser: async function(user){
-
-            const query = "SELECT name, pod_id FROM podcastlists WHERE list_owner = ? ORDER BY name"
+        
+            const query = "SELECT pl.playlist_name, p.pod_id FROM playlists pl LEFT JOIN podinlist p ON pl.id = p.playlist_id WHERE pl.list_owner = ?"
             const values = [user]
 
             try{
                 const result = await db(query, values)
+                console.log(result)
                 return result
 
             }catch(error){
@@ -72,10 +98,10 @@ module.exports = function(){
             }
         },
     
-        removePlaylist: async function (playlistName, user){
+        removePlaylist: async function (playlistId, user){
             
-            const query = "DELETE FROM podcastlists WHERE name = ? AND list_owner = ?"
-            const values = [playlistName,user]
+            const query = "DELETE FROM playlists WHERE id = ? AND list_owner = ?"
+            const values = [playlistId, user]
             
             try{
                 const result = await db(query, values)
@@ -86,13 +112,27 @@ module.exports = function(){
                 throw err.err.INTERNAL_SERVER_ERROR
             }
         },
-
-        getAllPodcastsByPlaylist: async function(user, playlistName){
+        
+        getAllPodcastsByPlaylist: async function(playlistId){
             
-            const query = "SELECT pod_id FROM podcastlists WHERE list_owner = ? AND name = ?"
-            const values = [user, playlistName]
+            const query = "SELECT pod_id FROM podinlist WHERE playlist_id = ?"
+            const values = [playlistId]
             try{
                 return await db(query,values)
+
+            }catch(error){
+                console.log(error)
+                throw err.err.INTERNAL_SERVER_ERROR
+            }
+        },
+        
+        getPlaylistIdFromPlaylistName: async function(playlistName, user){
+            const query = "SELECT id FROM playlists WHERE playlist_name = ? AND list_owner = ?"
+            const values = [playlistName, user]
+            try{
+                const result =  await db(query,values)
+                return result[0].id
+
             }catch(error){
                 console.log(error)
                 throw err.err.INTERNAL_SERVER_ERROR

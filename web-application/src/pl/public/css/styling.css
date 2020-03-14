@@ -973,16 +973,16 @@ i.fa.fa-edit{
 }
 
 /*-------------------- SLICK CAROUSEL --------------------*/
-.nextArrowBtn{
+i.nextArrowBtn{
     position: absolute;
     z-index: 1;
     top: 30%;
     right: 0;
     color: rgba(0, 0, 0, 0.637);
-    font-size: 150%;
+    font-size: 50px;
     
 }
-.prevArrowBtn{
+i.prevArrowBtn{
     position: absolute;
     z-index: 1;
     top: 30%;
@@ -1819,7 +1819,7 @@ legend{
 
 }
 #create-new-list{
-    display: none;
+    display: block;
 }
 
 .list-pop-up-button{
@@ -1941,7 +1941,7 @@ ul.social-media-list li{
     font-size: 50px;
 }
 
-/*Comdey/Seriouss*/
+/*-------------------- Comdey/Seriouss --------------------*/
 
 .checkgroup input[type="radio"].tone, .checkgroup input[type="checkbox"].tone {
     -webkit-appearance: none;

@@ -1,32 +1,34 @@
 document.addEventListener("DOMContentLoaded", function (event) {
 
-    var modalSignIn = document.getElementById("sign-in-pop-up")
+    const modalSignIn = document.getElementById("sign-in-pop-up")
 
-    var modalBtnSignIn = document.getElementById("sign-in")
+    const modalBtnSignIn = document.getElementById("sign-in")
 
-    var closeBtn = document.getElementById("close-btn-sign-in")
+    const closeBtn = document.getElementById("close-btn-sign-in")
 
-    var altSignUpBtn = document.getElementById("sign-up-alternative")
+    const altSignUpBtn = document.getElementById("sign-up-alternative")
 
-    var modalSignUp = document.getElementById("sign-up-pop-up")
-    
+    const modalSignUp = document.getElementById("sign-up-pop-up")
+
+    const loaderSection = document.getElementById("loader")
+
     const inputUsername = document.getElementById("signin-user")
     const inputPassword = document.getElementById("signin-password")
+
+    const signOutBtn = document.getElementById("sign-out")
 
     modalBtnSignIn.addEventListener("click", function (event) {
         event.preventDefault()
         modalSignIn.style.display = "block"
     })
 
-    altSignUpBtn.addEventListener("click",function(event){
+    altSignUpBtn.addEventListener("click", function (event) {
         modalSignIn.style.display = "none"
         modalSignUp.style.display = "block"
     })
 
-
-
     window.addEventListener("click", function (event) {
-        
+
         if (event.target === modalSignIn) {
             modalSignIn.style.display = "none"
         }
@@ -36,20 +38,72 @@ document.addEventListener("DOMContentLoaded", function (event) {
         modalSignIn.style.display = "none"
     })
 
-    document.getElementById("sign-in-btn").addEventListener("click", function(event){
-    
+    document.getElementById("sign-in-btn").addEventListener("click", async function (event) {
+
+        event.preventDefault()
+
         console.log("submit user sign in")
         const username = inputUsername.value
         const password = inputPassword.value
         
-        if(username.length == 0 || username.length > 15){
-            document.getElementById("input-user-error").innerText = "enter a valid username"
-            event.preventDefault()
-        }
-        if(password.length == 0 || password.length > 40){
-            document.getElementById("input-password-error").innerText = "enter a valid password"
-            event.preventDefault()
-        }
+        loaderSection.classList.add("lds-hourglass")
+
+        await signIn(username, password, modalSignIn)
+        
+        loaderSection.classList.remove("lds-hourglass")
+
     })
 
+    signOutBtn.addEventListener("click", function(event){
+        event.preventDefault()
+
+        signOut()
+
+    })
 })
+
+export async function signIn(username, password, modal) {
+
+    modal.style.display = "none"
+
+    try {
+
+
+        const response = await fetch(
+            "http://192.168.99.100:3000/api/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
+            body: "grant_type=password&username=" + username + "&password=" + password
+        })
+
+        // TODO: Check status code to see if it succeeded. Display errors if it failed.
+        
+        const body = await response.json()
+
+        if(response.status == 200){
+
+            localStorage.accessToken = body.access_token        
+            document.body.classList.remove("signed-out")
+            document.body.classList.add("signed-in")
+            
+
+        } else {
+            modal.style.display = "block"
+            const error = document.getElementById("signin-error")
+			error.innerText = body
+        }   
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export function signOut(){
+
+    localStorage.accessToken = ""
+    document.body.classList.remove("signed-in")
+    document.body.classList.add("signed-out")
+
+}

@@ -29,9 +29,9 @@
 
     <!-- Podsaint Clientside JavaScript -->
     <script src="js/navigation-handler.js" type="module"></script>
-    <script src="js/sign-up-pop-up.js"></script>
-    <script src="js/sign-in-pop-up.js"></script>
-    <script src="js/add-to-list-pop-up.js"></script>
+    <script src="js/sign-up-pop-up.js" type="module"></script>
+    <script src="js/sign-in-pop-up.js" type="module"></script>
+    <script src="js/add-to-list-pop-up.js" type="module"></script>
     <script src="js/search-podcasts.js" type="module"></script>
 
     <meta charset="UTF-8">
@@ -68,7 +68,7 @@
                             <a href="/settings">Settings</a>
                         </li>
                         <li class="show-if-signed-in">
-                            <form action="/signout" method="POST">
+                            <form id="sign-out" action="/signout" method="POST">
                                 <input class="logout-button nothing" type="submit" value="Sign Out" />
                             </form>
                         </li>
@@ -184,6 +184,8 @@
                     <div class="pop-up-content">
                         <span id="close-btn-sign-in">&times;</span>
 
+                        <p id="signin-error"></p>
+
                         <form action="/signin" method="POST">
                             <label>
                                 Username
@@ -221,21 +223,26 @@
                     <div class="pop-up-content">
                         <span id="close-btn-sign-up">&times;</span>
 
+                        <p id="signup-error"></p>
+
                         <form id="sign-up-form" action="/signup" method="POST">
                             <label>
                                 Username
                                 <input id="input-username" type="text" name="username">
                             </label>
+                            <p id="username-error"></p>
                             <label>
                                 Email
                                 <input id="input-email" type="email" name="email">
                             </label>
+                            <p id="email-error"></p>
                             <label>
                                 Password
                                 <input id="input-password" type="password" name="password">
                                 <p class="help-text" id="passwordHelpText">Your password must have at least 8 characters
                                 </p>
                             </label>
+                            <p id="password-error"></p>
                             <input id="sign-up-btn" class="button pop-up-button" type="submit" value="SIGN UP">
                         </form>
                         <div class="center alternative-sign-up">

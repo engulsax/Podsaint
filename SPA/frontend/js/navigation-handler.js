@@ -3,6 +3,17 @@ import { populatePodcastInformation } from './podcast-information.js'
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
+    console.log(localStorage.accessToken)
+
+
+    if(localStorage.accessToken){
+		document.body.classList.remove("signed-out")
+        document.body.classList.add("signed-in")
+	}else{
+		document.body.classList.remove("signed-in")
+        document.body.classList.add("signed-out")
+	}
+
     //Use function
     const pages = {
         "/account": "account-page", "/home": "home-page", "/search": "search-page",
@@ -59,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         for (const [urlKey, pageValue] of Object.entries(pages)) {
             if (url == urlKey || new RegExp(`^${urlKey}/[0-9]+$`).test(url)) {
                 if (id != "") {
-                   loaderSection.classList.add("lds-hourglass")
+                    loaderSection.classList.add("lds-hourglass")
                     await populatePodcastInformation(id)
                     loaderSection.classList.remove("lds-hourglass")
                 }
@@ -69,10 +80,5 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     }
 
-    function createLoader(parent) {
-        const div = document.createElement("div")
-        div.classList.add("lds-hourglass")
-        return div
-    }
 
 })

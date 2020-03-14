@@ -70,7 +70,7 @@ app.use("/my-review", container.resolve('myReviewPL'))
 app.use(function (request, response, next) {
 
   const model = {}
-
+  
   response.status(404)
   model.error = "Page Not Found"
   model.code = "404"
@@ -87,7 +87,7 @@ app.use(function (error, request, response, next) {
   }
 
   const code = err.getErrCode(error)
-
+  console.log("COOOOOOOOOODE : " + code)
   response.status(code)
 
 
