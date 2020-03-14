@@ -1,26 +1,29 @@
 
 import { populatePodcastInformation } from './podcast-information.js'
+import { getUserPlaylists } from './account.js'
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
-    console.log(localStorage.accessToken)
+    const loaderSection = document.getElementById("loader")
 
-
-    if(localStorage.accessToken){
-		document.body.classList.remove("signed-out")
+    if (localStorage.accessToken) {
+        document.body.classList.remove("signed-out")
         document.body.classList.add("signed-in")
-	}else{
-		document.body.classList.remove("signed-in")
+    } else {
+        document.body.classList.remove("signed-in")
         document.body.classList.add("signed-out")
-	}
-
-    //Use function
-    const pages = {
-        "/account": "account-page", "/home": "home-page", "/search": "search-page",
-        "/podcast": "podcast-page"
     }
 
-    const loaderSection = document.getElementById("loader")
+    const ACCOUNT_PAGE = "account-page"
+    const HOME_PAGE = "home-page"
+    const SEARCH_PAGE = "search-page"
+    const PODCAST_PAGE = "podcast-page"
+
+    const pages = {
+        "/account": ACCOUNT_PAGE, "/home": HOME_PAGE, "/search": SEARCH_PAGE,
+        "/podcast": PODCAST_PAGE
+    }
+
 
     window.addEventListener("popstate", function (event) {
         let url = location.pathname
@@ -69,15 +72,45 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         for (const [urlKey, pageValue] of Object.entries(pages)) {
             if (url == urlKey || new RegExp(`^${urlKey}/[0-9]+$`).test(url)) {
-                if (id != "") {
-                    loaderSection.classList.add("lds-hourglass")
-                    await populatePodcastInformation(id)
-                    loaderSection.classList.remove("lds-hourglass")
-                }
-                document.getElementById(pageValue).classList.add("current-page")
+
+               await doPageAction(pageValue, id)
+                
             }
         }
 
+    }
+
+    async function doPageAction(pageValue, id) {
+        switch (pageValue) {
+
+            case ACCOUNT_PAGE:
+                loaderSection.classList.add("lds-hourglass")
+                getUserPlaylists()
+                loaderSection.classList.remove("lds-hourglass")
+                document.getElementById(pageValue).classList.add("current-page")
+                break
+
+            case HOME_PAGE:
+                if (localStorage.accessToken) {
+                    loaderSection.classList.add("lds-hourglass")
+                    getUserPlaylists()
+                    loaderSection.classList.remove("lds-hourglass")
+                    document.getElementById(ACCOUNT_PAGE).classList.add("current-page")
+                    return
+                }
+                break
+
+            case SEARCH_PAGE:
+                break
+
+            case PODCAST_PAGE:
+                loaderSection.classList.add("lds-hourglass")
+                await populatePodcastInformation(id)
+                loaderSection.classList.remove("lds-hourglass")
+                break
+        }
+
+        document.getElementById(pageValue).classList.add("current-page")
     }
 
 

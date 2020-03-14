@@ -80,11 +80,12 @@ export async function signIn(username, password, modal) {
 
         // TODO: Check status code to see if it succeeded. Display errors if it failed.
         
-        const body = await response.json()
+        const token = await response.json()
 
         if(response.status == 200){
 
-            localStorage.accessToken = body.access_token        
+            localStorage.accessToken = token    
+            console.log(token)    
             document.body.classList.remove("signed-out")
             document.body.classList.add("signed-in")
             

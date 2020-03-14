@@ -1,3 +1,4 @@
+
 const cookieParser = require('cookie-parser')
 //const csrf = require('csurf')
 const express = require('express')
@@ -22,6 +23,8 @@ const err = require('../errors/error')
 const serverSecret = "SGR#¤%2S2343OGj32r23//&#¤43rnj!#"
 const app = express()
 
+const cors = require('cors')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -29,20 +32,21 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 //app.use(csrf({ cookie: true }))
 
-app.use(async function (request, response, next) {
+app.use( cors(), async function (request, response, next) {
 
-  const authorizationHeader = request.get('authorization')
+  response.setHeader("Access-Control-Allow-Origin", "*")
+  response.setHeader("Access-Control-Allow-Methods", "*")
+  response.setHeader("Access-Control-Allow-Headers", "*")
+  response.setHeader("Access-Control-Expose-Headers", "*")
+ 
+  const authorizationHeader = request.get('Authorization')
+
+  console.log(JSON.stringify("HEgewgwfgsfafwer----" + authorizationHeader))
+
   if (authorizationHeader != undefined) {
     const token = authorizationHeader.substr("Bearer ".length)
-    request.token = token
+    response.token = token
   }
-
-  response.model = {}
-
-  response.setHeader(
-    "Access-Control-Allow-Origin",
-    "*"
-  )
 
   next()
 
@@ -62,11 +66,11 @@ app.post('/signup', async function (request, response, next) {
     console.log(error)
     next(error)
   }
+
 })
 
 app.post('/signin', async function (request, response, next) {
 
-  const model = response.model
   const grantType = request.body.grant_type
   const username = request.body.username
   const password = request.body.password
@@ -80,8 +84,10 @@ app.post('/signin', async function (request, response, next) {
 
     if (await accountBL.userLogin(username, password)) {
 
-      model.token = await jwtSign({ user: username }, serverSecret)
-      response.status(200).json(model)
+      const token = await jwtSign({ user: username }, serverSecret)
+
+
+      response.status(200).json(token)
 
     }
 
@@ -92,7 +98,7 @@ app.post('/signin', async function (request, response, next) {
       error == "invalid_request" ||
       error == "invalid_scope"
     ) {
-      
+
       error = err.err.BAD_REQUEST
       next(error)
       return
@@ -103,12 +109,12 @@ app.post('/signin', async function (request, response, next) {
       error == "unauthorized_client" ||
       error == "invalid_client" ||
       error == "invalid_grant"
-     
+
     ) {
       error = err.err.AUTH_USER_ERROR
       next(error)
       return
-    } 
+    }
     else if (error == err.err.LOGIN_ERROR) {
       next(error)
       return
@@ -122,14 +128,45 @@ app.post('/signin', async function (request, response, next) {
 
 app.get('/userplaylists', async function (request, response, next) {
 
+  const token = response.token
+
+  console.log(JSON.stringify(token))
+
   try {
-    const authData = await jwtVerify(request.token, serverSecret)
-    const userPlaylists = await playlistBL.getAllPlaylistsByUser(authData)
-    response.status(200).json(userPlaylists)
+    const authData = await jwtVerify(token, serverSecret)
+    const userPlaylists = await playlistBL.getAllPlaylistsAndPodcastsByUser(authData)
+
+    const playlists = []
+
+    for (userPlaylist of userPlaylists) {
+
+      playlist = {}
+
+      const podcasts = []
+      for (podcast of userPlaylist.podcastInfo) {
+
+        pod = {}
+
+        pod.collectionId = podcast.collectionId
+        pod.imageUrl = podcast.artworkUrl600
+
+        podcasts.push(pod)
+
+      }
+
+      playlist.playlistName = userPlaylist.playlistName
+
+      playlist.podcasts = podcasts
+
+      playlists.push(playlist)
+    }
+
+    response.status(200).json(playlists)
   } catch (error) {
     console.log(error)
     next(error)
   }
+
 })
 
 app.get('/podcast/:id', async function (request, response, next) {
@@ -211,9 +248,57 @@ app.use(function (error, request, response, next) {
 
 })
 
+
 /*app.listen(8085, function () {
   console.log("Web application listening on port 8080.")
 })
+*/
+
+
+
+/*
+
+
+   router.get('/:id/edit', async function (request, response, next) {
+        const model = response.model
+        try {
+            const playlist = await playlistBL.getAllPodcastsByPlaylist(request.session.key.user, request.params.id, request.session.key)
+            model.playlist = playlist
+            response.render("editplaylist.hbs", model )
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    })
+
+    router.post('/:id/remove-playlist', async function (request, response, next) {
+        try {
+            await playlistBL.removePlaylist(request.params.id, request.session.key.user, request.session.key)
+            response.redirect("/home")
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    router.post('/:id/remove-podcasts', async function (request, response, next) {
+        
+        const playlistId = request.params.id
+        console.log("PLAYLISTNAME->   ")
+        const model = response.model
+        const podcastsToRemove = request.body.pod_id
+
+        try {          
+            await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, request.session.key.user, request.session.key)
+            response.redirect(`/${playlistId}/edit`)        
+
+        } catch (error) {
+            
+
+            console.log(error)
+            next(error)
+        }
+    })
+
 */
 
 module.exports = app

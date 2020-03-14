@@ -88,6 +88,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 		try {
 
+			modalSignUp.style.display = "none"
+
 			const error = document.getElementById("signup-error")
 			error.innerText = ""
 
@@ -103,13 +105,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 			})
 
 
-			if(response.status == 201){
-				
-				modalSignUp.style.display = "none"
+			if(response.status == 201){	
 				signIn(username, password, modalSignUp)
-
 			} else {
 
+
+				
 				const error = document.getElementById("signup-error")
 				error.innerText = response
 

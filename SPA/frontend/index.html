@@ -33,6 +33,7 @@
     <script src="js/sign-in-pop-up.js" type="module"></script>
     <script src="js/add-to-list-pop-up.js" type="module"></script>
     <script src="js/search-podcasts.js" type="module"></script>
+    <script src="js/account.js" type="module"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,13 +60,10 @@
                             <a href="/home">Home</a>
                         </li>
                         <li class="show-if-signed-in">
-                            <a href="/account/2">Account</a>
+                            <a href="/account">Account</a>
                         </li>
                         <li>
                             <a href="/search">Search Podcasts</a>
-                        </li>
-                        <li class="show-if-signed-in">
-                            <a href="/settings">Settings</a>
                         </li>
                         <li class="show-if-signed-in">
                             <form id="sign-out" action="/signout" method="POST">
@@ -111,10 +109,14 @@
 
         <section id="account-page">
 
-            <div class="grid-x">
 
-                    <h1 class="head-text">My Podcasts</h1>
-            </div>
+                <h1 class="head-text center">My Podcasts</h1>
+
+                <h2 id="no-podcasts" class="sub-text center">You don't have any playlists</h2>
+
+                <div id="my-playlists" class="grid-x cell small-10 medium-8 small-offset-1 medium-offset-2 center">
+
+                </div>
 
         </section>
 
@@ -128,7 +130,7 @@
                     <form id="search-form" class="search-menu" method="GET" action="/search/">
                         <input id="search-term" class="search" type="text" placeholder="Search...">
                     </form>
-                        
+
                 </div>
 
                 <div class="cell small-10 medium-8 small-offset-1 medium-offset-2">
@@ -147,14 +149,18 @@
 
             <div class="grid-x">
 
+                <div class="show-if-signed-in"> </div>
+
+                <a id="add-to-list" class="text-left"></a>
+
                 <div id="information-holder" class="cell small-12 medium-10 medium-offset-1">
 
                     <div class="cell">
-            
+
                         <div class="grid-x">
 
                             <div id="image" class="center cell small-12">
-                               
+
                             </div>
 
                             <div id="title" class="cell">
@@ -166,13 +172,13 @@
                             </div>
 
                         </div>
-            
+
                         <div id="description" class="cell text-left center">
 
                         </div>
                     </div>
                 </div>
-    
+
             </div>
 
         </section>
@@ -208,7 +214,7 @@
 
                         <div class="sign-in-link sign-text">
                             Don't have an account?
-                            <a  href="/signup"  id="sign-up-alternative">Sign up</a>
+                            <a href="/signup" id="sign-up-alternative">Sign up</a>
                         </div>
                     </div>
                 </div>
