@@ -46,13 +46,12 @@ module.exports = function({}){
 
             } catch (error) {
                 console.log(error)
-                console.log(error.errors[0].type == 'notNull Violation')
 
                 if(error.errors[0].type == 'notNull Violation'){
                     throw err.err.PLAYLIST_ADD_ERROR
                 }
 
-                if (error.errors[0].path == 'unique violation'){
+                if (error.errors[0].type == 'unique violation'){
                     throw err.err.DUP_PODCAST_PLAYLIST_ERROR
 
                 } else{
