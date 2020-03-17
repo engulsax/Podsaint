@@ -93,7 +93,7 @@ a:hover, a:focus{
     color: rgba(245, 245, 245, 0.712);
 }
 
-p {
+p, pre {
     font-family: 'Open Sans', sans-serif;
     color: whitesmoke;
     font-size: 1rem;;
@@ -775,7 +775,7 @@ input.star-1-or:checked ~ label.star:before {
     border-radius: 20px;
 }
 
-#close-btn-sign-in, #close-btn-sign-up #close-btn-add-to-list{
+#close-btn-sign-in, #close-btn-sign-up, #close-btn-add-to-list{
     float: right;
     color:white;
     font-size: 40px;

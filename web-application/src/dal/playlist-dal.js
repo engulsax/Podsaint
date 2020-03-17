@@ -7,17 +7,19 @@ module.exports = function(){
 	
     return{
 
-        createPlaylist: async function(playlistName, user){
+        createPlaylist: async function(playlistName, username){
 
             const query = "INSERT INTO playlists(playlist_name, list_owner) VALUES(?, ?)" 
-            const values = [playlistName, user]
+            const values = [playlistName, username]
             
             try{
+
                 if(playlistName == ""){
                     throw err.err.PLAYLIST_NAME_ERROR
                 }
-                const response = await db(query,values)
-                return response.insertId
+
+                const result = await db(query,values)
+                return result.insertId
 
             } catch (error){
                 console.log(error)
@@ -33,6 +35,9 @@ module.exports = function(){
 
         addPodcastToPlaylist: async function(collectionId, playlistId){
 
+            if(playlistId == ""){
+                playlistId = null
+            }
             const query = "INSERT INTO podinlist(pod_id, playlist_id) VALUES(?, ?)" 
             const values = [collectionId, playlistId]
            
@@ -42,6 +47,10 @@ module.exports = function(){
 
             } catch (error) {
                 
+                console.log(error)
+                if(error.code == 'ER_BAD_NULL_ERROR'){
+                    throw err.err.PLAYLIST_ADD_ERROR
+                }
                 if (error.code === 'ER_DUP_ENTRY' && error.sqlMessage.includes('playlist_dup')){
                     throw err.err.DUP_PODCAST_PLAYLIST_ERROR
 
