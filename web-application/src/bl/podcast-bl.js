@@ -60,8 +60,7 @@ module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
         getReviewById: async function getReviewById(reviewId) {
 
             try {
-                const result = await podcastDAL.getReviewById(reviewId)
-                return result
+                return await podcastDAL.getReviewById(reviewId)
 
             } catch (error) {
                 console.log(error)

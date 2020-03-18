@@ -177,8 +177,10 @@ exports.reviews = sequelize.define('reviews', {
         type: Sequelize.STRING(2000)
     }
 }, { timestamps: false })
+
 this.podinlist.belongsTo(this.playlists, { targetKey: 'id', foreignKey: 'playlist_id' })
 this.playlists.hasMany(this.podinlist, { foreignKey: 'playlist_id' })
+
 sequelize.sync().then(function () {
     console.log('DB connection sucessful.')
 }, function (err) {

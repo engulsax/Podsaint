@@ -16,7 +16,6 @@ module.exports = function () {
 			try {
 				
 				if (!await this.podcastExist(collectionId)) {
-				
 					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
 				

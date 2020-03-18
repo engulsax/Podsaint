@@ -57,9 +57,7 @@ module.exports = function ({ accountDAL }) {
         updateEmail: async function (user, email, confirmedEmail) {
 
             try {
-                console.log("-------email---")
-                console.log(email)
-                console.log(confirmedEmail)
+
                 updateEmailInputValidation(email, confirmedEmail)
                 return await accountDAL.updateEmail(user, email)
 
@@ -129,9 +127,11 @@ module.exports = function ({ accountDAL }) {
         if (email.length < EMAIL_MIN_LENGTH || email.length > EMAIL_MAX_LENGTH) {
             emailErrors.push(err.err.EMAIL_LENGTH_ERROR)
         }
+
         if (email != confirmedEmail) {
             emailErrors.push(err.err.EMAIL_MATCH_ERROR)
         }
+        
         if (emailErrors.length != 0) {
             throw emailErrors
         }

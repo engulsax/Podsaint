@@ -84,8 +84,6 @@ module.exports = function({}){
                     attributes: ['playlist_name', 'id'], 
                     where: {list_owner: username}
                 })
-                console.log("result from getallplaylistsfromuser")
-                console.log(result)
                 
                 const playlists= []
                 for(let i = 0; i < result.length; i++){
@@ -103,7 +101,6 @@ module.exports = function({}){
 
             try{
                
-
                 const result = await pgdb.playlists.findAll({
                     attributes:['playlist_name'],
                     where:{ list_owner: username},
