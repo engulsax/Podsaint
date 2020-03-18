@@ -33,6 +33,7 @@ exports.users = sequelize.define('users', {
         allowNull: false
     }
 }, { timestamps: false })
+
 exports.playlists = sequelize.define('playlists', {
     id: {
         type: Sequelize.INTEGER,
