@@ -182,6 +182,7 @@ module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
                 if (authBL.isLoggedIn(userLoginKey)) {
                     if (await podcastDAL.userHasReviews(userLoginKey.user)) {
                         let reviews = await podcastDAL.getNReviewsByUser(userLoginKey.user, numberOfReviews)
+                        console.log(reviews)
                         reviews = await addPodcastInfoToReview(reviews)
                         return reviews
                     }

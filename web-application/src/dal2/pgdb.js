@@ -1,9 +1,4 @@
 const Sequelize = require('sequelize')
-/*const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
-    dialect: 'postgres',
-    port: '5432',
-    host: 'host.docker.internal'
-})*/
 
 const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
     dialect: 'postgres',
