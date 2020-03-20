@@ -107,14 +107,9 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
         removePlaylist: async function (playlistName, user, userloginKey) {
             try {
                 if (authBL.isLoggedIn(userloginKey)) {
-<<<<<<< HEAD
                     const playlistId = await playlistDAL.getPlaylistIdFromPlaylistName(playlistName, user)
                     console.log(playlistId)
                     
-=======
-
-                    const playlistId = await playlistDAL.getPlaylistIdFromPlaylistName(playlistName, user) 
->>>>>>> origin/MISC
                     return await playlistDAL.removePlaylist(playlistId, user)
                 } else {
                     throw err.err.AUTH_USER_ERROR
