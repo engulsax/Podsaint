@@ -4,7 +4,29 @@ const err = require('../errors/error')
 module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) {
 
     return {
-       
+
+        createPlaylistOnly: async function(playlistName, userloginKey){
+            try{
+                if (authBL.isLoggedIn(userloginKey)) {
+
+                    await playlistDAL.createPlaylist(playlistName, userloginKey.user)
+
+                } else {
+
+                    throw err.err.AUTH_USER_ERROR
+                }
+
+            } catch (error){
+                console.log(error)
+                if(err.errorNotExist(error)){
+                    error = err.err.INTERNAL_SERVER_ERROR
+                }
+                throw error
+            }
+        },
+
+               
+        //Also adds podcsat to playlist
         createPlaylist: async function(playlistName, user, userloginKey,collectionId, collectionName, artistName){
             try{
                 if (authBL.isLoggedIn(userloginKey)) {
@@ -85,9 +107,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
         removePlaylist: async function (playlistName, user, userloginKey) {
             try {
                 if (authBL.isLoggedIn(userloginKey)) {
-                    console.log("HÄRÄHÄHÄÄHÄHÄHÄHÄHÄHÄHÄHÄHÄHÄHÄHÄHÄHÄ")
                     const playlistId = await playlistDAL.getPlaylistIdFromPlaylistName(playlistName, user)
-                    console.log("PÖLAYLALYLALYLAYLAYL")
                     console.log(playlistId)
                     
                     return await playlistDAL.removePlaylist(playlistId, user)

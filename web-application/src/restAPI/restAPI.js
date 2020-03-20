@@ -28,17 +28,13 @@ const cors = require('cors')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-//app.use(cookieParser())
-
-//app.use(csrf({ cookie: true }))
-
-app.use( cors(), async function (request, response, next) {
+app.use(cors(), async function (request, response, next) {
 
   response.setHeader("Access-Control-Allow-Origin", "*")
   response.setHeader("Access-Control-Allow-Methods", "*")
   response.setHeader("Access-Control-Allow-Headers", "*")
   response.setHeader("Access-Control-Expose-Headers", "*")
- 
+
   const authorizationHeader = request.get('Authorization')
 
   console.log(JSON.stringify("HEgewgwfgsfafwer----" + authorizationHeader))
@@ -126,16 +122,33 @@ app.post('/signin', async function (request, response, next) {
 
 })
 
+app.get('/playlistnames', async function (request, response, next) {
+
+  const token = response.token
+
+  try {
+
+    const authData = await jwtVerify(token, serverSecret)
+    const playlists = await playlistBL.getAllPlaylistsByUser(authData)
+
+    response.status(200).json(playlists)
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
+
+
+
 app.get('/userplaylists', async function (request, response, next) {
 
   const token = response.token
 
-  console.log(JSON.stringify(token))
-
   try {
     const authData = await jwtVerify(token, serverSecret)
     const userPlaylists = await playlistBL.getAllPlaylistsAndPodcastsByUser(authData)
-
+    
     const playlists = []
 
     for (userPlaylist of userPlaylists) {
@@ -143,15 +156,19 @@ app.get('/userplaylists', async function (request, response, next) {
       playlist = {}
 
       const podcasts = []
-      for (podcast of userPlaylist.podcastInfo) {
 
-        pod = {}
+      //userPlaylist.podcastInfo is [null] if no podcast in list, so checking for that here
+      if (userPlaylist.podcastInfo.length > 1) {
+        for (const podcast of userPlaylist.podcastInfo) {
 
-        pod.collectionId = podcast.collectionId
-        pod.imageUrl = podcast.artworkUrl600
+          pod = {}
 
-        podcasts.push(pod)
+          pod.collectionId = podcast.collectionId
+          pod.imageUrl = podcast.artworkUrl600
 
+          podcasts.push(pod)
+
+        }
       }
 
       playlist.playlistName = userPlaylist.playlistName
@@ -159,6 +176,7 @@ app.get('/userplaylists', async function (request, response, next) {
       playlist.podcasts = podcasts
 
       playlists.push(playlist)
+
     }
 
     response.status(200).json(playlists)
@@ -196,7 +214,6 @@ app.get('/podcast/:id', async function (request, response, next) {
 
 })
 
-//MAKE MODEL ONLY USE NECESSARY STUFF
 app.get('/search', async function (request, response, next) {
 
   const searchTerm = request.query.term
@@ -207,7 +224,7 @@ app.get('/search', async function (request, response, next) {
     const podcasts = res.results
 
     const model = []
-    for (podcast of podcasts) {
+    for (const podcast of podcasts) {
 
       console.log(podcast)
 
@@ -225,6 +242,137 @@ app.get('/search', async function (request, response, next) {
     console.log(error)
     next(error)
   }
+})
+
+app.post('/:id/add-to-playlist', async function (request, response, next) {
+
+  const token = response.token
+  const collectionId = request.params.id
+  const playlistId = request.body.playlistId
+  const title = request.body.title
+  const creator = request.body.creator
+
+  try {
+
+    const authData = await jwtVerify(token, serverSecret)
+
+    await playlistBL.addPodcastToPlaylist(
+      playlistId,
+      collectionId,
+      creator,
+      title,
+      authData
+    )
+
+    response.status(201).end()
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+
+})
+
+
+app.get('/edit/:id', async function (request, response, next) {
+
+  try {
+    const token = response.token
+    const authData = await jwtVerify(token, serverSecret)
+
+    const userPlaylist = await playlistBL.getAllPodcastsByPlaylist(
+      authData.user,
+      request.params.id,
+      authData
+    )
+
+    playlist = {}
+    const podcasts = []
+
+    if (userPlaylist[0].podcastInfo) {
+      for (podcast of userPlaylist[0].podcastInfo) {
+
+        pod = {}
+
+        pod.collectionId = podcast.collectionId
+        pod.imageUrl = podcast.artworkUrl600
+
+        podcasts.push(pod)
+      }
+    }
+
+    playlist.playlistName = userPlaylist[0].playlistName
+    playlist.podcasts = podcasts
+
+    response.status(200).json(playlist)
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
+
+app.delete('/remove-playlist/:id', async function (request, response, next) {
+  try {
+    const token = response.token
+    const authData = await jwtVerify(token, serverSecret)
+    await playlistBL.removePlaylist(request.params.id, authData.user, authData)
+    response.status(201).end()
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.put('/remove-podcasts/:id', async function (request, response, next) {
+
+  const playlistId = request.params.id
+  const podcastsToRemove = request.body.pod_id
+
+  try {
+
+    const token = response.token
+    const authData = await jwtVerify(token, serverSecret)
+    await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, authData.user, authData)
+    response.status(201).end()
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
+
+app.post('/create-list', async function (request, response, next)  {
+  
+  
+ const playlistName = request.body.playlistName
+
+  try {
+    const token = response.token
+    const authData = await jwtVerify(token, serverSecret)
+
+    await playlistBL.createPlaylistOnly(
+      playlistName,
+      authData
+    )
+
+    response.status(201).end()
+
+  } catch (error) {
+
+    if (error == err.err.DUP_PLAYLIST_ERROR || error == err.err.PLAYLIST_NAME_ERROR) {
+
+      const inputErrors = []
+      inputErrors = inputErrors.concat(error)
+      response.status(400).json(inputErrors)
+
+      return
+    }
+
+    console.log(error)
+    next(error)
+    
+  }
+
 })
 
 app.use(function (request, response, next) {
@@ -247,58 +395,5 @@ app.use(function (error, request, response, next) {
   response.status(code).json(error)
 
 })
-
-
-/*app.listen(8085, function () {
-  console.log("Web application listening on port 8080.")
-})
-*/
-
-
-
-/*
-
-
-   router.get('/:id/edit', async function (request, response, next) {
-        const model = response.model
-        try {
-            const playlist = await playlistBL.getAllPodcastsByPlaylist(request.session.key.user, request.params.id, request.session.key)
-            model.playlist = playlist
-            response.render("editplaylist.hbs", model )
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
-    })
-
-    router.post('/:id/remove-playlist', async function (request, response, next) {
-        try {
-            await playlistBL.removePlaylist(request.params.id, request.session.key.user, request.session.key)
-            response.redirect("/home")
-        } catch (error) {
-            next(error)
-        }
-    })
-
-    router.post('/:id/remove-podcasts', async function (request, response, next) {
-        
-        const playlistId = request.params.id
-        console.log("PLAYLISTNAME->   ")
-        const model = response.model
-        const podcastsToRemove = request.body.pod_id
-
-        try {          
-            await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, request.session.key.user, request.session.key)
-            response.redirect(`/${playlistId}/edit`)        
-
-        } catch (error) {
-            
-
-            console.log(error)
-            next(error)
-        }
-    })
-
-*/
 
 module.exports = app

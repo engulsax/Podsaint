@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             const response = await fetch("http://192.168.99.100:3000/api/search?term=" + searchTerm)
             const podcasts = await response.json()
 
-            const ul = document.querySelector("ul#podcast-section")
+            const ul = document.querySelector("ul#search-section")
             ul.innerHTML = ""
 
             if(podcasts[0].collectionId == undefined){

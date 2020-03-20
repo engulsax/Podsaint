@@ -1,4 +1,6 @@
-$(document).ready(() => {
+
+export function makeSlickCarousel(){
+
     $('#slideshow .slick').slick({
         slide: 'li',
         infinite: true,
@@ -31,5 +33,5 @@ $(document).ready(() => {
             }
         ]
     })
-})
 
+}

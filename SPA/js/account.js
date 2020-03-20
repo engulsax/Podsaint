@@ -1,9 +1,8 @@
+import {makeSlickCarousel} from './slick.js'
+
 export async function getUserPlaylists() {
 
-    const accountPage = document.getElementById("account-page")
     document.getElementById("no-podcasts").innerText = ""
-
-    console.log("TOKEN---- " + localStorage.accessToken)
 
     const response = await fetch(
         "http://192.168.99.100:3000/api/userplaylists", {
@@ -11,8 +10,6 @@ export async function getUserPlaylists() {
                 "Authorization": "Bearer " + localStorage.accessToken
             }
         })
-
-    console.log(response)
 
     const playlists = await response.json()
 
@@ -23,11 +20,11 @@ export async function getUserPlaylists() {
             return
         }
 
-
         const div1 = document.getElementById("my-playlists")
         div1.innerText = ""
     
         const ul1 = document.createElement("ul")
+        ul1.id = "podcast-section"
     
         for(const playlist of playlists){
     
@@ -37,23 +34,23 @@ export async function getUserPlaylists() {
             div2.className ="cell small-11"
 
             const h2 = document.createElement("h2")
-            h2.className = "sub-text no-margin left"
+            h2.className = "sub-text no-margin center"
             h2.innerText = playlist.playlistName
     
             const div3 = document.createElement("div")
-            div3.className ="cell small-11"
+            div3.className ="cell small-11 center"
     
             const anchor1 = document.createElement("a")
-            anchor1.className ="no-margin right"
-            anchor1.setAttribute("href", "/podcast/" + playlist.playlistName + "/edit")
+            anchor1.className ="no-margin"
+            anchor1.setAttribute("href", "/edit/" + playlist.playlistName )
+            anchor1.innerText = "Edit List"
     
             const section = document.createElement("section")
             section.className ="cell small-8 center"
             section.id = "slideshow"
     
             const ul2 = document.createElement("ul")
-            ul2.classList.className ="slick"
-            ul2.id = "podcast-section"
+            ul2.className ="slick"
     
             for(const podcast of playlist.podcasts){
     
@@ -61,8 +58,8 @@ export async function getUserPlaylists() {
     
                 const anchor2 = document.createElement("a")
                 anchor2.setAttribute("href", '/podcast/' + podcast.collectionId)
+
                 const figure = document.createElement("figure")
-                figure.classList.add("podcast-holder")
                 figure.id = "podcast-holder"
     
                 const image = document.createElement("img")
@@ -90,52 +87,10 @@ export async function getUserPlaylists() {
     
         div1.appendChild(ul1)
 
-        accountPage.appendChild(div1)
+        makeSlickCarousel()
 
     } else {
         //error function call
     }
    
 }
-
-
-
-
-    /*
-    
-    
-    <div class="grid-x">
-
-        <li>
-        
-            <div class="cell small-11">
-
-                <h2 class="sub-text no-margin left"> PLAYLISTNAME</h2>
-
-            </div>
-
-            <div class="cell small-1">
-
-                <a class="no-margin right" href="/{{playlistName}}/edit"><i class="fa fa-edit"></i></a>
-
-            </div>
-
-            <section id="slideshow" class="cell small-8 center">
-
-                    <ul id="podcast-section" class="slick">
-
-                        <li>
-                                                
-                            PODCASTS
-
-                        </li>
-
-                    </ul>
-
-            </section>
-
-        </li>
-    
-    <div class="grid-x">
-    
-    */

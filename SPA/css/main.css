@@ -107,9 +107,33 @@ p {
 
 ul,li {
     list-style: none;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin: 1px;
 }
 
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 2px white;
+}
+
+li:focus{
+    outline: none;
+    opacity: 0.8;
+}
+
+
 /*-------------------- UNIVERSAL STYLING --------------------*/
+
+.no-margin{
+    margin: 0;
+}
 
 .left{
     float: left;
@@ -162,6 +186,16 @@ ul,li {
     text-transform: uppercase;
     letter-spacing: 3px;
     text-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+}
+
+.podsaint-button.delete-button{
+    padding: 15px;
+    margin: 15px;
+    background-color: rgb(221, 87, 87);
+}
+
+.podsaint-button.delete-button:hover, .podsaint-button.delete-button:focus{
+    background-color: rgb(121, 11, 11);
 }
 
 .podsaint-button{
@@ -257,29 +291,32 @@ ul,li {
 }
 
 
-#podcast-section{
+#podcast-section, #search-section{
     margin: auto auto;
     background-color: rgba(255,255,255,0.2);
     padding: 2px;
     border-radius: 20px;
-    text-align: center;
+   text-align: center;
 }
 
-#podcast-section ul{
+#search-section ul{
     margin: 10px auto 0;
     list-style: none;
 }
 
-#podcast-section li{
+#search-section li{
+    display: inline;
+}
+
+#podcast-section li, #search-section li{
     margin: 2px 2px 0px 2px;
     list-style: none;
-    display: inline-block;
 }
 
 #podcast-holder{
     position: relative;
     display: inline-block;
-    margin: 30px 10px;
+    margin: 15px 10px;
     vertical-align: top;
     text-align: center;
     width: 210px;
@@ -296,6 +333,10 @@ ul,li {
 }
 
 #podcast-image:hover{
+    box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.8);
+ }
+
+ #podcast-image:focus{
     box-shadow: 2px 0px 10px rgba(22, 22, 22, 0.8);
  }
 
@@ -317,6 +358,10 @@ ul,li {
 .podcast-size-210{
     width: 210px;
     height: 210px;
+}
+
+ul#podcast-section li{
+    display: inline;
 }
 
 /*-------------------- INFROMATION HOLDER --------------------*/
@@ -542,7 +587,7 @@ ul.social-media-list li{
     top: 30%;
     right: 0;
     color: rgba(0, 0, 0, 0.637);
-    font-size: 150%;
+    font-size: 50px;
     
 }
 .prevArrowBtn{
@@ -553,6 +598,12 @@ ul.social-media-list li{
     color: rgba(0, 0, 0, 0.637);
     font-size: 50px;
 }
+
+.slick img{
+    max-width: 210px;
+    max-height: 210px;
+}
+
 
 
 /*-------------------- LOADER --------------------*/

@@ -67,8 +67,6 @@ function errorNotExist(errs) {
     return true
 }
 
-
-
 module.exports.errorNotExist = errorNotExist
 module.exports.err = errors
 module.exports.getErrCode = getErrorStatusCode

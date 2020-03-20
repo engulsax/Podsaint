@@ -1,6 +1,7 @@
 
-export async function populatePodcastInformation(id) {
+export async function populatePodcastInformation(url) {
 
+    const id = url.split("/")[2]
 
     const titleDiv = document.getElementById("title")
     titleDiv.innerText = ""
@@ -50,6 +51,7 @@ export async function populatePodcastInformation(id) {
 async function fetchPodcastInformation(id) {
 
     try {
+        console.log(id)
         const response = await fetch("http://192.168.99.100:3000/api/podcast/" + id)
         const podcast = await response.json()
 

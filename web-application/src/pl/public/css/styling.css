@@ -462,10 +462,7 @@ fieldset#main-field{
     text-align: center;
 }
 
-#podcast-section ul{
-    margin: 10px auto 0;
-    list-style: none;
-}
+
 
 #podcast-section li{
     margin: 2px 2px 0px 2px;
@@ -1443,10 +1440,7 @@ fieldset#main-field{
     text-align: center;
 }
 
-#podcast-section ul{
-    margin: 10px auto 0;
-    list-style: none;
-}
+
 
 #podcast-section li{
     margin: 2px 2px 0px 2px;
@@ -2019,7 +2013,3 @@ input.tone:checked ~ label.tone svg {
   #delete-playlist-btn:hover, #delete-account-btn:hover{
     background-color: rgb(123, 5, 5);   
   }
-
-  .no-margin{
-    margin: 0;
-}
