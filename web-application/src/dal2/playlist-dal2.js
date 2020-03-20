@@ -12,7 +12,7 @@ module.exports = function({}){
             try{
 
                 if(playlistName == ""){
-                    throw err.err.PLAYLIST_NAME_ERROR
+                    playlistName = null
                 }
              
                 const result = await pgdb.playlists.create({
@@ -25,11 +25,11 @@ module.exports = function({}){
             } catch (error){
                 console.log(error)
 
-                if(error == err.err.PLAYLIST_NAME_ERROR){
+                if(error.errors[0].type == 'notNull Violation'){
                     throw err.err.PLAYLIST_NAME_ERROR
                 }
 
-                if(error.errors[0].path == 'unique violation'){
+                if(error.errors[0].type == 'unique violation'){
                     throw err.err.DUP_PLAYLIST_ERROR
                 }
                 throw err.err.INTERNAL_SERVER_ERROR
@@ -46,17 +46,15 @@ module.exports = function({}){
 
             } catch (error) {
                 console.log(error)
-                console.log(error.errors[0].type == 'notNull Violation')
 
                 if(error.errors[0].type == 'notNull Violation'){
                     throw err.err.PLAYLIST_ADD_ERROR
                 }
 
-                if (error.errors[0].path == 'unique violation'){
+                if (error.errors[0].type == 'unique violation'){
                     throw err.err.DUP_PODCAST_PLAYLIST_ERROR
 
-                } else{
-                    
+                } else{    
                     throw err.err.INTERNAL_SERVER_ERROR
                 }
             }
@@ -85,8 +83,6 @@ module.exports = function({}){
                     attributes: ['playlist_name', 'id'], 
                     where: {list_owner: username}
                 })
-                console.log("result from getallplaylistsfromuser")
-                console.log(result)
                 
                 const playlists= []
                 for(let i = 0; i < result.length; i++){
@@ -104,7 +100,6 @@ module.exports = function({}){
 
             try{
                
-
                 const result = await pgdb.playlists.findAll({
                     attributes:['playlist_name'],
                     where:{ list_owner: username},

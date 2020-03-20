@@ -2,7 +2,7 @@
 const errors = {
     INTERNAL_SERVER_ERROR: "There seems to a problem with our servers, try again later.",
     CATEGORY_FETCH_ERROR: "We couldn't fetch the categories.",
-    PODCAST_FETCH_ERROR: "We couldn't fetch the podcasts.",
+    PODCAST_FETCH_ERROR: "We couldn't find the podcasts you´re looking for.",
     NOT_FOUND_ERROR: "The page you are looking for couldn't be found.",
     DUP_EMAIL_ERROR: "This email already exists.",
     DUP_USER_ERROR: "This username already exists.",

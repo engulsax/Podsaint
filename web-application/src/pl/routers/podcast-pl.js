@@ -185,7 +185,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
         }
     })
 
-    router.post('/:id/add-to-playlist', async function (request, response) {
+    router.post('/:id/add-to-playlist', async function (request, response, next) {
     
         const model = response.model
        

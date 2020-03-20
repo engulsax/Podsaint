@@ -1,26 +1,22 @@
 const Sequelize = require('sequelize')
-/*const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
-    dialect: 'postgres',
-    port: '5432',
-    host: 'host.docker.internal'
-})*/
 
 const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
     dialect: 'postgres',
     port: '5432',
-    host: '192.168.99.100'  // on mac use 'host.docker.internal'
+    //host: '192.168.99.100'  // on mac use 'host.docker.internal'
+    host: 'host.docker.internal'
 })
 
 exports.users = sequelize.define('users', {
     username: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
         unique: true,
         allowNull: false,
         primaryKey: true,
         autoIncrement: false
     },
     email: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
         allowNull: false,
         unique: true,
         primaryKey: false
@@ -33,7 +29,7 @@ exports.users = sequelize.define('users', {
         autoIncrement: true
     },
     password: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(100),
         allowNull: false
     }
 }, { timestamps: false })
@@ -47,13 +43,12 @@ exports.playlists = sequelize.define('playlists', {
         autoIncrement: true
     },
     playlist_name: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         unique: true,
-        notEmpty: true,
         allowNull: false
     },
     list_owner: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         references: {
@@ -62,18 +57,19 @@ exports.playlists = sequelize.define('playlists', {
         }
     },
 }, { timestamps: false })
-
 exports.podinlist = sequelize.define('podinlist', {
+    
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     pod_id: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
+        unique: 'actions_unique',
         references: {
             model: 'podcasts',
             key: 'pod_id'
@@ -84,27 +80,32 @@ exports.podinlist = sequelize.define('podinlist', {
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
+        unique: 'actions_unique'
         /*references: {
-            model: 'playlists',
-            key: 'id'
+        model: 'playlists',
+        key: 'id'
         }*/
     }
-}, { timestamps: false },
-    { uniqueKeys: { fields: ['pod_id', 'playlist_id'] } })
+}, { timestamps: false },{
+    uniqueKeys: {
+        actions_unique: {
+            fields: ['pod_id', 'playlist_id']
+        }
+    } })
+
 
 exports.podcasts = sequelize.define('podcasts', {
-
     pod_id: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         primaryKey: true,
         allowNull: false
     },
     pod_name: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(300),
         primaryKey: false
     },
     pod_creators: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(300),
         primaryKey: false
     },
     comedy_rating: {
@@ -129,15 +130,15 @@ exports.podcasts = sequelize.define('podcasts', {
     }
 }, { timestamps: false })
 
-exports.reviews = sequelize.define('reviews', {
 
+exports.reviews = sequelize.define('reviews', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
     review_poster: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         primaryKey: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
@@ -150,7 +151,7 @@ exports.reviews = sequelize.define('reviews', {
         type: Sequelize.DATE
     },
     pod_id: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         references: {
@@ -174,18 +175,16 @@ exports.reviews = sequelize.define('reviews', {
         type: Sequelize.INTEGER
     },
     review_text: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING(2000)
     }
-
 }, { timestamps: false })
 
-this.podinlist.belongsTo(this.playlists, {targetKey:'id',foreignKey: 'playlist_id'})
-this.playlists.hasMany(this.podinlist,{foreignKey: 'playlist_id'})
+this.podinlist.belongsTo(this.playlists, { targetKey: 'id', foreignKey: 'playlist_id' })
+this.playlists.hasMany(this.podinlist, { foreignKey: 'playlist_id' })
 
 sequelize.sync().then(function () {
     console.log('DB connection sucessful.')
 }, function (err) {
     console.log(err)
 })
-
 exports.sequelize

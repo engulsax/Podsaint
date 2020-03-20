@@ -12,14 +12,10 @@ module.exports = function () {
 			collectionId, reviewPoster, collectionName, podCreators,
 			comedyRating, dramaRating, topicRelevence, 
 			productionQuality,overallRating, reviewText) {
-			
-
-
-
+		
 			try {
 				
 				if (!await this.podcastExist(collectionId)) {
-				
 					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
 				
@@ -127,12 +123,17 @@ module.exports = function () {
 		getAllReviewsByPodcastId: async function getAllReviewsByPodcastId(collectionId) {
 
 			try {
-				return await pgdb.reviews.findAll({
+				const reviews = await pgdb.reviews.findAll({
 					where: { pod_id: collectionId },
 					order: [
 						['post_date', 'DESC']
 					]
 				})
+				result = []
+				for(review of reviews){
+					result.push(review.dataValues)
+				}
+				return result
 
 			} catch (error) {
 				console.log(error)
@@ -166,12 +167,17 @@ module.exports = function () {
 		getAllReviewsByUser: async function getAllReviewsByUser(user) {
 
 			try {
-				return await pgdb.reviews.findAll({
+				const reviews = await pgdb.reviews.findAll({
 					where: { review_poster: user },
 					order: [
 						['post_date', 'DESC']
 					]
 				})
+				result = []
+				for(review of reviews){
+					result.push(review.dataValues)
+				}
+				return result
 
 			} catch (error) {
 				console.log(error)
@@ -182,13 +188,19 @@ module.exports = function () {
 		getNReviewsByUser: async function getNReviewsByPodcastId(user, amount) {
 
 			try {
-				return await pgdb.reviews.findAll({
+				const reviews = await pgdb.reviews.findAll({
 					where: { review_poster: user },
 					limit: amount,
 					order: [
 						['post_date', "DESC"]
 					]
 				})
+				result = []
+				for(review of reviews){
+					result.push(review.dataValues)
+				}
+				return result
+
 
 			} catch (error) {
 				console.log(error)
@@ -197,8 +209,6 @@ module.exports = function () {
 		},
 
 		getAverageRatingsByPodcastId: async function getAverageRatingsByPodcastId(collectionId) {
-
-		
 
 			try {
 				const ratings = await getRatingsFromPodcast(collectionId)
@@ -219,6 +229,7 @@ module.exports = function () {
 		},
 
 		getToneInformationByPodcastId: async function getToneInformationByPodcastId(collectionId) {
+			
 			try {
 				toneInformation = {}
 
@@ -255,8 +266,6 @@ module.exports = function () {
 			}
 		},
 
-
-
 		podcastHasReviews: async function podcastHasReviews(collectionId) {
 
 			try {
@@ -282,8 +291,8 @@ module.exports = function () {
 		},
 
 		podcastExist: async function podcastExist(collectionId) {
-			try {
-				
+			
+			try {	
 				const response = await pgdb.podcasts.count({
 					where: { pod_id: collectionId }
 				})

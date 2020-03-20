@@ -31,7 +31,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
             try{
                 if (authBL.isLoggedIn(userloginKey)) {
 
-                    const playlistId = await playlistDAL.createPlaylist(playlistName,user)
+                    const playlistId = await playlistDAL.createPlaylist(playlistName, user)
                     const result = await this.addPodcastToPlaylist(playlistId, collectionId, collectionName, artistName, userloginKey)
                     return result
 
@@ -107,9 +107,14 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
         removePlaylist: async function (playlistName, user, userloginKey) {
             try {
                 if (authBL.isLoggedIn(userloginKey)) {
+<<<<<<< HEAD
                     const playlistId = await playlistDAL.getPlaylistIdFromPlaylistName(playlistName, user)
                     console.log(playlistId)
                     
+=======
+
+                    const playlistId = await playlistDAL.getPlaylistIdFromPlaylistName(playlistName, user) 
+>>>>>>> origin/MISC
                     return await playlistDAL.removePlaylist(playlistId, user)
                 } else {
                     throw err.err.AUTH_USER_ERROR
@@ -129,8 +134,8 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
             try {
                 if (authBL.isLoggedIn(userloginKey)) {
 
-                    const result = await playlistDAL.getAllPlaylistsByUser(userloginKey.user)
-                    return result
+                    return await playlistDAL.getAllPlaylistsByUser(userloginKey.user)  
+
                 } else {
                     throw err.err.AUTH_USER_ERROR
                 }
@@ -210,8 +215,7 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
                         podcastList.push(val)
                         val = {}
                     }
-                    console.log(val)
-
+                    
                     let sortRes = podcastList.reduce(function (obj, item) {
                         obj[item.playlistName] = obj[item.playlistName] || []
                         obj[item.playlistName].push(item.podcastInfo)
@@ -219,7 +223,6 @@ module.exports = function ({ playlistDAL, podcastDAL, searchItunesBL, authBL }) 
                     }, {})
 
                     sortedResult = Object.entries(sortRes).map(([playlistName, podcastInfo]) => ({ playlistName, podcastInfo }))
-                    console.log(sortedResult)
                     return (sortedResult)
                     
                 }
