@@ -3,8 +3,8 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize('postgres', 'root', 'theRootPassword', {
     dialect: 'postgres',
     port: '5432',
-    //host: '192.168.99.100'  // on mac use 'host.docker.internal'
-    host: 'host.docker.internal'
+    host: '192.168.99.100'  // on mac use 'host.docker.internal'
+    //host: 'host.docker.internal'
 })
 
 exports.users = sequelize.define('users', {
