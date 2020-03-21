@@ -45,6 +45,7 @@ function getErrorStatusCode(error) {
             return 401
         case errors['NOT_FOUND_ERROR']:
         case errors['PODCAST_NOT_FOUND']:
+        case errors['PODCAST_FETCH_ERROR']:
         case errors['CATEGORY_FETCH_ERROR']:
             return 404
         default:

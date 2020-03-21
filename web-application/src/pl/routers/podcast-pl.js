@@ -18,13 +18,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             if(request.query.status == "playlist-created"){
                 response.model.successMessage = "New playlist created"
             }
-            if(request.query.status == "review-edited"){
-                response.model.successMessage = "Review is updated"
-            }
-            if(request.query.status == "review-deleted"){
-                response.model.successMessage = "Review is deleted"
-            }
-            
+
             response.model.collectionId = collectionId
             response.model.information = information
             response.model.description = await podcastBL.fetchPodInfo(information[0].collectionViewUrl)

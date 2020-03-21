@@ -7,6 +7,7 @@ const ACCOUNT_PAGE = "account-page"
 const HOME_PAGE = "home-page"
 const SEARCH_PAGE = "search-page"
 const PODCAST_PAGE = "podcast-page"
+const ERROR_PAGE = "error-page"
 const EDIT_LIST_PAGE = "edit-list-page"
 
 const pages = {
@@ -118,7 +119,12 @@ async function doPageAction(pageValue, url) {
             loaderSection.classList.add("lds-hourglass")
             await getPlaylistInEditMode(url)
             loaderSection.classList.remove("lds-hourglass")
-            break;
+            break
+
+        default:
+            //ERROR
+            document.getElementById(ERROR_PAGE).classList.add("current-page")
+            return
     }
     document.getElementById(pageValue).classList.add("current-page")
 }

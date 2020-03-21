@@ -68,17 +68,14 @@ export async function signIn(username, password, modal) {
 
     try {
 
-
         const response = await fetch(
             "http://192.168.99.100:3000/api/signin", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
-            }, // TODO: Escape username and password in case they contained reserved characters in the x-www-form-urlencoded format.
-            body: "grant_type=password&username=" + username + "&password=" + password
+            },
+            body: encodeURI("grant_type=password&username=" + username + "&password=" + password)
         })
-
-        // TODO: Check status code to see if it succeeded. Display errors if it failed.
         
         const token = await response.json()
 

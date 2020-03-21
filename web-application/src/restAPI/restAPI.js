@@ -154,7 +154,7 @@ app.get('/userplaylists', async function (request, response, next) {
       const podcasts = []
 
       //userPlaylist.podcastInfo is [null] if no podcast in list, so checking for that here
-      if (userPlaylist.podcastInfo != [null]) {
+      if (userPlaylist.podcastInfo[0]) {
         for (const podcast of userPlaylist.podcastInfo) {
 
           pod = {}

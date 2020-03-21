@@ -38,32 +38,35 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 async function getLitsOptions() {
 
-
-    const response = await fetch(
-        "http://192.168.99.100:3000/api/playlistnames", {
-        headers: {
-            "Authorization": "Bearer " + localStorage.accessToken
+    try{
+        const response = await fetch(
+            "http://192.168.99.100:3000/api/playlistnames", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.accessToken
+            }
+        })
+    
+        if (response.status == 200) {
+    
+            const playlists = await response.json()
+    
+            const optionList = document.getElementById("podcast-lists")
+            optionList.innerText = ""
+    
+            for (const playlist of playlists) {  
+    
+                const option = document.createElement("option")
+                option.value = playlist.id
+                option.innerText = playlist.playlist_name
+    
+                optionList.appendChild(option)
+            }
+    
+        } else {
+           alert("We couln't get the playlists, try reloading the page.")
         }
-    })
-
-    if (response.status == 200) {
-
-        const playlists = await response.json()
-
-        const optionList = document.getElementById("podcast-lists")
-        optionList.innerText = ""
-
-        for (const playlist of playlists) {  
-
-            const option = document.createElement("option")
-            option.value = playlist.id
-            option.innerText = playlist.playlist_name
-
-            optionList.appendChild(option)
-        }
-
-    } else {
-        //HANDLE ERROR HERE
+    } catch (error) {
+        console.log(error)
     }
 
 }
@@ -71,30 +74,34 @@ async function getLitsOptions() {
 async function addPodcastToList(playlistId){
 
 
-    const url = window.location.href
-    const podcastId = url.match(new RegExp("(?:podcast\/)([0-9]+)"))[1]
-    const title = document.getElementById("title").innerText
-    const creator = document.getElementById("creator").innerText
-
-    const podcast ={
-        playlistId,
-        title,
-        creator
-    }
-
-    const response = await fetch(
-        "http://192.168.99.100:3000/api/" + podcastId + "/add-to-playlist", {
-        method: "POST",
-        headers: {
-            "Authorization": "Bearer " + localStorage.accessToken,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(podcast)
-    })
-
-    if(response.status == 201){
-        //Display success message
-    } else {   
-        //error
+    try{
+        const url = window.location.href
+        const podcastId = url.match(new RegExp("(?:podcast\/)([0-9]+)"))[1]
+        const title = document.getElementById("title").innerText
+        const creator = document.getElementById("creator").innerText
+    
+        const podcast ={
+            playlistId,
+            title,
+            creator
+        }
+    
+        const response = await fetch(
+            "http://192.168.99.100:3000/api/" + podcastId + "/add-to-playlist", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + localStorage.accessToken,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(podcast)
+        })
+    
+        if(response.status == 201){
+            alert("Podcast has been added")
+        } else {   
+            alert("We couldn't add the podcast, try again later")
+        }
+    } catch(error) {
+        console.log(error)
     }
 }

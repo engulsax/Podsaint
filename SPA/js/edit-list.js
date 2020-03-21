@@ -1,7 +1,7 @@
 import { goToPage } from './navigation-handler.js'
 
 export async function getPlaylistInEditMode(url) {
-    
+
     const id = url.split("/")[2]
 
     const response = await fetch(
@@ -87,7 +87,7 @@ export async function getPlaylistInEditMode(url) {
         await setEventListenerRemoveList(id)
 
     } else {
-        //error function call
+        alert("We couldn't fetch the podcast list, try reloading the page.")
     }
 
 }
@@ -97,38 +97,41 @@ async function setEventListenerRemovePodcast(url, input, id) {
     input.addEventListener("click", async function (event) {
         event.preventDefault()
 
-        const checked = document.querySelectorAll('.select-pod:checked')
+        try {
 
-        const checkedValues = []
-        for (const check of checked) {
-            checkedValues.push(check.value)
-        }
+            const checked = document.querySelectorAll('.select-pod:checked')
 
-        console.log(checkedValues)
+            const checkedValues = []
+            for (const check of checked) {
+                checkedValues.push(check.value)
+            }
 
-        const podId = {
-            pod_id: checkedValues
-        }
+            console.log(checkedValues)
 
-        const response = await fetch(
-            "http://192.168.99.100:3000/api/remove-podcasts/" + id, {
-            headers: {
-                "Authorization": "Bearer " + localStorage.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: "PUT",
-            body: JSON.stringify(podId)
-        })
+            const podId = {
+                pod_id: checkedValues
+            }
 
-        console.log(JSON.stringify(response))
+            const response = await fetch(
+                "http://192.168.99.100:3000/api/remove-podcasts/" + id, {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.accessToken,
+                    "Content-Type": "application/json"
+                },
+                method: "PUT",
+                body: JSON.stringify(podId)
+            })
 
-        if (response.status == 201) {
-            document.getElementById("loader").classList.add("lds-hourglass")
-            goToPage(url)
-            document.getElementById("loader").classList.remove("lds-hourglass")
+            if (response.status == 201) {
+                document.getElementById("loader").classList.add("lds-hourglass")
+                goToPage(url)
+                document.getElementById("loader").classList.remove("lds-hourglass")
 
-        } else {
-            //Display oops
+            } else {
+                alert("We couldn't remove the podcast, try again later.")
+            }
+        } catch (error) {
+            console.log(error)
         }
 
     })
@@ -140,18 +143,22 @@ async function setEventListenerRemoveList(id) {
     document.getElementById("remove-list").addEventListener("submit", async function (event) {
         event.preventDefault()
 
-        const response = await fetch(
-            "http://192.168.99.100:3000/api/remove-playlist/" + id, {
-            headers: {
-                "Authorization": "Bearer " + localStorage.accessToken
-            },
-            method: "DELETE"
-        })
+        try {
+            const response = await fetch(
+                "http://192.168.99.100:3000/api/remove-playlist/" + id, {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.accessToken
+                },
+                method: "DELETE"
+            })
 
-        if (response.status == 201) {
-            window.history.back()
-        } else {
-            //Display oops
+            if (response.status == 201) {
+                window.history.back()
+            } else {
+                alert("We couldn't delete the list, try again later.")
+            }
+        } catch (error) {
+            console.log(error)
         }
 
     })
