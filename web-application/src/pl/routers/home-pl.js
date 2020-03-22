@@ -16,13 +16,13 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
             model.reviews = reviews
             model.playlists = playlists
 
-            response.render("feed.hbs", model )
+            response.render("feed.hbs", model)
         } catch (error) {
             console.log(error)
             if (error === err.err.AUTH_USER_ERROR) {
                 const mainPodcasts = await searchItunesBL.searchPodcasts('podcast')
                 model.mainPodcasts = mainPodcasts.results
-                response.render("home.hbs", model )
+                response.render("home.hbs", model)
             } else {
                 next(error)
             }
@@ -34,7 +34,7 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
         try {
             const playlist = await playlistBL.getAllPodcastsByPlaylist(request.session.key.user, request.params.id, request.session.key)
             model.playlist = playlist
-            response.render("editplaylist.hbs", model )
+            response.render("editplaylist.hbs", model)
         } catch (error) {
             console.log(error)
             next(error)
@@ -51,33 +51,26 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
     })
 
     router.post('/:id/remove-podcasts', async function (request, response, next) {
-        
+
         const playlistId = request.params.id
-        console.log("PLAYLISTNAME->   ")
         const model = response.model
         const podcastsToRemove = request.body.pod_id
 
-        try {          
+        try {
             await playlistBL.removePodcastsFromPlaylist(podcastsToRemove, playlistId, request.session.key.user, request.session.key)
-            response.redirect(`/${playlistId}/edit`)        
+            response.redirect(`/${playlistId}/edit`)
 
         } catch (error) {
-            /*
-            if(error === err.err.REMOVE_PODCAST_PLAYLIST_ERROR){
-                inputErrors = []
-                model.inputErrors = inputErrors.concat(error)
-                response.render("editplaylist.hbs",  model )
-            }*/
             console.log(error)
             next(error)
         }
     })
-  
+
 
     router.get('/account-settings', function (request, response, next) {
         const model = response.model
         if (request.session.key) {
-            response.render("account-settings.hbs",  model )
+            response.render("account-settings.hbs", model)
         } else {
             next(err.err.AUTH_USER_ERROR)
         }
@@ -156,12 +149,12 @@ module.exports = function ({ categoryBL, accountBL, searchItunesBL, playlistBL, 
 
     router.get('/signup', function (request, response) {
         const model = response.model
-        response.render("signup.hbs",  model )
+        response.render("signup.hbs", model)
     })
 
     router.get('/signin', function (request, response) {
         const model = response.model
-        response.render("signin.hbs",  model )
+        response.render("signin.hbs", model)
     })
 
     router.post('/signout', function (request, response) {

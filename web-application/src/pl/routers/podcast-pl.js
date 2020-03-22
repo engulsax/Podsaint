@@ -20,7 +20,7 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             }
 
             response.model.collectionId = collectionId
-            response.model.information = information
+            response.model.information = informationF
             response.model.description = await podcastBL.fetchPodInfo(information[0].collectionViewUrl)
             next()
 
@@ -67,7 +67,6 @@ module.exports = function ({ categoryBL, searchItunesBL, podcastBL, playlistBL }
             model.podcastsInSameCategory = podcastsInSameCategory.results
             response.render("podcast.hbs", model )
         } catch (error) {
-            console.log("KASTAT HIT")
             console.log(error)
             next(error)
         }

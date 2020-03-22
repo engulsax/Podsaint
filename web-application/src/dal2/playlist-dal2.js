@@ -2,72 +2,73 @@
 const pgdb = require('./pgdb')
 const err = require('../errors/error')
 
-module.exports = function({}){
-	
+module.exports = function ({ }) {
 
-    return{
 
-        createPlaylist: async function(playlistName, username){
+    return {
 
-            try{
+        createPlaylist: async function (playlistName, username) {
 
-                if(playlistName == ""){
+            try {
+
+                if (playlistName == "") {
                     playlistName = null
                 }
-             
+
                 const result = await pgdb.playlists.create({
                     playlist_name: playlistName,
                     list_owner: username
                 })
-            
+
                 return result.dataValues.id
-                
-            } catch (error){
+
+            } catch (error) {
                 console.log(error)
 
-                if(error.errors[0].type == 'notNull Violation'){
+                if (error.errors[0].type == 'notNull Violation') {
                     throw err.err.PLAYLIST_NAME_ERROR
                 }
 
-                if(error.errors[0].type == 'unique violation'){
+                if (error.errors[0].type == 'unique violation') {
                     throw err.err.DUP_PLAYLIST_ERROR
                 }
                 throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
-        addPodcastToPlaylist: async function(collectionId, playlistId){
-           
+        addPodcastToPlaylist: async function (collectionId, playlistId) {
+
             try {
                 return await pgdb.podinlist.create({
-                    playlist_id: playlistId, 
+                    playlist_id: playlistId,
                     pod_id: collectionId
                 })
 
             } catch (error) {
                 console.log(error)
 
-                if(error.errors[0].type == 'notNull Violation'){
+                if (error.errors[0].type == 'notNull Violation') {
                     throw err.err.PLAYLIST_ADD_ERROR
                 }
 
-                if (error.errors[0].type == 'unique violation'){
+                if (error.errors[0].type == 'unique violation') {
                     throw err.err.DUP_PODCAST_PLAYLIST_ERROR
 
-                } else{    
+                } else {
                     throw err.err.INTERNAL_SERVER_ERROR
                 }
             }
         },
-   
-        removePodcastFromPlaylist: async function(collectionId, playlistId){  
-            
+
+        removePodcastFromPlaylist: async function (collectionId, playlistId) {
+
             try {
-                return await pgdb.podinlist.destroy({ 
-                    where: { 
-                        playlist_id: playlistId, 
-                        pod_id: collectionId} 
-                    })
+                return await pgdb.podinlist.destroy({
+                    where: {
+                        playlist_id: playlistId,
+                        pod_id: collectionId
+                    }
+                })
 
             } catch (error) {
                 console.log(error)
@@ -75,17 +76,17 @@ module.exports = function({}){
             }
         },
 
-        getAllPlaylistsByUser: async function(username){
-            
+        getAllPlaylistsByUser: async function (username) {
+
             try {
 
-                const result =  await pgdb.playlists.findAll({
-                    attributes: ['playlist_name', 'id'], 
-                    where: {list_owner: username}
+                const result = await pgdb.playlists.findAll({
+                    attributes: ['playlist_name', 'id'],
+                    where: { list_owner: username }
                 })
-                
-                const playlists= []
-                for(let i = 0; i < result.length; i++){
+
+                const playlists = []
+                for (let i = 0; i < result.length; i++) {
                     playlists.push(result[i].dataValues)
                 }
                 return playlists
@@ -96,99 +97,99 @@ module.exports = function({}){
             }
         },
 
-        getAllPlaylistsAndPodcastsByUser: async function(username){
+        getAllPlaylistsAndPodcastsByUser: async function (username) {
 
-            try{
-               
+            try {
+
                 const result = await pgdb.playlists.findAll({
-                    attributes:['playlist_name'],
-                    where:{ list_owner: username},
-                    include:[{
+                    attributes: ['playlist_name'],
+                    where: { list_owner: username },
+                    include: [{
                         model: pgdb.podinlist,
-                        attributes:['pod_id'],
-                        required:false
+                        attributes: ['pod_id'],
+                        required: false
                     }]
                 })
-    
+
                 const data = []
-                for(let i = 0; i <result.length;i++){
-                    if(result[i].dataValues.podinlists[0]){
-            
-                        for(let j = 0;j < result[i].dataValues.podinlists.length; j++){
-                          
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].dataValues.podinlists[0]) {
+
+                        for (let j = 0; j < result[i].dataValues.podinlists.length; j++) {
+
                             data.push({
                                 playlist_name: result[i].dataValues.playlist_name,
                                 pod_id: result[i].dataValues.podinlists[j].pod_id
                             })
                         }
-                    }else{
+                    } else {
                         data.push({
                             playlist_name: result[i].dataValues.playlist_name,
                             pod_id: null
                         })
                     }
                 }
-           
+
                 return data
 
-            }catch(error){
+            } catch (error) {
                 console.log(error)
                 throw err.err.INTERNAL_SERVER_ERROR
             }
         },
-    
-        removePlaylist: async function (playlistId, username){
-           
-            try{
+
+        removePlaylist: async function (playlistId, username) {
+
+            try {
                 return await pgdb.playlists.destroy({
                     where: {
                         id: playlistId,
                         list_owner: username
                     }
                 })
-            
-            }catch(error){
+
+            } catch (error) {
                 console.log(error)
                 throw err.err.INTERNAL_SERVER_ERROR
             }
         },
 
-        getAllPodcastsByPlaylist: async function(playlistId){
+        getAllPodcastsByPlaylist: async function (playlistId) {
 
-            try{
-    
+            try {
+
                 const result = await pgdb.podinlist.findAll({
                     attributes: ['pod_id'],
                     where: { playlist_id: playlistId }
                 })
                 const data = []
-                for(let i = 0; i <result.length; i++){
+                for (let i = 0; i < result.length; i++) {
                     data.push(result[i].dataValues)
                 }
 
                 return data
 
-            }catch(error){
+            } catch (error) {
                 console.log(error)
                 throw err.err.INTERNAL_SERVER_ERROR
             }
         },
-        
-        getPlaylistIdFromPlaylistName: async function(playlistName, username){
-        
-            try{
-                
+
+        getPlaylistIdFromPlaylistName: async function (playlistName, username) {
+
+            try {
+
                 const result = await pgdb.playlists.findAll({
                     attributes: ['id'],
-                    where:{
+                    where: {
                         playlist_name: playlistName,
                         list_owner: username
                     }
                 })
 
                 return result[0].dataValues.id
-    
-            }catch(error){
+
+            } catch (error) {
                 console.log(error)
                 throw err.err.INTERNAL_SERVER_ERROR
             }

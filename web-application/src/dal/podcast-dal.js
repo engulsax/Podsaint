@@ -92,7 +92,7 @@ module.exports = function () {
 
 			try {
 				return await db(query, values)
-		
+
 			} catch (error) {
 				console.log(error)
 				throw err.err.INTERNAL_SERVER_ERROR

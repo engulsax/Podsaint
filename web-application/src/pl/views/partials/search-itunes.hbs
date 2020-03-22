@@ -1,9 +1,10 @@
 <form id="itunes-search" method="GET" id="search-form" action="/search/itunes/{{id}}">
     <fieldset id="main-field" class="fieldset">
         {{#if category}}
-              <input type="text" name="searchText" placeholder="Search for podcast in {{category}}..." value="{{prevSearchText}}">
+        <input type="text" name="searchText" placeholder="Search for podcast in {{category}}..."
+            value="{{prevSearchText}}">
         {{else}}
-            <input type="text" name="searchText" placeholder="Search for podcast on itunes..." value="{{prevSearchText}}">
+        <input type="text" name="searchText" placeholder="Search for podcast on itunes..." value="{{prevSearchText}}">
         {{/if}}
         <div id="options">
             <div class="grid-x">

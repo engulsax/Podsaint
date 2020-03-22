@@ -10,15 +10,15 @@ module.exports = function () {
 
 		newPodcastReview: async function newPodcastReview(
 			collectionId, reviewPoster, collectionName, podCreators,
-			comedyRating, dramaRating, topicRelevence, 
-			productionQuality,overallRating, reviewText) {
-		
+			comedyRating, dramaRating, topicRelevence,
+			productionQuality, overallRating, reviewText) {
+
 			try {
-				
+
 				if (!await this.podcastExist(collectionId)) {
 					await this.addPodcast(collectionId, collectionName, podCreators)
 				}
-				
+
 				await addNewInfoToPodcast(collectionId, productionQuality, topicRelevence, comedyRating, dramaRating, overallRating)
 				await pgdb.reviews.create({
 					review_poster: reviewPoster,
@@ -55,9 +55,9 @@ module.exports = function () {
 		},
 
 		addPodcast: async function addPodcast(collectionId, collectionName, podCreators) {
-			
+
 			try {
-				
+
 				return await pgdb.podcasts.create({
 					pod_id: collectionId,
 					pod_name: collectionName,
@@ -130,7 +130,7 @@ module.exports = function () {
 					]
 				})
 				result = []
-				for(review of reviews){
+				for (review of reviews) {
 					result.push(review.dataValues)
 				}
 				return result
@@ -174,7 +174,7 @@ module.exports = function () {
 					]
 				})
 				result = []
-				for(review of reviews){
+				for (review of reviews) {
 					result.push(review.dataValues)
 				}
 				return result
@@ -196,7 +196,7 @@ module.exports = function () {
 					]
 				})
 				result = []
-				for(review of reviews){
+				for (review of reviews) {
 					result.push(review.dataValues)
 				}
 				return result
@@ -229,7 +229,7 @@ module.exports = function () {
 		},
 
 		getToneInformationByPodcastId: async function getToneInformationByPodcastId(collectionId) {
-			
+
 			try {
 				toneInformation = {}
 
@@ -291,8 +291,8 @@ module.exports = function () {
 		},
 
 		podcastExist: async function podcastExist(collectionId) {
-			
-			try {	
+
+			try {
 				const response = await pgdb.podcasts.count({
 					where: { pod_id: collectionId }
 				})
@@ -311,7 +311,7 @@ module.exports = function () {
 
 		try {
 			const ratings = await getRatingsFromPodcast(collectionId)
-			
+
 			ratings.overall += overallRating
 			ratings.quality += productionQuality
 			ratings.topic += topicRelevence
@@ -380,13 +380,13 @@ module.exports = function () {
 	}
 
 	async function addNewRatingsToPodcast(collectionId, ratingName, ratingScore) {
-		
+
 		try {
 			await pgdb.podcasts.update(
 				{ [ratingName]: ratingScore },
 				{
 					where: { pod_id: collectionId }
-			})
+				})
 
 		} catch (error) {
 			console.log(error)

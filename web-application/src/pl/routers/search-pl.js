@@ -21,7 +21,7 @@ module.exports = function ({ categoryBL, searchItunesBL }) {
             model.result = searchResponse.results
             model.category = "Search for all podcasts"
             model.id = ""
-        
+        F
         response.render('search.hbs', model)
 
         } catch(error){

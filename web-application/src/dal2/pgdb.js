@@ -58,7 +58,7 @@ exports.playlists = sequelize.define('playlists', {
     },
 }, { timestamps: false })
 exports.podinlist = sequelize.define('podinlist', {
-    
+
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -81,17 +81,14 @@ exports.podinlist = sequelize.define('podinlist', {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         unique: 'actions_unique'
-        /*references: {
-        model: 'playlists',
-        key: 'id'
-        }*/
     }
-}, { timestamps: false },{
+}, { timestamps: false }, {
     uniqueKeys: {
         actions_unique: {
             fields: ['pod_id', 'playlist_id']
         }
-    } })
+    }
+})
 
 
 exports.podcasts = sequelize.define('podcasts', {

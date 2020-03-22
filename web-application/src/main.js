@@ -15,7 +15,7 @@ const playlistBLFun = require('../src/bl/playlist-bl')
 
 /*Postgres-dal with sequelize*/
 
-const playlistDALFun = require('../src/dal2/playlist-dal2') 
+const playlistDALFun = require('../src/dal2/playlist-dal2')
 const podcastDALFun = require('../src/dal2/podcast-dal2')
 const accountDALFun = require('../src/dal2/account-dal2')
 
@@ -44,7 +44,7 @@ container.register('podcastBL', awilix.asFunction(podcastBLFun))
 container.register('accountDAL', awilix.asFunction(accountDALFun))
 container.register('podcastDAL', awilix.asFunction(podcastDALFun))
 
-container.register('playlistBL' , awilix.asFunction(playlistBLFun))
+container.register('playlistBL', awilix.asFunction(playlistBLFun))
 container.register('playlistDAL', awilix.asFunction(playlistDALFun))
 
 module.exports = container

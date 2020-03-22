@@ -5,7 +5,7 @@
     <div class="cell small-10 large-8 medium-10 large-offset-2 medium-offset-1 small-offset-1">
         <div class="cell">
             <form action="/my-review/edit-review/{{review.[0].id}}" method="POST">
-               <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <label>
                     Update Review
                     <textarea rows="5" cols="2" placeholder="Write your review here..."

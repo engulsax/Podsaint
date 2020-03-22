@@ -301,9 +301,9 @@ module.exports = function ({ podcastDAL, authBL, searchItunesBL }) {
     }
 
 
-    async function addPodcastInfoToReview(reviews){
-        try{
-            for(review of reviews){
+    async function addPodcastInfoToReview(reviews) {
+        try {
+            for (review of reviews) {
                 const podInfo = await searchItunesBL.searchPodcast(review.pod_id)
                 review.posterUrl = podInfo.results[0].artworkUrl600
             }

@@ -26,7 +26,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorNotExist(error)){
+                if (err.errorNotExist(error)) {
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -47,7 +47,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorNotExist(error)){
+                if (err.errorNotExist(error)) {
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -63,7 +63,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorNotExist(error)){
+                if (err.errorNotExist(error)) {
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -79,7 +79,7 @@ module.exports = function ({ accountDAL }) {
 
             } catch (error) {
                 console.log(error)
-                if(err.errorNotExist(error)){
+                if (err.errorNotExist(error)) {
                     error = err.err.INTERNAL_SERVER_ERROR
                 }
                 throw error
@@ -105,7 +105,7 @@ module.exports = function ({ accountDAL }) {
         if (password.length < PASSWORD_MIN_LENGTH) {
             passwordErrors.push(err.err.PASSWORD_LENGTH_SHORT_ERROR)
         }
-        if(password.length > PASSWORD_MAX_LENGTH){
+        if (password.length > PASSWORD_MAX_LENGTH) {
             passwordErrors.push(err.err.PASSWORD_LENGTH_LONG_ERROR)
         }
         if (password != confirmedPassword) {
@@ -131,7 +131,7 @@ module.exports = function ({ accountDAL }) {
         if (email != confirmedEmail) {
             emailErrors.push(err.err.EMAIL_MATCH_ERROR)
         }
-        
+
         if (emailErrors.length != 0) {
             throw emailErrors
         }
@@ -164,7 +164,7 @@ module.exports = function ({ accountDAL }) {
             signInErrors.push(err.err.PASSWORD_LENGTH_LONG_ERROR)
         }
 
-        if(password && password.length < PASSWORD_MIN_LENGTH){
+        if (password && password.length < PASSWORD_MIN_LENGTH) {
             signInErrors.push(err.err.PASSWORD_LENGTH_SHORT_ERROR)
         }
 

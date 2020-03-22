@@ -1,7 +1,6 @@
-
 <div id="create-new-list">
     <form action="/podcast/{{collectionId}}/create-list" method="POST">
-       <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <h2>Create a new list</h2>
         <label>
             Playlist name
@@ -11,4 +10,3 @@
         <input id="create-new-list-btn" class="button podsaint-button" type="submit" value="Create and add">
     </form>
 </div>
-

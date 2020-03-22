@@ -22,7 +22,7 @@ const errors = {
     INVALID_TONE_RATING: "Invalid tone rating.",
     INVALID_TOPIC_RATING: "Invalid topic rating.",
     INVALID_PRODUCTION_RATING: "Invalid production rating.",
-    BAD_REQUEST: "Request was bad dude!",
+    BAD_REQUEST: "The request was unhandable, are you sure it is correct?",
     DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist.",
     UNSUPPORTED_GRANT_TYPE: "Unsupported grant type.",
     DUP_PODCAST_PLAYLIST_ERROR: "Podcast already exists in playlist.",
@@ -30,7 +30,6 @@ const errors = {
     DUP_PLAYLIST_ERROR: "A playlist already exists with that name",
     PLAYLIST_NAME_ERROR: "Enter a playlist name",
     PLAYLIST_ADD_ERROR: "Choose a playlist or create a new"
-
 }
 
 function getErrorStatusCode(error) {

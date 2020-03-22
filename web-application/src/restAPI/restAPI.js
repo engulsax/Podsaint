@@ -78,7 +78,6 @@ app.post('/signin', async function (request, response, next) {
 
       const token = await jwtSign({ user: username }, serverSecret)
 
-
       response.status(200).json(token)
 
     }

@@ -68,7 +68,7 @@ module.exports = function () {
         if (responseJSON.resultCount == 0) {
             console.log("error - search-itunes-bl - getPodcast")
             throw err.err.PODCAST_FETCH_ERROR
-        } else if (responseJSON.resultCount > 1 || responseJSON.results[0].collectionId != term){
+        } else if (responseJSON.resultCount > 1 || responseJSON.results[0].collectionId != term) {
             console.log("error - search-itunes-bl - getPodcast")
             throw err.err.BAD_REQUEST
         }

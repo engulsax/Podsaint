@@ -61,7 +61,8 @@ module.exports = function ({ }) {
             try {
                 return await pgdb.users.update(
                     { password: password },
-                    { where: { username: username }
+                    {
+                        where: { username: username }
                     })
 
             } catch (error) {
@@ -73,7 +74,8 @@ module.exports = function ({ }) {
         deleteAccount: async function (username) {
             try {
                 return await pgdb.users.destroy(
-                    { where: { username: username }
+                    {
+                        where: { username: username }
                     })
 
             } catch (error) {

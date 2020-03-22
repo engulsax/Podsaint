@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let modalCategories = document.getElementById("categories-content")
     //Get modal button
     let categoriesBtn = document.getElementById("categories-button")
-    
+
     modalCategories.style.display = "none"
     categoriesBtn.style.display = "inline-block"
     categoriesBtn.textContent = "Categories " + downArrow
